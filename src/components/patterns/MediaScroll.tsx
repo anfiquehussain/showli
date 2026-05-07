@@ -19,7 +19,7 @@ const MediaScroll = ({ title, icon, items, isLoading, onAddClick }: MediaScrollP
           {[...Array(6)].map((_, i) => (
             <div 
               key={i} 
-              className="flex-shrink-0 w-32 md:w-40 aspect-[2/3] bg-card/50 animate-pulse rounded-xl"
+              className="flex-shrink-0 w-28 md:w-40 aspect-[2/3] bg-card/50 animate-pulse rounded-xl"
             />
           ))}
         </div>

@@ -10,6 +10,8 @@ import Modal from '@/components/patterns/Modal';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
 
+import type { TmdbMedia } from '@/types/tmdb.types';
+
 interface AddFavoriteModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -33,7 +35,7 @@ const AddFavoriteModal = ({ isOpen, onClose }: AddFavoriteModalProps) => {
     skip: debouncedQuery.length < 2,
   });
 
-  const handleAdd = async (movie: any) => {
+  const handleAdd = async (movie: TmdbMedia) => {
     if (favorites.length >= 5 || !user?.uid) return;
     
     try {

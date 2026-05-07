@@ -1,10 +1,19 @@
+import { useState } from 'react';
+import { motion } from 'framer-motion';
 import Modal from '@/components/patterns/Modal';
-import { Folder, Check } from 'lucide-react';
+import { Folder, Check, Plus, Loader2 } from 'lucide-react';
 import type { TmdbMedia } from '@/types/tmdb.types';
 import type { Collection } from '@/types/collections.types';
-import { useGetCollectionsQuery, useAddMovieToCollectionMutation, useRemoveMovieFromCollectionMutation, useGetCollectionMoviesQuery } from '@/api/collections/collectionsApi';
+import { 
+  useGetCollectionsQuery, 
+  useAddMovieToCollectionMutation, 
+  useRemoveMovieFromCollectionMutation, 
+  useGetCollectionMoviesQuery,
+  useCreateCollectionMutation
+} from '@/api/collections/collectionsApi';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
+import CollectionModal from './CollectionModal';
 
 interface AddToCollectionModalProps {
   isOpen: boolean;
@@ -22,6 +31,52 @@ export const AddToCollectionModal = ({ isOpen, onClose, media }: AddToCollection
 
   const [addMovie] = useAddMovieToCollectionMutation();
   const [removeMovie] = useRemoveMovieFromCollectionMutation();
+  const [createCollection] = useCreateCollectionMutation();
+
+  const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleCreateAndAdd = async (data: { name: string; description: string; color: string; visibility: 'private' | 'public' }) => {
+    if (!user || !media) return;
+
+    setIsSubmitting(true);
+    try {
+      // 1. Create the collection
+      const newCollection = await createCollection({
+        uid: user.uid,
+        data: {
+          ...data,
+          is_default: false
+        }
+      }).unwrap();
+
+      // 2. Add movie to the new collection
+      const type = 'title' in media ? 'movie' : 'tv';
+      const title = 'title' in media ? media.title : media.name;
+      const release_date = 'release_date' in media ? media.release_date : media.first_air_date;
+
+      await addMovie({
+        uid: user.uid,
+        collectionId: newCollection.id,
+        movie: {
+          tmdb_id: media.id,
+          media_type: type,
+          title,
+          poster_path: media.poster_path,
+          release_date: release_date || '',
+          vote_average: media.vote_average
+        }
+      }).unwrap();
+
+      success(`Created "${data.name}" and added ${title}`);
+      setIsCollectionModalOpen(false);
+    } catch (err) {
+      error('Failed to create collection');
+      console.error(err);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const handleToggleCollection = async (collectionId: string, isAdded: boolean) => {
     if (!user || !media) return;
@@ -78,6 +133,16 @@ export const AddToCollectionModal = ({ isOpen, onClose, media }: AddToCollection
           </div>
         ) : (
           <div className="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
+            <button
+              onClick={() => setIsCollectionModalOpen(true)}
+              className="w-full flex items-center gap-3 p-3 rounded-xl border border-dashed border-white/10 hover:border-brand-primary/50 hover:bg-brand-primary/5 transition-all group mb-2"
+            >
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-white/5 group-hover:bg-brand-primary/20 transition-colors">
+                <Plus className="w-4 h-4 text-text-secondary group-hover:text-brand-primary" />
+              </div>
+              <span className="text-sm font-medium text-text-secondary group-hover:text-primary">Create New Collection</span>
+            </button>
+
             {collections
               .filter(c => !c.is_all_media)
               .map((collection) => (
@@ -95,6 +160,13 @@ export const AddToCollectionModal = ({ isOpen, onClose, media }: AddToCollection
             )}
           </div>
         )}
+
+        <CollectionModal
+          isOpen={isCollectionModalOpen}
+          onClose={() => setIsCollectionModalOpen(false)}
+          onSubmit={handleCreateAndAdd}
+          isLoading={isSubmitting}
+        />
 
         <div className="pt-4 flex justify-end">
           <button

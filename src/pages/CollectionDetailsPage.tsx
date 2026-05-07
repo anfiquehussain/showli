@@ -17,6 +17,7 @@ import ConfirmationModal from '@/components/patterns/ConfirmationModal';
 import { useToast } from '@/hooks/useToast';
 import { ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
+import type { Collection } from '@/types/collections.types';
 
 export const CollectionDetailsPage = () => {
   const { collectionId } = useParams<{ collectionId: string }>();
@@ -78,7 +79,7 @@ export const CollectionDetailsPage = () => {
     );
   }
 
-  const handleEditSubmit = async (data: any) => {
+  const handleEditSubmit = async (data: Partial<Collection>) => {
     if (!user || !collectionId) return;
     try {
       await updateCollection({ uid: user.uid, collectionId, data }).unwrap();

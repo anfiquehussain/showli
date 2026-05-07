@@ -45,8 +45,9 @@ export const useAuth = () => {
       await authService.login(data);
       toast.success('Welcome back!');
       dispatch(closeModal());
-    } catch (err: any) {
-      const message = err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential'
+    } catch (err: unknown) {
+      const firebaseError = err as { code?: string };
+      const message = firebaseError.code === 'auth/user-not-found' || firebaseError.code === 'auth/wrong-password' || firebaseError.code === 'auth/invalid-credential'
         ? 'Invalid email or password'
         : 'An error occurred during login';
       dispatch(setError(message));
@@ -62,11 +63,12 @@ export const useAuth = () => {
       await authService.register(data);
       toast.success('Account created successfully!');
       dispatch(closeModal());
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const firebaseError = err as { code?: string };
       let message = 'An error occurred during registration';
-      if (err.code === 'auth/email-already-in-use') {
+      if (firebaseError.code === 'auth/email-already-in-use') {
         message = 'Email already in use';
-      } else if (err.code === 'auth/operation-not-allowed') {
+      } else if (firebaseError.code === 'auth/operation-not-allowed') {
         message = 'Email/Password auth is not enabled in Firebase Console';
       }
       dispatch(setError(message));
@@ -82,9 +84,10 @@ export const useAuth = () => {
       await authService.signInWithGoogle();
       toast.success('Signed in with Google!');
       dispatch(closeModal());
-    } catch (err: any) {
-      if (err.code !== 'auth/popup-closed-by-user') {
-        const message = err.code === 'auth/operation-not-allowed'
+    } catch (err: unknown) {
+      const firebaseError = err as { code?: string };
+      if (firebaseError.code !== 'auth/popup-closed-by-user') {
+        const message = firebaseError.code === 'auth/operation-not-allowed'
           ? 'Google auth is not enabled in Firebase Console'
           : 'Failed to sign in with Google';
         dispatch(setError(message));

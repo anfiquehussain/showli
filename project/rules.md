@@ -1,6 +1,6 @@
 # Project Rules & Best Practices
 
-This document outlines the coding standards and architectural principles for the **Movie Planner** project.
+This document outlines the coding standards and architectural principles for the **ShowLi** project.
 
 ## 1. Core Architecture (Strict 3-Layer UI)
 
@@ -34,7 +34,7 @@ Imports **MUST** flow in one direction only:
 ### 2.2 `components/patterns/` — Reusable UI Patterns
 -   **Purpose**: Reusable compositions of primitives, still domain-agnostic.
 -   **Characteristics**: Compose primitives, no business rules, no entity-specific naming, no API awareness.
--   **Examples**: `DataTable`, `PaginationControls`, `SelectableList`, `EntityCard`, `MediaCard`, `StatCard`.
+-   **Examples**: `DataTable`, `PaginationControls`, `SelectableList`, `EntityCard`, `MediaCard`, `StatCard`, `SearchBar`.
 -   **Pagination Rule**: Pagination UI belongs here; logic (fetching, response shapes) does NOT.
 -   **Confirmation Pattern**: Use `ConfirmationModal` for destructive actions. NEVER use `window.confirm`.
 -   **Modal Pattern**: Use `Modal` for complex interactions (Auth, Forms) with Framer Motion animations.

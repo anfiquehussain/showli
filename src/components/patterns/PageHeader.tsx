@@ -12,11 +12,11 @@ const PageHeader = ({ title, description, actions, children }: PageHeaderProps) 
     <div className="space-y-6 mb-12">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div className="space-y-1">
-          <h1 className="text-4xl font-heading font-bold text-gradient-primary tracking-tight">
+          <h1 className="text-xl md:text-4xl font-heading font-bold text-gradient-primary tracking-tight">
             {title}
           </h1>
           {description && (
-            <p className="text-lg text-muted-foreground max-w-2xl">
+            <p className="text-sm md:text-lg text-muted-foreground max-w-2xl">
               {description}
             </p>
           )}

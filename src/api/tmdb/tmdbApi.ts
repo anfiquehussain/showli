@@ -4,7 +4,10 @@ import type {
   TmdbMedia, 
   TmdbPaginatedResponse, 
   TmdbMovieDetails, 
-  TmdbTVDetails 
+  TmdbTVDetails,
+  TmdbCountry,
+  TmdbLanguage,
+  TmdbGenre
 } from '@/types/tmdb.types';
 
 export const tmdbApi = createApi({
@@ -35,6 +38,16 @@ export const tmdbApi = createApi({
         return `/discover/${type}?${searchParams.toString()}`;
       },
     }),
+    getDiscoveryContent: builder.query<TmdbPaginatedResponse<TmdbMedia>, { path: string; params?: Record<string, string | number | boolean> }>({
+      query: ({ path, params = {} }) => {
+        const searchParams = new URLSearchParams({
+          api_key: TMDB_API_KEY,
+          ...Object.entries(params).reduce((acc, [key, value]) => ({ ...acc, [key]: String(value) }), {})
+        });
+        const separator = path.includes('?') ? '&' : '?';
+        return `${path}${separator}${searchParams.toString()}`;
+      },
+    }),
     getMovieDetails: builder.query<TmdbMovieDetails, number>({
       query: (id) => `/movie/${id}?api_key=${TMDB_API_KEY}`,
     }),
@@ -43,6 +56,18 @@ export const tmdbApi = createApi({
     }),
     searchMedia: builder.query<TmdbPaginatedResponse<TmdbMedia>, string>({
       query: (query) => `/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}`,
+    }),
+    getCountries: builder.query<TmdbCountry[], void>({
+      query: () => `/configuration/countries?api_key=${TMDB_API_KEY}`,
+    }),
+    getLanguages: builder.query<TmdbLanguage[], void>({
+      query: () => `/configuration/languages?api_key=${TMDB_API_KEY}`,
+    }),
+    getMovieGenres: builder.query<{ genres: TmdbGenre[] }, void>({
+      query: () => `/genre/movie/list?api_key=${TMDB_API_KEY}`,
+    }),
+    getTVGenres: builder.query<{ genres: TmdbGenre[] }, void>({
+      query: () => `/genre/tv/list?api_key=${TMDB_API_KEY}`,
     }),
   }),
 });
@@ -53,7 +78,12 @@ export const {
   useGetPopularMoviesQuery,
   useGetTopRatedTVQuery,
   useDiscoverQuery,
+  useGetDiscoveryContentQuery,
   useGetMovieDetailsQuery,
   useGetTVDetailsQuery,
-  useSearchMediaQuery
+  useSearchMediaQuery,
+  useGetCountriesQuery,
+  useGetLanguagesQuery,
+  useGetMovieGenresQuery,
+  useGetTVGenresQuery
 } = tmdbApi;

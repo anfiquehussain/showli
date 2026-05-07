@@ -61,6 +61,7 @@ export interface TmdbTVDetails extends TmdbTV {
   episode_run_time: number[];
   number_of_episodes: number;
   number_of_seasons: number;
+  type: string;
   status: string;
   tagline: string | null;
   homepage: string | null;
@@ -85,6 +86,18 @@ export interface TmdbSpokenLanguage {
   english_name: string;
   iso_639_1: string;
   name: string;
+}
+
+export interface TmdbLanguage {
+  iso_639_1: string;
+  english_name: string;
+  name: string;
+}
+
+export interface TmdbCountry {
+  iso_3166_1: string;
+  english_name: string;
+  native_name: string;
 }
 
 export interface TmdbCastMember {

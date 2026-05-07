@@ -9,6 +9,7 @@ import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
 import { useToast } from '@/hooks/useToast';
 import type { Collection } from '@/types/collections.types';
+import type { TmdbMedia } from '@/types/tmdb.types';
 
 interface AddMediaModalProps {
   isOpen: boolean;
@@ -42,7 +43,7 @@ const AddMediaModal = ({ isOpen, onClose, collection }: AddMediaModalProps) => {
     skip: debouncedQuery.length < 2,
   });
 
-  const handleToggleMedia = async (media: any) => {
+  const handleToggleMedia = async (media: TmdbMedia) => {
     if (!user?.uid) return;
     
     const isAdded = currentMovies.some(m => m.tmdb_id === media.id);

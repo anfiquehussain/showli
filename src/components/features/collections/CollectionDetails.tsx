@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Folder, LayoutGrid, Columns2, Edit2, Trash2, Plus, Dices, ExternalLink, Sparkles } from 'lucide-react';
 import type { Collection, CollectionMovie, MovieStatus } from '@/types/collections.types';
 import { getTmdbImageUrl } from '@/utils/image';
 import IconButton from '@/components/ui/IconButton';
 import Button from '@/components/ui/Button';
+import SearchBar from '@/components/patterns/SearchBar';
 import StatusBadge from '@/components/patterns/StatusBadge';
 import { useAuth } from '@/hooks/useAuth';
 import { useUpdateCollectionMovieStatusMutation } from '@/api/collections/collectionsApi';
@@ -32,6 +33,7 @@ export const CollectionDetails = ({
   const navigate = useNavigate();
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [filterStatus, setFilterStatus] = useState<MovieStatus | 'all'>('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const [randomMovie, setRandomMovie] = useState<CollectionMovie | null>(null);
 
   const handleRandomPick = () => {
@@ -40,9 +42,14 @@ export const CollectionDetails = ({
     setRandomMovie(filteredMovies[randomIndex] || null);
   };
 
-  const filteredMovies = filterStatus === 'all' 
-    ? movies 
-    : movies.filter(m => m.status === filterStatus);
+  const filteredMovies = useMemo<CollectionMovie[]>(() => {
+    return movies
+      .filter(m => {
+        const matchesStatus = filterStatus === 'all' || m.status === filterStatus;
+        const matchesSearch = m.title?.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesStatus && matchesSearch;
+      });
+  }, [movies, filterStatus, searchQuery]);
 
   const statusFilters: { value: MovieStatus | 'all'; label: string }[] = [
     { value: 'all', label: 'All' },
@@ -56,42 +63,42 @@ export const CollectionDetails = ({
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 glass-card p-6 rounded-2xl">
-        <div className="flex items-start gap-4">
+      <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 glass-card p-4 sm:p-6 rounded-2xl">
+        <div className="flex items-start gap-3 sm:gap-4">
           <div 
-            className="w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg"
+            className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg"
             style={{ backgroundColor: collection.color || 'var(--color-brand-primary)' }}
           >
-            <Folder className="w-8 h-8 text-white" />
+            <Folder className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
           </div>
           <div className="space-y-1">
-            <h1 className="text-2xl font-bold text-primary">{collection.name}</h1>
+            <h1 className="text-xl sm:text-2xl font-bold text-primary">{collection.name}</h1>
             {collection.description && (
-              <p className="text-sm text-text-secondary max-w-2xl">{collection.description}</p>
+              <p className="text-xs sm:text-sm text-text-secondary max-w-2xl line-clamp-2">{collection.description}</p>
             )}
-            <div className="flex items-center gap-4 text-xs text-text-secondary font-medium mt-2">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[10px] sm:text-xs text-text-secondary font-medium mt-1 sm:mt-2">
               <span>{movies.length} items</span>
               {filteredMovies.length !== movies.length && (
                 <span className="text-brand-primary">• {filteredMovies.length} filtered</span>
               )}
               <span>•</span>
               <span className="capitalize">{collection.visibility}</span>
-              <span>•</span>
-              <span>Updated {new Date(collection.updated_at).toLocaleDateString()}</span>
+              <span className="hidden xs:inline">•</span>
+              <span className="hidden xs:inline">Updated {new Date(collection.updated_at).toLocaleDateString()}</span>
             </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 self-start">
+        <div className="flex items-center gap-2 self-end sm:self-start">
           {onAddMedia && (
             <Button
               onClick={onAddMedia}
               size="sm"
               variant="primary"
-              className="rounded-xl h-10 px-4 flex items-center gap-2"
+              className="rounded-xl h-9 sm:h-10 px-3 sm:px-4 flex items-center gap-2"
             >
               <Plus className="w-4 h-4" />
-              <span className="hidden sm:inline">Add Media</span>
+              <span className="text-xs sm:text-sm">Add Media</span>
             </Button>
           )}
           <IconButton
@@ -99,13 +106,14 @@ export const CollectionDetails = ({
             onClick={onEdit}
             variant="secondary"
             aria-label="Edit Collection"
+            className="w-9 h-9 sm:w-10 sm:h-10"
           />
           {!collection.is_default && (
             <IconButton
               icon={Trash2}
               onClick={onDelete}
               variant="secondary"
-              className="text-error hover:bg-error/10 hover:border-error/20"
+              className="text-error hover:bg-error/10 hover:border-error/20 w-9 h-9 sm:w-10 sm:h-10"
               aria-label="Delete Collection"
             />
           )}
@@ -113,14 +121,21 @@ export const CollectionDetails = ({
       </div>
 
       {/* Toolbar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 no-scrollbar">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 flex-1">
+          <SearchBar
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder="Search in collection..."
+            containerClassName="w-full sm:max-w-[280px]"
+          />
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 no-scrollbar">
           {statusFilters.map((filter) => (
             <button
               key={filter.value}
               onClick={() => setFilterStatus(filter.value)}
               className={`
-                px-4 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all
+                px-3 py-1.5 rounded-full text-[10px] sm:text-xs font-medium whitespace-nowrap transition-all
                 ${filterStatus === filter.value
                   ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20'
                   : 'bg-white/5 text-text-secondary hover:bg-white/10 hover:text-white'}
@@ -129,6 +144,7 @@ export const CollectionDetails = ({
               {filter.label}
             </button>
           ))}
+          </div>
         </div>
 
         <div className="flex items-center gap-2">
@@ -177,13 +193,29 @@ export const CollectionDetails = ({
         </div>
       ) : filteredMovies.length === 0 ? (
         <div className="text-center py-20 glass-card rounded-2xl">
-          <p className="text-text-secondary text-sm">No items matching the selected filter.</p>
-          <button 
-            onClick={() => setFilterStatus('all')}
-            className="mt-4 text-brand-primary text-sm font-medium hover:underline"
-          >
-            Clear filters
-          </button>
+          <p className="text-text-secondary text-sm">
+            {searchQuery 
+              ? `No items matching "${searchQuery}"${filterStatus !== 'all' ? ` in ${filterStatus} status` : ''}` 
+              : 'No items matching the selected filter.'}
+          </p>
+          <div className="flex items-center justify-center gap-4 mt-4">
+            {filterStatus !== 'all' && (
+              <button 
+                onClick={() => setFilterStatus('all')}
+                className="text-brand-primary text-sm font-medium hover:underline"
+              >
+                Clear status filter
+              </button>
+            )}
+            {searchQuery && (
+              <button 
+                onClick={() => setSearchQuery('')}
+                className="text-brand-primary text-sm font-medium hover:underline"
+              >
+                Clear search
+              </button>
+            )}
+          </div>
         </div>
       ) : (
         <div className={viewMode === 'grid' ? 'grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4' : 'grid grid-cols-1 md:grid-cols-2 gap-3'}>

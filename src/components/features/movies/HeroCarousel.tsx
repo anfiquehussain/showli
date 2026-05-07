@@ -46,7 +46,7 @@ const HeroCarousel = () => {
   };
 
   return (
-    <section className="relative w-full h-[75vh] md:h-[90vh] overflow-hidden rounded-3xl mb-16 group">
+    <section className="relative w-full h-[60vh] md:h-[75vh] lg:h-[85vh] overflow-hidden rounded-2xl md:rounded-3xl mb-8 md:mb-16 group">
       {/* Background Backdrop */}
       <AnimatePresence mode="wait">
         <motion.div
@@ -63,47 +63,47 @@ const HeroCarousel = () => {
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-background/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/40 md:via-background/20 to-transparent" />
         </motion.div>
       </AnimatePresence>
 
       {/* Content Overlay */}
-      <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-16 pb-32 md:pb-40">
-        <div className="max-w-3xl space-y-6">
+      <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-12 lg:p-16 pb-20 md:pb-32 lg:pb-40">
+        <div className="max-w-3xl space-y-4 md:space-y-6">
           <motion.div
             key={`info-${activeMovie.id}`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.5 }}
-            className="space-y-4"
+            className="space-y-3 md:space-y-4"
           >
             <div className="flex items-center gap-3">
-              <span className="px-3 py-1 bg-brand-primary text-xs font-bold uppercase tracking-wider rounded-full text-white">
+              <span className="px-2 py-0.5 md:px-3 md:py-1 bg-brand-primary text-[10px] md:text-xs font-bold uppercase tracking-wider rounded-full text-white">
                 Trending Now
               </span>
-              <div className="flex items-center gap-1.5 text-warning font-semibold">
-                <Star className="w-4 h-4 fill-current" />
+              <div className="flex items-center gap-1.5 text-warning font-semibold text-sm md:text-base">
+                <Star className="w-3.5 h-3.5 md:w-4 md:h-4 fill-current" />
                 <span>{activeMovie.vote_average.toFixed(1)}</span>
               </div>
             </div>
 
-            <h1 className="text-3xl md:text-5xl font-heading font-bold text-white tracking-tight drop-shadow-2xl">
+            <h1 className="text-xl sm:text-3xl md:text-5xl lg:text-6xl font-heading font-bold text-white tracking-tight drop-shadow-2xl leading-tight">
               {'title' in activeMovie ? activeMovie.title : activeMovie.name}
             </h1>
 
-            <p className="text-base text-muted-foreground line-clamp-2 md:line-clamp-3 max-w-xl leading-relaxed text-pretty">
+            <p className="text-xs md:text-base text-muted-foreground line-clamp-2 md:line-clamp-3 max-w-xl leading-relaxed text-pretty opacity-80">
               {activeMovie.overview}
             </p>
 
-            <div className="flex flex-wrap items-center gap-3 pt-2">
-              <Button variant="primary" size="md" className="gap-2">
-                <Play className="w-4 h-4 fill-current" />
-                <span>Watch Trailer</span>
+            <div className="flex flex-row items-center gap-2 pt-1 md:pt-4">
+              <Button variant="primary" size="sm" className="md:px-6 md:py-2.5 gap-2 flex-1 sm:flex-initial">
+                <Play className="w-3.5 h-3.5 md:w-4 md:h-4 fill-current" />
+                <span className="text-xs md:text-sm">Trailer</span>
               </Button>
-              <Link to={`/${'title' in activeMovie ? 'movie' : 'tv'}/${activeMovie.id}`}>
-                <Button variant="secondary" size="md" className="gap-2 glass-card">
-                  <Info className="w-4 h-4" />
-                  <span>Details</span>
+              <Link to={`/${'title' in activeMovie ? 'movie' : 'tv'}/${activeMovie.id}`} className="flex-1 sm:flex-initial">
+                <Button variant="secondary" size="sm" className="md:px-6 md:py-2.5 gap-2 glass-card w-full sm:w-auto justify-center">
+                  <Info className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                  <span className="text-xs md:text-sm">Details</span>
                 </Button>
               </Link>
             </div>
@@ -111,29 +111,24 @@ const HeroCarousel = () => {
         </div>
       </div>
 
-      {/* Navigation Arrows */}
-      <div className="absolute inset-y-0 left-4 md:left-8 flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
-        <button
-          onClick={handlePrev}
-          className="p-3 rounded-full bg-background/20 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-colors text-white"
-          aria-label="Previous movie"
-        >
-          <ChevronLeft className="w-6 h-6" />
-        </button>
-      </div>
-      <div className="absolute inset-y-0 right-4 md:right-8 flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
-        <button
-          onClick={handleNext}
-          className="p-3 rounded-full bg-background/20 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-colors text-white"
-          aria-label="Next movie"
-        >
-          <ChevronRight className="w-6 h-6" />
-        </button>
-      </div>
+      {/* Indicators - Dots for mobile, Thumbnails for md+ */}
+      <div className="absolute bottom-6 md:bottom-8 left-0 w-full px-6 md:px-12 lg:px-16">
+        {/* Mobile Dots */}
+        <div className="flex md:hidden items-center justify-center gap-2">
+          {trendingItems.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentIndex(index)}
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                currentIndex === index ? 'w-8 bg-brand-primary' : 'w-2 bg-white/20'
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
 
-      {/* Thumbnail List */}
-      <div className="absolute bottom-8 left-0 w-full overflow-x-auto no-scrollbar px-8 md:px-16">
-        <div className="flex items-center gap-4 min-w-max pb-2">
+        {/* Desktop Thumbnails */}
+        <div className="hidden md:flex items-center gap-4 overflow-x-auto no-scrollbar pb-2">
           {trendingItems.map((movie, index) => (
             <motion.button
               key={movie.id}

@@ -57,7 +57,7 @@ const Navbar = () => {
                 <Film className="w-6 h-6 text-primary-foreground" aria-hidden="true" />
               </div>
               <span className="text-xl font-heading font-bold text-foreground tracking-tight">
-                MPlanner
+                ShowLi
               </span>
             </Link>
           </div>

@@ -16,11 +16,12 @@ src/
 │   │   ├── collectionsService.ts # Firebase firestore for collections
 │   │   └── collectionsApi.ts     # RTK Query for collections
 │   └── tmdb/           # TMDb specific API endpoints
-│       └── tmdbApi.ts  # RTK Query API for trending, search, etc.
+│       ├── tmdbApi.ts  # RTK Query API for trending, search, etc.
+│       └── discoveryConfigs.ts # [NEW] Discovery row presets
 ├── assets/             # Static assets (images, global icons)
 ├── components/         # UI Components (3-Layer Architecture)
 │   ├── ui/             # [Layer 1] Primitives (Button.tsx, IconButton.tsx, Input.tsx)
-│   ├── patterns/       # [Layer 2] Reusable Patterns (Modal, PageHeader, MediaScroll, MediaCard, StatusBadge)
+│   ├── patterns/       # [Layer 2] Reusable Patterns (Modal, PageHeader, MediaScroll, MediaCard, StatusBadge, SearchBar)
 │   └── features/       # [Layer 3] Feature Components (Grouped by domain)
 │       ├── auth/       # Authentication (AuthModal.tsx)
 │       ├── layout/     # Global structure (MainLayout.tsx, Navbar.tsx)
@@ -54,7 +55,8 @@ src/
 ├── utils/              # Helper functions (image.ts, date-fns helpers)
 │   └── image.ts        # TMDb image URL construction
 ├── App.tsx             # App entry with Router
-└── main.tsx            # React DOM mounting point
+├── main.tsx            # React DOM mounting point
+└── netlify.toml        # [NEW] Netlify deployment configuration
 ```
 
 ## 1. UI Layering (Strict)

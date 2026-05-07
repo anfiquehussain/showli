@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 import Modal from '@/components/patterns/Modal';
-import { Folder, Check, Plus, Loader2 } from 'lucide-react';
+import { Folder, Check, Plus } from 'lucide-react';
 import type { TmdbMedia } from '@/types/tmdb.types';
 import type { Collection } from '@/types/collections.types';
 import { 

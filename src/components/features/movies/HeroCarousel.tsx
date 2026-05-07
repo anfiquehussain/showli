@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Star, Play, Info, ChevronRight, ChevronLeft } from 'lucide-react';
+import { Star, Play, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useGetTrendingQuery } from '@/api/tmdb/tmdbApi';
 import { getTmdbImageUrl, HERO_BACKDROP_SIZE } from '@/utils/image';
@@ -37,13 +37,6 @@ const HeroCarousel = () => {
     return null;
   }
 
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % trendingItems.length);
-  };
-
-  const handlePrev = () => {
-    setCurrentIndex((prev) => (prev - 1 + trendingItems.length) % trendingItems.length);
-  };
 
   return (
     <section className="relative w-full h-[60vh] md:h-[75vh] lg:h-[85vh] overflow-hidden rounded-2xl md:rounded-3xl mb-8 md:mb-16 group">

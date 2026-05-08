@@ -39,7 +39,7 @@ const HeroCarousel = () => {
 
 
   return (
-    <section className="relative w-full h-[60vh] md:h-[75vh] lg:h-[85vh] overflow-hidden rounded-2xl md:rounded-3xl mb-8 md:mb-16 group">
+    <section className="relative w-full h-[45vh] md:h-[75vh] lg:h-[85vh] overflow-hidden rounded-2xl md:rounded-3xl mb-8 md:mb-16 group">
       {/* Background Backdrop */}
       <AnimatePresence mode="wait">
         <motion.div
@@ -61,8 +61,8 @@ const HeroCarousel = () => {
       </AnimatePresence>
 
       {/* Content Overlay */}
-      <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-12 lg:p-16 pb-20 md:pb-32 lg:pb-40">
-        <div className="max-w-3xl space-y-4 md:space-y-6">
+      <div className="absolute inset-0 flex flex-col justify-end p-4 md:p-12 lg:p-16 pb-12 md:pb-32 lg:pb-40">
+        <div className="max-w-3xl space-y-3 md:space-y-6">
           <motion.div
             key={`info-${activeMovie.id}`}
             initial={{ opacity: 0, y: 20 }}
@@ -80,7 +80,7 @@ const HeroCarousel = () => {
               </div>
             </div>
 
-            <h1 className="text-xl sm:text-3xl md:text-5xl lg:text-6xl font-heading font-bold text-white tracking-tight drop-shadow-2xl leading-tight">
+            <h1 className="text-lg sm:text-3xl md:text-5xl lg:text-6xl font-heading font-bold text-white tracking-tight drop-shadow-2xl leading-tight">
               {'title' in activeMovie ? activeMovie.title : activeMovie.name}
             </h1>
 
@@ -89,14 +89,14 @@ const HeroCarousel = () => {
             </p>
 
             <div className="flex flex-row items-center gap-2 pt-1 md:pt-4">
-              <Button variant="primary" size="sm" className="md:px-6 md:py-2.5 gap-2 flex-1 sm:flex-initial">
+              <Button variant="primary" size="sm" className="px-3 md:px-6 md:py-2.5 gap-2 flex-1 sm:flex-initial">
                 <Play className="w-3.5 h-3.5 md:w-4 md:h-4 fill-current" />
-                <span className="text-xs md:text-sm">Trailer</span>
+                <span className="text-[11px] md:text-sm">Trailer</span>
               </Button>
               <Link to={`/${'title' in activeMovie ? 'movie' : 'tv'}/${activeMovie.id}`} className="flex-1 sm:flex-initial">
-                <Button variant="secondary" size="sm" className="md:px-6 md:py-2.5 gap-2 glass-card w-full sm:w-auto justify-center">
+                <Button variant="secondary" size="sm" className="px-3 md:px-6 md:py-2.5 gap-2 glass-card w-full sm:w-auto justify-center">
                   <Info className="w-3.5 h-3.5 md:w-4 md:h-4" />
-                  <span className="text-xs md:text-sm">Details</span>
+                  <span className="text-[11px] md:text-sm">Details</span>
                 </Button>
               </Link>
             </div>

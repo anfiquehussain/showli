@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Search, Plus, Film, Star, Loader2, Check } from 'lucide-react';
-import { useSearchMediaQuery } from '@/api/tmdb/tmdbApi';
+import { useSearchMediaQuery } from '@/api/media/mediaApi';
 import { useAuth } from '@/hooks/useAuth';
-import { useAddMovieToCollectionMutation, useRemoveMovieFromCollectionMutation, useGetCollectionMoviesQuery } from '@/api/collections/collectionsApi';
+import { useAddMediaToCollectionMutation, useRemoveMediaFromCollectionMutation, useGetCollectionMediaQuery } from '@/api/collections/collectionsApi';
 import { getTmdbImageUrl } from '@/utils/image';
 import Modal from '@/components/patterns/Modal';
 import Input from '@/components/ui/Input';
@@ -23,11 +23,11 @@ const AddMediaModal = ({ isOpen, onClose, collection }: AddMediaModalProps) => {
   const { user } = useAuth();
   const { success, error } = useToast();
 
-  const [addMovie] = useAddMovieToCollectionMutation();
-  const [removeMovie] = useRemoveMovieFromCollectionMutation();
+  const [addMedia] = useAddMediaToCollectionMutation();
+  const [removeMedia] = useRemoveMediaFromCollectionMutation();
 
-  // Get current movies in this collection to show "Added" status
-  const { data: currentMovies = [] } = useGetCollectionMoviesQuery(
+  // Get current media in this collection to show "Added" status
+  const { data: currentMedia = [] } = useGetCollectionMediaQuery(
     { uid: user?.uid || '', collectionId: collection.id },
     { skip: !user || !isOpen || collection.is_all_media }
   );
@@ -43,30 +43,30 @@ const AddMediaModal = ({ isOpen, onClose, collection }: AddMediaModalProps) => {
     skip: debouncedQuery.length < 2,
   });
 
-  const handleToggleMedia = async (media: TmdbMedia) => {
+  const handleToggleMedia = async (item: TmdbMedia) => {
     if (!user?.uid) return;
     
-    const isAdded = currentMovies.some(m => m.tmdb_id === media.id);
+    const isAdded = currentMedia.some(m => m.tmdb_id === item.id);
 
     try {
       if (isAdded) {
-        await removeMovie({ uid: user.uid, collectionId: collection.id, tmdbId: media.id }).unwrap();
+        await removeMedia({ uid: user.uid, collectionId: collection.id, tmdbId: item.id }).unwrap();
         success('Removed from collection');
       } else {
-        const type = 'title' in media ? 'movie' : 'tv';
-        const title = 'title' in media ? media.title : media.name;
-        const release_date = 'release_date' in media ? media.release_date : media.first_air_date;
+        const type = 'title' in item ? 'movie' : 'tv';
+        const title = 'title' in item ? item.title : item.name;
+        const release_date = 'release_date' in item ? item.release_date : item.first_air_date;
 
-        await addMovie({
+        await addMedia({
           uid: user.uid,
           collectionId: collection.id,
-          movie: { 
-            tmdb_id: media.id, 
+          media: { 
+            tmdb_id: item.id, 
             media_type: type,
             title,
-            poster_path: media.poster_path,
+            poster_path: item.poster_path,
             release_date: release_date || '',
-            vote_average: media.vote_average
+            vote_average: item.vote_average
           }
         }).unwrap();
         success('Added to collection');
@@ -105,7 +105,7 @@ const AddMediaModal = ({ isOpen, onClose, collection }: AddMediaModalProps) => {
               .filter(m => m.media_type === 'movie' || m.media_type === 'tv')
               .map((item) => {
                 const title = 'title' in item ? item.title : item.name;
-                const isAdded = currentMovies.some(m => m.tmdb_id === item.id);
+                const isAdded = currentMedia.some(m => m.tmdb_id === item.id);
                 
                 return (
                   <div 

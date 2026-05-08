@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Star, Play, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useGetTrendingQuery } from '@/api/tmdb/tmdbApi';
+import { useGetTrendingQuery } from '@/api/media/mediaApi';
 import { getTmdbImageUrl, HERO_BACKDROP_SIZE } from '@/utils/image';
 import Button from '@/components/ui/Button';
 
@@ -31,9 +31,9 @@ const HeroCarousel = () => {
     return null;
   }
 
-  const activeMovie = trendingItems[currentIndex];
+  const activeMedia = trendingItems[currentIndex];
 
-  if (!activeMovie) {
+  if (!activeMedia) {
     return null;
   }
 
@@ -43,7 +43,7 @@ const HeroCarousel = () => {
       {/* Background Backdrop */}
       <AnimatePresence mode="wait">
         <motion.div
-          key={activeMovie.id}
+          key={activeMedia.id}
           initial={{ opacity: 0, scale: 1.1 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0 }}
@@ -51,8 +51,8 @@ const HeroCarousel = () => {
           className="absolute inset-0"
         >
           <img
-            src={getTmdbImageUrl(activeMovie.backdrop_path, HERO_BACKDROP_SIZE)}
-            alt={'title' in activeMovie ? activeMovie.title : activeMovie.name}
+            src={getTmdbImageUrl(activeMedia.backdrop_path, HERO_BACKDROP_SIZE)}
+            alt={'title' in activeMedia ? activeMedia.title : activeMedia.name}
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
@@ -64,7 +64,7 @@ const HeroCarousel = () => {
       <div className="absolute inset-0 flex flex-col justify-end p-4 md:p-12 lg:p-16 pb-12 md:pb-32 lg:pb-40">
         <div className="max-w-3xl space-y-3 md:space-y-6">
           <motion.div
-            key={`info-${activeMovie.id}`}
+            key={`info-${activeMedia.id}`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.5 }}
@@ -76,16 +76,16 @@ const HeroCarousel = () => {
               </span>
               <div className="flex items-center gap-1.5 text-warning font-semibold text-sm md:text-base">
                 <Star className="w-3.5 h-3.5 md:w-4 md:h-4 fill-current" />
-                <span>{activeMovie.vote_average.toFixed(1)}</span>
+                <span>{activeMedia.vote_average.toFixed(1)}</span>
               </div>
             </div>
 
             <h1 className="text-lg sm:text-3xl md:text-5xl lg:text-6xl font-heading font-bold text-white tracking-tight drop-shadow-2xl leading-tight">
-              {'title' in activeMovie ? activeMovie.title : activeMovie.name}
+              {'title' in activeMedia ? activeMedia.title : activeMedia.name}
             </h1>
 
             <p className="text-xs md:text-base text-muted-foreground line-clamp-2 md:line-clamp-3 max-w-xl leading-relaxed text-pretty opacity-80">
-              {activeMovie.overview}
+              {activeMedia.overview}
             </p>
 
             <div className="flex flex-row items-center gap-2 pt-1 md:pt-4">
@@ -93,7 +93,7 @@ const HeroCarousel = () => {
                 <Play className="w-3.5 h-3.5 md:w-4 md:h-4 fill-current" />
                 <span className="text-[11px] md:text-sm">Trailer</span>
               </Button>
-              <Link to={`/${'title' in activeMovie ? 'movie' : 'tv'}/${activeMovie.id}`} className="flex-1 sm:flex-initial">
+              <Link to={`/${'title' in activeMedia ? 'movie' : 'tv'}/${activeMedia.id}`} className="flex-1 sm:flex-initial">
                 <Button variant="secondary" size="sm" className="px-3 md:px-6 md:py-2.5 gap-2 glass-card w-full sm:w-auto justify-center">
                   <Info className="w-3.5 h-3.5 md:w-4 md:h-4" />
                   <span className="text-[11px] md:text-sm">Details</span>
@@ -122,9 +122,9 @@ const HeroCarousel = () => {
 
         {/* Desktop Thumbnails */}
         <div className="hidden md:flex items-center gap-4 overflow-x-auto no-scrollbar pb-2">
-          {trendingItems.map((movie, index) => (
+          {trendingItems.map((item, index) => (
             <motion.button
-              key={movie.id}
+              key={item.id}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setCurrentIndex(index)}
@@ -134,8 +134,8 @@ const HeroCarousel = () => {
               `}
             >
               <img
-                src={getTmdbImageUrl(movie.backdrop_path, 'w300')}
-                alt={'title' in movie ? movie.title : movie.name}
+                src={getTmdbImageUrl(item.backdrop_path, 'w300')}
+                alt={'title' in item ? item.title : item.name}
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-black/20" />

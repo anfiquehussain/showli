@@ -9,9 +9,10 @@ interface ModalProps {
   title?: string;
   children: React.ReactNode;
   className?: string;
+  maxWidth?: string;
 }
 
-const Modal = ({ isOpen, onClose, title, children, className }: ModalProps) => {
+const Modal = ({ isOpen, onClose, title, children, className, maxWidth = 'max-w-md' }: ModalProps) => {
   // Close on Escape key
   React.useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -47,7 +48,7 @@ const Modal = ({ isOpen, onClose, title, children, className }: ModalProps) => {
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ type: 'spring', duration: 0.4, bounce: 0.2 }}
             className={`
-              relative w-full max-w-md overflow-hidden rounded-2xl border border-gray-border bg-card shadow-2xl
+              relative w-full ${maxWidth} overflow-hidden rounded-2xl border border-gray-border bg-card shadow-2xl
               ${className}
             `}
           >

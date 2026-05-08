@@ -1,11 +1,11 @@
-import type { MovieStatus } from '@/types/collections.types';
+import type { MediaStatus } from '@/types/collections.types';
 
 interface StatusBadgeProps {
-  status: MovieStatus;
+  status: MediaStatus;
   className?: string;
 }
 
-const statusConfig: Record<MovieStatus, { label: string; colorClass: string }> = {
+const statusConfig: Record<MediaStatus, { label: string; colorClass: string }> = {
   planned: { label: 'Planned', colorClass: 'bg-brand-primary/20 text-brand-primary border border-brand-primary/30' },
   watching: { label: 'Watching', colorClass: 'bg-brand-secondary/20 text-brand-secondary border border-brand-secondary/30' },
   completed: { label: 'Completed', colorClass: 'bg-success/20 text-success border border-success/30' },

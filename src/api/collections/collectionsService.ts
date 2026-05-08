@@ -13,9 +13,9 @@ import {
 import { db } from '@/lib/firebase';
 import type {
   Collection,
-  CollectionMovie,
-  UserMovieMetadata,
-  MovieStatus,
+  CollectionMedia,
+  UserMediaMetadata,
+  MediaStatus,
 } from '@/types/collections.types';
 
 const USERS_COLLECTION = 'users';
@@ -54,7 +54,7 @@ export const collectionsService = {
    */
   createCollection: async (
     uid: string, 
-    data: Omit<Collection, 'id' | 'created_at' | 'updated_at' | 'movie_count'>
+    data: Omit<Collection, 'id' | 'created_at' | 'updated_at' | 'media_count'>
   ): Promise<Collection> => {
     const newCollectionRef = doc(collection(db, USERS_COLLECTION, uid, 'collections'));
     
@@ -62,7 +62,7 @@ export const collectionsService = {
       ...data,
       created_at: Date.now(),
       updated_at: Date.now(),
-      movie_count: 0,
+      media_count: 0,
     };
 
     await setDoc(newCollectionRef, collectionData);
@@ -79,7 +79,7 @@ export const collectionsService = {
   updateCollection: async (
     uid: string,
     collectionId: string,
-    data: Partial<Omit<Collection, 'id' | 'created_at' | 'movie_count'>>
+    data: Partial<Omit<Collection, 'id' | 'created_at' | 'media_count'>>
   ): Promise<void> => {
     const docRef = doc(db, USERS_COLLECTION, uid, 'collections', collectionId);
     await updateDoc(docRef, {
@@ -89,7 +89,7 @@ export const collectionsService = {
   },
 
   /**
-   * Delete a collection (and theoretically its subcollection of movies)
+   * Delete a collection (and theoretically its subcollection of media)
    */
   deleteCollection: async (uid: string, collectionId: string): Promise<void> => {
     const docRef = doc(db, USERS_COLLECTION, uid, 'collections', collectionId);
@@ -100,80 +100,76 @@ export const collectionsService = {
   },
 
   // =========================================================================
-  // MOVIES IN COLLECTIONS
+  // MEDIA IN COLLECTIONS
   // =========================================================================
 
   /**
-   * Get all movies in a specific collection
+   * Get all media in a specific collection
    */
-  getCollectionMovies: async (uid: string, collectionId: string): Promise<CollectionMovie[]> => {
-    const moviesRef = collection(db, USERS_COLLECTION, uid, 'collections', collectionId, 'movies');
-    const q = query(moviesRef, orderBy('added_at', 'desc'));
+  getCollectionMedia: async (uid: string, collectionId: string): Promise<CollectionMedia[]> => {
+    const mediaRef = collection(db, USERS_COLLECTION, uid, 'collections', collectionId, 'movies');
+    const q = query(mediaRef, orderBy('added_at', 'desc'));
     const snapshot = await getDocs(q);
     
-    return snapshot.docs.map(doc => doc.data() as CollectionMovie);
+    return snapshot.docs.map(doc => doc.data() as CollectionMedia);
   },
 
   /**
-   * Get all unique movies across all collections for a user
+   * Get all unique media across all collections for a user
    */
-  getAllUniqueMovies: async (uid: string): Promise<CollectionMovie[]> => {
+  getAllUniqueMedia: async (uid: string): Promise<CollectionMedia[]> => {
     const collectionsRef = collection(db, USERS_COLLECTION, uid, 'collections');
     const collectionsSnapshot = await getDocs(collectionsRef);
     
-    const allMovies: CollectionMovie[] = [];
-    const movieIds = new Set<number>();
+    const allMedia: CollectionMedia[] = [];
+    const mediaIds = new Set<number>();
 
-    // Fetch movies for each collection
-    // This is not the most efficient for many collections, but works for most users
-    const moviePromises = collectionsSnapshot.docs.map(async (colDoc) => {
-      const moviesRef = collection(db, colDoc.ref.path, 'movies');
-      const moviesSnapshot = await getDocs(moviesRef);
-      return moviesSnapshot.docs.map(d => d.data() as CollectionMovie);
+    // Fetch media for each collection
+    const mediaPromises = collectionsSnapshot.docs.map(async (colDoc) => {
+      const mediaRef = collection(db, colDoc.ref.path, 'movies');
+      const mediaSnapshot = await getDocs(mediaRef);
+      return mediaSnapshot.docs.map(d => d.data() as CollectionMedia);
     });
 
-    const moviesArrays = await Promise.all(moviePromises);
+    const mediaArrays = await Promise.all(mediaPromises);
     
-    for (const movies of moviesArrays) {
-      for (const movie of movies) {
-        if (!movieIds.has(movie.tmdb_id)) {
-          movieIds.add(movie.tmdb_id);
-          allMovies.push(movie);
+    for (const items of mediaArrays) {
+      for (const item of items) {
+        if (!mediaIds.has(item.tmdb_id)) {
+          mediaIds.add(item.tmdb_id);
+          allMedia.push(item);
         }
       }
     }
 
     // Sort by added_at desc (most recent first)
-    return allMovies.sort((a, b) => b.added_at - a.added_at);
+    return allMedia.sort((a, b) => b.added_at - a.added_at);
   },
 
   /**
-   * Add a movie to a collection
+   * Add a media item to a collection
    */
-  addMovieToCollection: async (
+  addMediaToCollection: async (
     uid: string,
     collectionId: string,
-    movie: Omit<CollectionMovie, 'added_at'>
+    media: Omit<CollectionMedia, 'added_at'>
   ): Promise<void> => {
     const batch = writeBatch(db);
     
-    // 1. Add movie to collection
-    const movieRef = doc(db, USERS_COLLECTION, uid, 'collections', collectionId, 'movies', movie.tmdb_id.toString());
-    batch.set(movieRef, {
-      ...movie,
+    // 1. Add media to collection
+    const mediaRef = doc(db, USERS_COLLECTION, uid, 'collections', collectionId, 'movies', media.tmdb_id.toString());
+    batch.set(mediaRef, {
+      ...media,
       status: 'planned', // Default status when adding to collection
       added_at: Date.now()
     });
 
-    // 2. Increment movie_count in the collection document
-    // Normally use FieldValue.increment(1) but RTK Query cache handles it manually for us too,
-    // For safety, we'll get the current collection and increment. Or just leave it to RTK Query optimistic updates.
-    // Better to use a Cloud Function for true counts, but let's read/update for now.
+    // 2. Increment media_count in the collection document
     const collectionRef = doc(db, USERS_COLLECTION, uid, 'collections', collectionId);
     const collectionSnap = await getDoc(collectionRef);
     if (collectionSnap.exists()) {
       batch.update(collectionRef, {
-        movie_count: (collectionSnap.data().movie_count || 0) + 1,
+        media_count: (collectionSnap.data().media_count || 0) + 1,
         updated_at: Date.now()
       });
     }
@@ -182,26 +178,26 @@ export const collectionsService = {
   },
 
   /**
-   * Remove a movie from a collection
+   * Remove a media item from a collection
    */
-  removeMovieFromCollection: async (
+  removeMediaFromCollection: async (
     uid: string,
     collectionId: string,
     tmdbId: number
   ): Promise<void> => {
     const batch = writeBatch(db);
     
-    // 1. Remove movie
-    const movieRef = doc(db, USERS_COLLECTION, uid, 'collections', collectionId, 'movies', tmdbId.toString());
-    batch.delete(movieRef);
+    // 1. Remove media item
+    const mediaRef = doc(db, USERS_COLLECTION, uid, 'collections', collectionId, 'movies', tmdbId.toString());
+    batch.delete(mediaRef);
 
-    // 2. Decrement movie_count
+    // 2. Decrement media_count
     const collectionRef = doc(db, USERS_COLLECTION, uid, 'collections', collectionId);
     const collectionSnap = await getDoc(collectionRef);
     if (collectionSnap.exists()) {
-      const currentCount = collectionSnap.data().movie_count || 0;
+      const currentCount = collectionSnap.data().media_count || 0;
       batch.update(collectionRef, {
-        movie_count: Math.max(0, currentCount - 1),
+        media_count: Math.max(0, currentCount - 1),
         updated_at: Date.now()
       });
     }
@@ -210,9 +206,9 @@ export const collectionsService = {
   },
 
   /**
-   * Remove a movie from all collections it belongs to
+   * Remove a media item from all collections it belongs to
    */
-  removeMovieFromAllCollections: async (uid: string, tmdbId: number): Promise<void> => {
+  removeMediaFromAllCollections: async (uid: string, tmdbId: number): Promise<void> => {
     const collectionsRef = collection(db, USERS_COLLECTION, uid, 'collections');
     const collectionsSnap = await getDocs(collectionsRef);
     
@@ -220,16 +216,16 @@ export const collectionsService = {
     let removedCount = 0;
 
     for (const collectionDoc of collectionsSnap.docs) {
-      const movieRef = doc(db, USERS_COLLECTION, uid, 'collections', collectionDoc.id, 'movies', tmdbId.toString());
-      const movieSnap = await getDoc(movieRef);
+      const mediaRef = doc(db, USERS_COLLECTION, uid, 'collections', collectionDoc.id, 'movies', tmdbId.toString());
+      const mediaSnap = await getDoc(mediaRef);
       
-      if (movieSnap.exists()) {
-        batch.delete(movieRef);
+      if (mediaSnap.exists()) {
+        batch.delete(mediaRef);
         
         // Update count for this collection
-        const currentCount = collectionDoc.data().movie_count || 0;
+        const currentCount = collectionDoc.data().media_count || 0;
         batch.update(collectionDoc.ref, {
-          movie_count: Math.max(0, currentCount - 1),
+          media_count: Math.max(0, currentCount - 1),
           updated_at: Date.now()
         });
         removedCount++;
@@ -242,28 +238,28 @@ export const collectionsService = {
   },
 
   /**
-   * Update the status of a movie within a specific collection
+   * Update the status of a media item within a specific collection
    */
-  updateCollectionMovieStatus: async (
+  updateCollectionMediaStatus: async (
     uid: string,
     collectionId: string,
     tmdbId: number,
-    status: MovieStatus
+    status: MediaStatus
   ): Promise<void> => {
-    const movieRef = doc(db, USERS_COLLECTION, uid, 'collections', collectionId, 'movies', tmdbId.toString());
-    await updateDoc(movieRef, {
+    const mediaRef = doc(db, USERS_COLLECTION, uid, 'collections', collectionId, 'movies', tmdbId.toString());
+    await updateDoc(mediaRef, {
       status,
       updated_at: Date.now()
     });
   },
 
   /**
-   * Update a movie's status across all collections it belongs to
+   * Update a media item's status across all collections it belongs to
    */
-  updateMovieStatusGlobally: async (
+  updateMediaStatusGlobally: async (
     uid: string,
     tmdbId: number,
-    status: MovieStatus
+    status: MediaStatus
   ): Promise<void> => {
     const batch = writeBatch(db);
     
@@ -282,11 +278,11 @@ export const collectionsService = {
     const collectionsSnap = await getDocs(collectionsRef);
     
     for (const collectionDoc of collectionsSnap.docs) {
-      const movieRef = doc(db, USERS_COLLECTION, uid, 'collections', collectionDoc.id, 'movies', tmdbId.toString());
-      const movieSnap = await getDoc(movieRef);
+      const mediaRef = doc(db, USERS_COLLECTION, uid, 'collections', collectionDoc.id, 'movies', tmdbId.toString());
+      const mediaSnap = await getDoc(mediaRef);
       
-      if (movieSnap.exists()) {
-        batch.update(movieRef, { status, updated_at: Date.now() });
+      if (mediaSnap.exists()) {
+        batch.update(mediaRef, { status, updated_at: Date.now() });
       }
     }
 
@@ -294,26 +290,26 @@ export const collectionsService = {
   },
 
   // =========================================================================
-  // GLOBAL MOVIE METADATA (STATUS, RATINGS, ETC)
+  // GLOBAL MEDIA METADATA (STATUS, RATINGS, ETC)
   // =========================================================================
 
   /**
-   * Get metadata for a specific movie
+   * Get metadata for a specific media item
    */
-  getUserMovieMetadata: async (uid: string, tmdbId: number): Promise<UserMovieMetadata | null> => {
+  getUserMediaMetadata: async (uid: string, tmdbId: number): Promise<UserMediaMetadata | null> => {
     const docRef = doc(db, USERS_COLLECTION, uid, 'movies', tmdbId.toString());
     const snapshot = await getDoc(docRef);
     if (!snapshot.exists()) return null;
-    return snapshot.data() as UserMovieMetadata;
+    return snapshot.data() as UserMediaMetadata;
   },
 
   /**
-   * Update or create metadata for a movie
+   * Update or create metadata for a media item
    */
-  updateUserMovieMetadata: async (
+  updateUserMediaMetadata: async (
     uid: string,
     tmdbId: number,
-    data: Partial<Omit<UserMovieMetadata, 'tmdb_id' | 'created_at'>>
+    data: Partial<Omit<UserMediaMetadata, 'tmdb_id' | 'created_at'>>
   ): Promise<void> => {
     const docRef = doc(db, USERS_COLLECTION, uid, 'movies', tmdbId.toString());
     const snapshot = await getDoc(docRef);
@@ -325,9 +321,9 @@ export const collectionsService = {
       });
     } else {
       // Create new
-      if (!data.media_type) throw new Error('media_type is required when creating movie metadata');
+      if (!data.media_type) throw new Error('media_type is required when creating media metadata');
       
-      const newMetadata: UserMovieMetadata = {
+      const newMetadata: UserMediaMetadata = {
         tmdb_id: tmdbId,
         media_type: data.media_type,
         created_at: Date.now(),

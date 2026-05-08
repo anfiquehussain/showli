@@ -7,11 +7,16 @@ import type {
   TmdbTVDetails,
   TmdbCountry,
   TmdbLanguage,
-  TmdbGenre
+  TmdbGenre,
+  TmdbConfiguration,
+  TmdbReview,
+  TmdbCreditsResponse,
+  TmdbAggregateCreditsResponse,
+  TmdbWatchProvidersResponse
 } from '@/types/tmdb.types';
 
-export const tmdbApi = createApi({
-  reducerPath: 'tmdbApi',
+export const mediaApi = createApi({
+  reducerPath: 'mediaApi',
   baseQuery: fetchBaseQuery({
     baseUrl: TMDB_BASE_URL,
   }),
@@ -69,6 +74,27 @@ export const tmdbApi = createApi({
     getTVGenres: builder.query<{ genres: TmdbGenre[] }, void>({
       query: () => `/genre/tv/list?api_key=${TMDB_API_KEY}`,
     }),
+    getConfiguration: builder.query<TmdbConfiguration, void>({
+      query: () => `/configuration?api_key=${TMDB_API_KEY}`,
+    }),
+    getReviews: builder.query<TmdbPaginatedResponse<TmdbReview>, { type: 'movie' | 'tv'; id: number; page?: number }>({
+      query: ({ type, id, page = 1 }) => `/${type}/${id}/reviews?api_key=${TMDB_API_KEY}&page=${page}`,
+    }),
+    getCredits: builder.query<TmdbCreditsResponse, number>({
+      query: (id) => `/movie/${id}/credits?api_key=${TMDB_API_KEY}`,
+    }),
+    getTVCredits: builder.query<TmdbAggregateCreditsResponse, number>({
+      query: (id) => `/tv/${id}/aggregate_credits?api_key=${TMDB_API_KEY}`,
+    }),
+    getWatchProviders: builder.query<TmdbWatchProvidersResponse, { type: 'movie' | 'tv'; id: number }>({
+      query: ({ type, id }) => `/${type}/${id}/watch/providers?api_key=${TMDB_API_KEY}`,
+    }),
+    getSimilar: builder.query<TmdbPaginatedResponse<TmdbMedia>, { type: 'movie' | 'tv'; id: number }>({
+      query: ({ type, id }) => `/${type}/${id}/similar?api_key=${TMDB_API_KEY}`,
+    }),
+    getRecommendations: builder.query<TmdbPaginatedResponse<TmdbMedia>, { type: 'movie' | 'tv'; id: number }>({
+      query: ({ type, id }) => `/${type}/${id}/recommendations?api_key=${TMDB_API_KEY}`,
+    }),
   }),
 });
 
@@ -85,5 +111,12 @@ export const {
   useGetCountriesQuery,
   useGetLanguagesQuery,
   useGetMovieGenresQuery,
-  useGetTVGenresQuery
-} = tmdbApi;
+  useGetTVGenresQuery,
+  useGetConfigurationQuery,
+  useGetReviewsQuery,
+  useGetCreditsQuery,
+  useGetTVCreditsQuery,
+  useGetWatchProvidersQuery,
+  useGetSimilarQuery,
+  useGetRecommendationsQuery
+} = mediaApi;

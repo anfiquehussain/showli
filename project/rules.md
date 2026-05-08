@@ -46,19 +46,30 @@ Imports **MUST** flow in one direction only:
 ### 2.3 `components/features/` — Feature Components
 -   **Purpose**: Business-domain components, own real application behavior.
 -   **Characteristics**: May contain business logic, may call APIs, may reference domain entities.
--   **Organization**: Grouped by feature/domain (e.g., `features/movies/`, `features/planner/`, `features/layout/`).
+-   **Organization**: Grouped by feature/domain (e.g., `features/media/`, `features/planner/`, `features/layout/`).
 -   **Responsibility**: Configure patterns (columns, actions, permissions), do NOT re-implement UI mechanics.
 
 ---
 
 ## 3. Feature Internal Organization
 
-Each feature domain (e.g., `movies/`, `planner/`) can contain:
+Each feature domain (e.g., `media/`, `planner/`) can contain:
 -   **`components/`**: Feature-specific sub-components (NOT reusable across other features).
 -   **`hooks/`**: Feature-specific custom hooks (e.g., `useMovieSync`).
 -   **`utils/`**: Feature-specific utilities (validation, transformers).
 -   **`types.ts`**: Feature-specific TypeScript types.
 -   **Naming Pattern**: Use `[Entity]SettingsUpdate` for partial update components.
+
+### 3.1 Component Decomposition & Encapsulation
+
+When a feature component becomes complex (e.g., >200 lines) or consists of clearly defined sections:
+-   **Folder-per-Component**: Create a dedicated folder for the component (e.g., `features/media/MediaDetails/`).
+-   **Sub-components**: Extract internal sections into sub-components within that folder.
+-   **Naming**: Name sub-components specifically for their role (e.g., `MediaHero.tsx`, `MediaQuickFacts.tsx`).
+-   **Strict Encapsulation**: Sub-components in a component-specific folder MUST NOT be imported by any external component. They are private to their parent.
+-   **Shared vs Private**:
+    -   If a component is used by multiple features/pages, it must live in `patterns/` or the feature's root `components/`.
+    -   If it is a "building block" only for one specific component, it MUST be hidden inside that component's folder.
 
 **Rules**:
 -   ✅ Feature hooks can use feature utils.
@@ -281,7 +292,7 @@ import type { ButtonProps } from '@/components/ui/Button';
 -   **Types**: `[domain].types.ts` (e.g., `tmdb.types.ts`, `auth.types.ts`).
 -   **Utilities**: `camelCase.ts` (e.g., `formatDate.ts`).
 -   **Store Slices**: `camelCase.ts` (e.g., `movieSlice.ts`).
--   **API Services**: `camelCase.ts` (e.g., `tmdbApi.ts`).
+-   **API Services**: `.ts` | camelCase (e.g., `mediaApi.ts`).
 -   **Config**: `camelCase.ts` (e.g., `firebase.ts`).
 
 ### 12.10 Reusable Type Organization

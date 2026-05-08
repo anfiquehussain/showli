@@ -2,7 +2,7 @@
  * Global Type Barrel Export
  *
  * Re-exports all shared types from a single entry point.
- * Usage: import type { TmdbMovie, TmdbGenre } from '@/types';
+ * Usage: import type { TmdbMedia, TmdbGenre } from '@/types';
  */
 
 export type {

@@ -1,4 +1,4 @@
-export type MovieStatus = 'planned' | 'watching' | 'completed' | 'on_hold' | 'dropped' | 'rewatching';
+export type MediaStatus = 'planned' | 'watching' | 'completed' | 'on_hold' | 'dropped' | 'rewatching';
 
 export interface Collection {
   id: string;
@@ -9,17 +9,17 @@ export interface Collection {
   icon?: string;
   created_at: number;
   updated_at: number;
-  movie_count: number;
+  media_count: number;
   is_default: boolean;
   is_all_media?: boolean;
   is_pinned?: boolean;
 }
 
-// Global user-movie metadata stored in users/{uid}/movies/{movieId}
-export interface UserMovieMetadata {
+// Global user-media metadata stored in users/{uid}/movies/{movieId}
+export interface UserMediaMetadata {
   tmdb_id: number;
   media_type: 'movie' | 'tv';
-  status?: MovieStatus;
+  status?: MediaStatus;
   rating?: number; // 1-10
   notes?: string;
   watched_date?: number;
@@ -33,8 +33,8 @@ export interface UserMovieMetadata {
   updated_at: number;
 }
 
-// Pointer to a movie stored in users/{uid}/collections/{collectionId}/movies/{movieId}
-export interface CollectionMovie {
+// Pointer to a media item stored in users/{uid}/collections/{collectionId}/movies/{movieId}
+export interface CollectionMedia {
   tmdb_id: number;
   media_type: 'movie' | 'tv';
   title: string;
@@ -42,10 +42,10 @@ export interface CollectionMovie {
   release_date: string;
   vote_average: number;
   added_at: number;
-  status?: MovieStatus;
+  status?: MediaStatus;
 }
 
-// When returning a movie with its metadata joined
-export interface CollectionMovieWithMetadata extends CollectionMovie {
-  metadata?: UserMovieMetadata;
+// When returning a media item with its metadata joined
+export interface CollectionMediaWithMetadata extends CollectionMedia {
+  metadata?: UserMediaMetadata;
 }

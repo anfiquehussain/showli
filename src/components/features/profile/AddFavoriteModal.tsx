@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Search, Plus, Film, Star, Loader2 } from 'lucide-react';
 
-import { useSearchMediaQuery } from '@/api/tmdb/tmdbApi';
+import { useSearchMediaQuery } from '@/api/media/mediaApi';
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux';
 import { useAuth } from '@/hooks/useAuth';
 import { addUserFavorite } from '@/store/slices/profileSlice';
@@ -35,11 +35,11 @@ const AddFavoriteModal = ({ isOpen, onClose }: AddFavoriteModalProps) => {
     skip: debouncedQuery.length < 2,
   });
 
-  const handleAdd = async (movie: TmdbMedia) => {
+  const handleAdd = async (media: TmdbMedia) => {
     if (favorites.length >= 5 || !user?.uid) return;
     
     try {
-      await dispatch(addUserFavorite({ uid: user.uid, movie })).unwrap();
+      await dispatch(addUserFavorite({ uid: user.uid, media })).unwrap();
       if (favorites.length + 1 === 5) onClose();
     } catch (error) {
       console.error('Failed to add favorite:', error);

@@ -2,15 +2,15 @@ import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 import { collectionsService } from './collectionsService';
 import type { 
   Collection, 
-  CollectionMovie, 
-  UserMovieMetadata,
-  MovieStatus
+  CollectionMedia, 
+  UserMediaMetadata,
+  MediaStatus
 } from '@/types/collections.types';
 
 export const collectionsApi = createApi({
   reducerPath: 'collectionsApi',
   baseQuery: fakeBaseQuery(),
-  tagTypes: ['Collection', 'CollectionMovie', 'UserMovieMetadata'],
+  tagTypes: ['Collection', 'CollectionMedia', 'UserMediaMetadata'],
   endpoints: (builder) => ({
     getCollections: builder.query<Collection[], string>({
       queryFn: async (uid) => {
@@ -22,15 +22,15 @@ export const collectionsApi = createApi({
         }
       },
       providesTags: (result) =>
-        result
-          ? [
-              ...result.map(({ id }) => ({ type: 'Collection' as const, id })),
-              { type: 'Collection', id: 'LIST' },
-            ]
-          : [{ type: 'Collection', id: 'LIST' }],
+      result
+        ? [
+            ...result.map(({ id }) => ({ type: 'Collection' as const, id })),
+            { type: 'Collection', id: 'LIST' },
+          ]
+        : [{ type: 'Collection', id: 'LIST' }],
     }),
 
-    createCollection: builder.mutation<Collection, { uid: string; data: Omit<Collection, 'id' | 'created_at' | 'updated_at' | 'movie_count'> }>({
+    createCollection: builder.mutation<Collection, { uid: string; data: Omit<Collection, 'id' | 'created_at' | 'updated_at' | 'media_count'> }>({
       queryFn: async ({ uid, data }) => {
         try {
           const newCollection = await collectionsService.createCollection(uid, data);
@@ -42,7 +42,7 @@ export const collectionsApi = createApi({
       invalidatesTags: [{ type: 'Collection', id: 'LIST' }],
     }),
 
-    updateCollection: builder.mutation<void, { uid: string; collectionId: string; data: Partial<Omit<Collection, 'id' | 'created_at' | 'movie_count'>> }>({
+    updateCollection: builder.mutation<void, { uid: string; collectionId: string; data: Partial<Omit<Collection, 'id' | 'created_at' | 'media_count'>> }>({
       queryFn: async ({ uid, collectionId, data }) => {
         try {
           await collectionsService.updateCollection(uid, collectionId, data);
@@ -72,23 +72,23 @@ export const collectionsApi = createApi({
       ],
     }),
 
-    getCollectionMovies: builder.query<CollectionMovie[], { uid: string; collectionId: string }>({
+    getCollectionMedia: builder.query<CollectionMedia[], { uid: string; collectionId: string }>({
       queryFn: async ({ uid, collectionId }) => {
         try {
-          const movies = await collectionsService.getCollectionMovies(uid, collectionId);
-          return { data: movies };
+          const items = await collectionsService.getCollectionMedia(uid, collectionId);
+          return { data: items };
         } catch (error: unknown) {
           return { error: { status: 500, data: error instanceof Error ? error.message : 'Unknown error' } };
         }
       },
-      providesTags: (_result, _error, { collectionId }) => [{ type: 'CollectionMovie', id: `LIST_${collectionId}` }],
+      providesTags: (_result, _error, { collectionId }) => [{ type: 'CollectionMedia', id: `LIST_${collectionId}` }],
     }),
     
-    getAllCollectionMovies: builder.query<CollectionMovie[], string>({
+    getAllCollectionMedia: builder.query<CollectionMedia[], string>({
       queryFn: async (uid) => {
         try {
-          const movies = await collectionsService.getAllUniqueMovies(uid);
-          return { data: movies };
+          const items = await collectionsService.getAllUniqueMedia(uid);
+          return { data: items };
         } catch (error: unknown) {
           return { error: { status: 500, data: error instanceof Error ? error.message : 'Unknown error' } };
         }
@@ -96,100 +96,100 @@ export const collectionsApi = createApi({
       providesTags: (result) => 
         result 
           ? [
-              ...result.map(({ tmdb_id }) => ({ type: 'CollectionMovie' as const, id: tmdb_id })),
-              { type: 'CollectionMovie', id: 'ALL' }
+              ...result.map(({ tmdb_id }) => ({ type: 'CollectionMedia' as const, id: tmdb_id })),
+              { type: 'CollectionMedia', id: 'ALL' }
             ]
-          : [{ type: 'CollectionMovie', id: 'ALL' }],
+          : [{ type: 'CollectionMedia', id: 'ALL' }],
     }),
 
-    addMovieToCollection: builder.mutation<void, { uid: string; collectionId: string; movie: Omit<CollectionMovie, 'added_at'> }>({
-      queryFn: async ({ uid, collectionId, movie }) => {
+    addMediaToCollection: builder.mutation<void, { uid: string; collectionId: string; media: Omit<CollectionMedia, 'added_at'> }>({
+      queryFn: async ({ uid, collectionId, media }) => {
         try {
-          await collectionsService.addMovieToCollection(uid, collectionId, movie);
+          await collectionsService.addMediaToCollection(uid, collectionId, media);
           return { data: undefined };
         } catch (error: unknown) {
           return { error: { status: 500, data: error instanceof Error ? error.message : 'Unknown error' } };
         }
       },
       invalidatesTags: (_result, _error, { collectionId }) => [
-        { type: 'CollectionMovie', id: `LIST_${collectionId}` },
-        { type: 'CollectionMovie', id: 'ALL' },
+        { type: 'CollectionMedia', id: `LIST_${collectionId}` },
+        { type: 'CollectionMedia', id: 'ALL' },
         { type: 'Collection', id: collectionId },
         { type: 'Collection', id: 'LIST' }
       ],
     }),
 
-    removeMovieFromCollection: builder.mutation<void, { uid: string; collectionId: string; tmdbId: number }>({
+    removeMediaFromCollection: builder.mutation<void, { uid: string; collectionId: string; tmdbId: number }>({
       queryFn: async ({ uid, collectionId, tmdbId }) => {
         try {
-          await collectionsService.removeMovieFromCollection(uid, collectionId, tmdbId);
+          await collectionsService.removeMediaFromCollection(uid, collectionId, tmdbId);
           return { data: undefined };
         } catch (error: unknown) {
           return { error: { status: 500, data: error instanceof Error ? error.message : 'Unknown error' } };
         }
       },
       invalidatesTags: (_result, _error, { collectionId }) => [
-        { type: 'CollectionMovie', id: `LIST_${collectionId}` },
-        { type: 'CollectionMovie', id: 'ALL' },
+        { type: 'CollectionMedia', id: `LIST_${collectionId}` },
+        { type: 'CollectionMedia', id: 'ALL' },
         { type: 'Collection', id: collectionId },
         { type: 'Collection', id: 'LIST' }
       ],
     }),
 
-    removeMovieFromLibrary: builder.mutation<void, { uid: string; tmdbId: number }>({
+    removeMediaFromLibrary: builder.mutation<void, { uid: string; tmdbId: number }>({
       queryFn: async ({ uid, tmdbId }) => {
         try {
-          await collectionsService.removeMovieFromAllCollections(uid, tmdbId);
+          await collectionsService.removeMediaFromAllCollections(uid, tmdbId);
           return { data: undefined };
         } catch (error: unknown) {
           return { error: { status: 500, data: error instanceof Error ? error.message : 'Unknown error' } };
         }
       },
       invalidatesTags: () => [
-        { type: 'CollectionMovie', id: 'ALL' },
+        { type: 'CollectionMedia', id: 'ALL' },
         { type: 'Collection', id: 'LIST' }
       ],
     }),
 
-    updateCollectionMovieStatus: builder.mutation<void, { uid: string; collectionId: string; tmdbId: number; status: MovieStatus }>({
+    updateCollectionMediaStatus: builder.mutation<void, { uid: string; collectionId: string; tmdbId: number; status: MediaStatus }>({
       queryFn: async ({ uid, tmdbId, status }) => {
         try {
-          await collectionsService.updateMovieStatusGlobally(uid, tmdbId, status);
+          await collectionsService.updateMediaStatusGlobally(uid, tmdbId, status);
           return { data: undefined };
         } catch (error: unknown) {
           return { error: { status: 500, data: error instanceof Error ? error.message : 'Unknown error' } };
         }
       },
       invalidatesTags: (_result, _error, { collectionId }) => [
-        { type: 'CollectionMovie', id: `LIST_${collectionId}` },
-        { type: 'CollectionMovie', id: 'ALL' },
+        { type: 'CollectionMedia', id: `LIST_${collectionId}` },
+        { type: 'CollectionMedia', id: 'ALL' },
         { type: 'Collection', id: collectionId },
         { type: 'Collection', id: 'LIST' }
       ],
     }),
 
-    getUserMovieMetadata: builder.query<UserMovieMetadata | null, { uid: string; tmdbId: number }>({
+    getUserMediaMetadata: builder.query<UserMediaMetadata | null, { uid: string; tmdbId: number }>({
       queryFn: async ({ uid, tmdbId }) => {
         try {
-          const metadata = await collectionsService.getUserMovieMetadata(uid, tmdbId);
+          const metadata = await collectionsService.getUserMediaMetadata(uid, tmdbId);
           return { data: metadata };
         } catch (error: unknown) {
           return { error: { status: 500, data: error instanceof Error ? error.message : 'Unknown error' } };
         }
       },
-      providesTags: (_result, _error, { tmdbId }) => [{ type: 'UserMovieMetadata', id: tmdbId }],
+      providesTags: (_result, _error, { tmdbId }) => [{ type: 'UserMediaMetadata', id: tmdbId }],
     }),
 
-    updateUserMovieMetadata: builder.mutation<void, { uid: string; tmdbId: number; data: Partial<Omit<UserMovieMetadata, 'tmdb_id' | 'created_at'>> }>({
+    updateUserMediaMetadata: builder.mutation<void, { uid: string; tmdbId: number; data: Partial<Omit<UserMediaMetadata, 'tmdb_id' | 'created_at'>> }>({
       queryFn: async ({ uid, tmdbId, data }) => {
         try {
-          await collectionsService.updateUserMovieMetadata(uid, tmdbId, data);
+          await collectionsService.updateUserMediaMetadata(uid, tmdbId, data);
           return { data: undefined };
         } catch (error: unknown) {
           return { error: { status: 500, data: error instanceof Error ? error.message : 'Unknown error' } };
         }
       },
-      invalidatesTags: (_result, _error, { tmdbId }) => [{ type: 'UserMovieMetadata', id: tmdbId }],
+      invalidatesTags: (_result, _error, { tmdbId }) => [{ type: 'UserMediaMetadata', id: tmdbId }],
     })
   }),
 });
@@ -199,12 +199,12 @@ export const {
   useCreateCollectionMutation,
   useUpdateCollectionMutation,
   useDeleteCollectionMutation,
-  useGetCollectionMoviesQuery,
-  useGetAllCollectionMoviesQuery,
-  useAddMovieToCollectionMutation,
-  useRemoveMovieFromCollectionMutation,
-  useUpdateCollectionMovieStatusMutation,
-  useRemoveMovieFromLibraryMutation,
-  useGetUserMovieMetadataQuery,
-  useUpdateUserMovieMetadataMutation,
+  useGetCollectionMediaQuery,
+  useGetAllCollectionMediaQuery,
+  useAddMediaToCollectionMutation,
+  useRemoveMediaFromCollectionMutation,
+  useUpdateCollectionMediaStatusMutation,
+  useRemoveMediaFromLibraryMutation,
+  useGetUserMediaMetadataQuery,
+  useUpdateUserMediaMetadataMutation,
 } = collectionsApi;

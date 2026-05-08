@@ -26,8 +26,8 @@ import {
   useGetLanguagesQuery, 
   useGetMovieGenresQuery, 
   useGetTVGenresQuery 
-} from '@/api/tmdb/tmdbApi';
-import { generateRandomDiscovery, type DiscoveryConfig } from '@/api/tmdb/discoveryConfigs';
+} from '@/api/media/mediaApi';
+import { generateRandomDiscovery, type DiscoveryConfig } from '@/api/media/mediaDiscovery';
 import MediaScroll from '@/components/patterns/MediaScroll';
 import Button from '@/components/ui/Button';
 

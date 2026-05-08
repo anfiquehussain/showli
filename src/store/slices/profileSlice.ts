@@ -30,7 +30,7 @@ export const fetchFavorites = createAsyncThunk(
 
 export const addUserFavorite = createAsyncThunk(
   'profile/addUserFavorite',
-  async ({ uid, movie }: { uid: string; movie: TmdbMedia }, { getState, rejectWithValue }) => {
+  async ({ uid, media }: { uid: string; media: TmdbMedia }, { getState, rejectWithValue }) => {
     try {
       const state = getState() as { profile: ProfileState };
       const currentFavorites = state.profile.favorites;
@@ -39,14 +39,14 @@ export const addUserFavorite = createAsyncThunk(
         return rejectWithValue('Maximum of 5 favorites allowed');
       }
 
-      if (currentFavorites.some((m) => m.id === movie.id)) {
-        return rejectWithValue('Movie already in favorites');
+      if (currentFavorites.some((m) => m.id === media.id)) {
+        return rejectWithValue('Media already in favorites');
       }
 
-      const newFavorites = [...currentFavorites, movie];
+      const newFavorites = [...currentFavorites, media];
       await profileService.updateFavorites(uid, newFavorites);
       
-      return movie;
+      return media;
     } catch (error) {
       if (error instanceof Error) return rejectWithValue(error.message);
       return rejectWithValue('Failed to add favorite');
@@ -56,14 +56,14 @@ export const addUserFavorite = createAsyncThunk(
 
 export const removeUserFavorite = createAsyncThunk(
   'profile/removeUserFavorite',
-  async ({ uid, movieId }: { uid: string; movieId: number }, { getState, rejectWithValue }) => {
+  async ({ uid, mediaId }: { uid: string; mediaId: number }, { getState, rejectWithValue }) => {
     try {
       const state = getState() as { profile: ProfileState };
-      const newFavorites = state.profile.favorites.filter((m) => m.id !== movieId);
+      const newFavorites = state.profile.favorites.filter((m) => m.id !== mediaId);
       
       await profileService.updateFavorites(uid, newFavorites);
       
-      return movieId;
+      return mediaId;
     } catch (error) {
       if (error instanceof Error) return rejectWithValue(error.message);
       return rejectWithValue('Failed to remove favorite');

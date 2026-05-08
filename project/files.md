@@ -15,9 +15,9 @@ src/
 │   ├── collections/    # [NEW] Collections service layer
 │   │   ├── collectionsService.ts # Firebase firestore for collections
 │   │   └── collectionsApi.ts     # RTK Query for collections
-│   └── tmdb/           # TMDb specific API endpoints
-│       ├── tmdbApi.ts  # RTK Query API for trending, search, etc.
-│       └── discoveryConfigs.ts # [NEW] Discovery row presets
+│   └── media/           # TMDb specific API endpoints
+│       ├── mediaApi.ts  # RTK Query API for trending, search, etc.
+│       └── mediaDiscovery.ts # Discovery row presets
 ├── assets/             # Static assets (images, global icons)
 ├── components/         # UI Components (3-Layer Architecture)
 │   ├── ui/             # [Layer 1] Primitives (Button.tsx, IconButton.tsx, Input.tsx)
@@ -25,10 +25,42 @@ src/
 │   └── features/       # [Layer 3] Feature Components (Grouped by domain)
 │       ├── auth/       # Authentication (AuthModal.tsx)
 │       ├── layout/     # Global structure (MainLayout.tsx, Navbar.tsx)
-│       ├── movies/     # Movie-related components (HeroCarousel.tsx, MediaDetails.tsx)
-│       ├── tv/         # TV-related components (DiscoveryGrids.tsx)
-│       ├── profile/    # Profile-related components (ProfileHero.tsx, ProfileSidebar.tsx)
-│       └── collections/# Collection-related components (CollectionList, CollectionModal, etc.)
+│       ├── media/      # Media-related components
+│       │   ├── MediaDetails/ # Decomposed details component
+│       │   │   ├── index.tsx
+│       │   │   ├── MediaHero.tsx
+│       │   │   ├── MediaQuickFacts.tsx
+│       │   │   ├── MediaReviews.tsx
+│       │   │   ├── MediaCast.tsx
+│       │   │   ├── MediaCrew.tsx
+│       │   │   └── FullCreditsModal.tsx
+│       │   ├── HeroCarousel.tsx
+│       │   └── DiscoveryGrids.tsx
+│       ├── profile/    # Profile-related components
+│       │   ├── ProfileHero.tsx
+│       │   ├── ProfileSidebar.tsx
+│       │   ├── ProfileSection.tsx
+│       │   ├── ProfileFavorites.tsx
+│       │   └── AddFavoriteModal.tsx
+│       └── collections/# Collection-related components
+│           ├── CollectionDetails/ # Decomposed
+│           │   ├── index.tsx
+│           │   ├── CollectionDetailsHeader.tsx
+│           │   ├── CollectionDetailsToolbar.tsx
+│           │   ├── CollectionMediaCard.tsx
+│           │   └── RandomPickModal.tsx
+│           ├── CollectionList/ # Decomposed
+│           │   ├── index.tsx
+│           │   └── CollectionListItem.tsx
+│           ├── AddToCollectionModal/ # Decomposed
+│           │   ├── index.tsx
+│           │   └── CollectionItem.tsx
+│           ├── hooks/      # Feature-specific hooks
+│           │   ├── useCollectionsManagement.ts
+│           │   └── useCollectionDetails.ts
+│           ├── CollectionsHero.tsx
+│           ├── CollectionModal.tsx
+│           └── AddMediaModal.tsx
 ├── hooks/              # Reusable global hooks
 │   ├── useAuth.ts      # Firebase auth logic and state sync
 │   ├── useRedux.ts     # Pre-typed useAppDispatch & useAppSelector
@@ -38,7 +70,7 @@ src/
 ├── pages/              # Routed page components
 │   ├── HomePage.tsx      # App landing page
 │   ├── ProfilePage.tsx   # User profile and favorites
-│   ├── DetailsPage.tsx   # Media (Movie/TV) detail view
+│   ├── MediaDetailsPage.tsx   # Media (Movie/TV) detail view
 │   ├── CollectionsPage.tsx # [NEW] Library dashboard and collections list
 │   └── CollectionDetailsPage.tsx # [NEW] Individual collection view
 ├── routes/             # Route definitions
@@ -50,7 +82,7 @@ src/
 │   ├── env.d.ts        # Vite environment variable types (ImportMetaEnv)
 │   ├── tmdb.types.ts   # TMDb API response types
 │   ├── auth.types.ts   # Firebase auth types
-│   ├── collections.types.ts # Collection and movie types
+│   ├── collections.types.ts # Collection and media types
 │   └── index.ts        # Barrel export for all global types
 ├── utils/              # Helper functions (image.ts, date-fns helpers)
 │   └── image.ts        # TMDb image URL construction
@@ -74,7 +106,7 @@ src/
 
 ### `components/features/`
 -   Business-logic heavy.
--   Grouped by domain (e.g., `features/movies/`).
+-   Grouped by domain (e.g., `features/media/`).
 -   Contains its own `components/`, `hooks/`, `utils/`, and `types.ts` if they are private to that feature.
 
 ---
@@ -116,7 +148,7 @@ src/
 | Type Definitions | `.types.ts` | camelCase | `tmdb.types.ts`, `auth.types.ts` |
 | Environment Types | `.d.ts` | camelCase | `env.d.ts` |
 | Store/Slices | `.ts` | camelCase | `index.ts`, `movieSlice.ts` |
-| API Services | `.ts` | camelCase | `base.ts`, `tmdbApi.ts` |
+| API Services | `.ts` | camelCase | `base.ts`, `mediaApi.ts` |
 | Utilities | `.ts` | camelCase | `formatDate.ts` |
 | Styles | `.css` | camelCase | `index.css` |
 

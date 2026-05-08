@@ -1,6 +1,6 @@
-import HeroCarousel from '@/components/features/movies/HeroCarousel';
+import HeroCarousel from '@/components/features/media/HeroCarousel';
 import PageHeader from '@/components/patterns/PageHeader';
-import DiscoveryGrids from '@/components/features/tv/DiscoveryGrids';
+import DiscoveryGrids from '@/components/features/media/DiscoveryGrids';
 
 const HomePage = () => {
   return (

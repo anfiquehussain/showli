@@ -1,7 +1,7 @@
 import { useParams, useLocation } from 'react-router-dom';
-import MediaDetails from '@/components/features/movies/MediaDetails';
+import MediaDetails from '@/components/features/media/MediaDetails/index';
 
-const DetailsPage = () => {
+const MediaDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const { pathname } = useLocation();
   const type = pathname.includes('/movie/') ? 'movie' : 'tv';
@@ -11,4 +11,4 @@ const DetailsPage = () => {
   return <MediaDetails id={Number(id)} type={type} />;
 };
 
-export default DetailsPage;
+export default MediaDetailsPage;

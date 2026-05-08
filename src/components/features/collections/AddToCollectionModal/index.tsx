@@ -1,18 +1,19 @@
 import { useState } from 'react';
 import Modal from '@/components/patterns/Modal';
-import { Folder, Check, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import type { TmdbMedia } from '@/types/tmdb.types';
-import type { Collection } from '@/types/collections.types';
 import { 
   useGetCollectionsQuery, 
-  useAddMovieToCollectionMutation, 
-  useRemoveMovieFromCollectionMutation, 
-  useGetCollectionMoviesQuery,
+  useAddMediaToCollectionMutation, 
+  useRemoveMediaFromCollectionMutation, 
   useCreateCollectionMutation
 } from '@/api/collections/collectionsApi';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
-import CollectionModal from './CollectionModal';
+import CollectionModal from '../CollectionModal';
+
+// Internal Components
+import CollectionItem from './CollectionItem';
 
 interface AddToCollectionModalProps {
   isOpen: boolean;
@@ -28,8 +29,8 @@ export const AddToCollectionModal = ({ isOpen, onClose, media }: AddToCollection
     skip: !user || !isOpen,
   });
 
-  const [addMovie] = useAddMovieToCollectionMutation();
-  const [removeMovie] = useRemoveMovieFromCollectionMutation();
+  const [addMedia] = useAddMediaToCollectionMutation();
+  const [removeMedia] = useRemoveMediaFromCollectionMutation();
   const [createCollection] = useCreateCollectionMutation();
 
   const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false);
@@ -40,24 +41,19 @@ export const AddToCollectionModal = ({ isOpen, onClose, media }: AddToCollection
 
     setIsSubmitting(true);
     try {
-      // 1. Create the collection
       const newCollection = await createCollection({
         uid: user.uid,
-        data: {
-          ...data,
-          is_default: false
-        }
+        data: { ...data, is_default: false }
       }).unwrap();
 
-      // 2. Add movie to the new collection
       const type = 'title' in media ? 'movie' : 'tv';
       const title = 'title' in media ? media.title : media.name;
       const release_date = 'release_date' in media ? media.release_date : media.first_air_date;
 
-      await addMovie({
+      await addMedia({
         uid: user.uid,
         collectionId: newCollection.id,
-        movie: {
+        media: {
           tmdb_id: media.id,
           media_type: type,
           title,
@@ -71,7 +67,6 @@ export const AddToCollectionModal = ({ isOpen, onClose, media }: AddToCollection
       setIsCollectionModalOpen(false);
     } catch (err) {
       error('Failed to create collection');
-      console.error(err);
     } finally {
       setIsSubmitting(false);
     }
@@ -79,20 +74,19 @@ export const AddToCollectionModal = ({ isOpen, onClose, media }: AddToCollection
 
   const handleToggleCollection = async (collectionId: string, isAdded: boolean) => {
     if (!user || !media) return;
-
     try {
       if (isAdded) {
-        await removeMovie({ uid: user.uid, collectionId, tmdbId: media.id }).unwrap();
+        await removeMedia({ uid: user.uid, collectionId, tmdbId: media.id }).unwrap();
         success('Removed from collection');
       } else {
         const type = 'title' in media ? 'movie' : 'tv';
         const title = 'title' in media ? media.title : media.name;
         const release_date = 'release_date' in media ? media.release_date : media.first_air_date;
 
-        await addMovie({
+        await addMedia({
           uid: user.uid,
           collectionId,
-          movie: { 
+          media: { 
             tmdb_id: media.id, 
             media_type: type,
             title,
@@ -105,20 +99,14 @@ export const AddToCollectionModal = ({ isOpen, onClose, media }: AddToCollection
       }
     } catch (err) {
       error('Failed to update collection');
-      console.error(err);
     }
   };
 
   if (!media) return null;
-
   const title = 'title' in media ? media.title : media.name;
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      title="Save to Collection"
-    >
+    <Modal isOpen={isOpen} onClose={onClose} title="Save to Collection">
       <div className="space-y-4">
         <p className="text-sm text-text-secondary">
           Select collections to save <strong className="text-primary">{title}</strong>.
@@ -177,52 +165,6 @@ export const AddToCollectionModal = ({ isOpen, onClose, media }: AddToCollection
         </div>
       </div>
     </Modal>
-  );
-};
-
-// Extracted component to handle individual collection query and optimistic state
-const CollectionItem = ({ 
-  collection, 
-  mediaId,
-  onToggle
-}: { 
-  collection: Collection, 
-  mediaId: number,
-  onToggle: (isAdded: boolean) => void 
-}) => {
-  const { user } = useAuth();
-  const { data: movies = [], isFetching } = useGetCollectionMoviesQuery({ uid: user?.uid || '', collectionId: collection.id }, {
-    skip: !user
-  });
-  
-  const isAdded = movies.some(m => m.tmdb_id === mediaId);
-
-  return (
-    <button
-      onClick={() => onToggle(isAdded)}
-      disabled={isFetching}
-      className={`
-        w-full flex items-center justify-between p-3 rounded-xl transition-colors text-left
-        ${isAdded ? 'bg-brand-primary/10 border border-brand-primary/30' : 'glass-card hover:bg-white/5'}
-        ${isFetching ? 'opacity-50 cursor-not-allowed' : ''}
-      `}
-    >
-      <div className="flex items-center gap-3">
-        <div 
-          className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-          style={{ backgroundColor: collection.color || 'var(--brand-primary)' }}
-        >
-          <Folder className="w-4 h-4 text-white" />
-        </div>
-        <span className="text-sm font-medium text-primary">{collection.name}</span>
-      </div>
-      
-      {isAdded && (
-        <div className="w-5 h-5 rounded-full bg-brand-primary flex items-center justify-center">
-          <Check className="w-3 h-3 text-white" />
-        </div>
-      )}
-    </button>
   );
 };
 

@@ -54,7 +54,13 @@ export interface TmdbMovieDetails extends TmdbMovie {
   imdb_id: string | null;
   genres: TmdbGenre[];
   production_companies: TmdbProductionCompany[];
+  production_countries: TmdbProductionCountryDetails[];
   spoken_languages: TmdbSpokenLanguage[];
+}
+
+export interface TmdbProductionCountryDetails {
+  iso_3166_1: string;
+  name: string;
 }
 
 export interface TmdbTVDetails extends TmdbTV {
@@ -68,6 +74,16 @@ export interface TmdbTVDetails extends TmdbTV {
   genres: TmdbGenre[];
   production_companies: TmdbProductionCompany[];
   spoken_languages: TmdbSpokenLanguage[];
+  networks: TmdbNetwork[];
+  in_production: boolean;
+  last_air_date: string;
+}
+
+export interface TmdbNetwork {
+  id: number;
+  name: string;
+  logo_path: string | null;
+  origin_country: string;
 }
 
 export interface TmdbGenre {
@@ -103,17 +119,34 @@ export interface TmdbCountry {
 export interface TmdbCastMember {
   id: number;
   name: string;
-  character: string;
+  character?: string;
+  roles?: { character: string; episode_count: number }[];
   profile_path: string | null;
   order: number;
+  total_episode_count?: number;
 }
 
 export interface TmdbCrewMember {
   id: number;
   name: string;
-  job: string;
+  job?: string;
+  jobs?: { job: string; episode_count: number }[];
   department: string;
   profile_path: string | null;
+  total_episode_count?: number;
+}
+
+export interface TmdbConfiguration {
+  images: {
+    base_url: string;
+    secure_base_url: string;
+    backdrop_sizes: string[];
+    logo_sizes: string[];
+    poster_sizes: string[];
+    profile_sizes: string[];
+    still_sizes: string[];
+  };
+  change_keys: string[];
 }
 
 // --- Response Wrappers ---
@@ -131,8 +164,49 @@ export interface TmdbCreditsResponse {
   crew: TmdbCrewMember[];
 }
 
+export interface TmdbAggregateCreditsResponse {
+  id: number;
+  cast: TmdbCastMember[];
+  crew: TmdbCrewMember[];
+}
+
+export interface TmdbWatchProvider {
+  logo_path: string;
+  provider_id: number;
+  provider_name: string;
+  display_priority: number;
+}
+
+export interface TmdbWatchProvidersResponse {
+  id: number;
+  results: Record<string, {
+    link: string;
+    flatrate?: TmdbWatchProvider[];
+    rent?: TmdbWatchProvider[];
+    buy?: TmdbWatchProvider[];
+    ads?: TmdbWatchProvider[];
+  }>;
+}
+
+export interface TmdbReview {
+  author: string;
+  author_details: {
+    name: string;
+    username: string;
+    avatar_path: string | null;
+    rating: number | null;
+  };
+  content: string;
+  created_at: string;
+  id: string;
+  updated_at: string;
+  url: string;
+}
+
 // --- Image Sizes ---
 
 export type TmdbPosterSize = 'w92' | 'w154' | 'w185' | 'w342' | 'w500' | 'w780' | 'original';
 export type TmdbBackdropSize = 'w300' | 'w780' | 'w1280' | 'original';
 export type TmdbProfileSize = 'w45' | 'w185' | 'h632' | 'original';
+export type TmdbStillSize = 'w92' | 'w185' | 'w300' | 'original';
+export type TmdbLogoSize = 'w45' | 'w92' | 'w154' | 'w185' | 'w300' | 'w500' | 'original';

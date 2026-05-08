@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { tmdbApi } from '@/api/tmdb/tmdbApi';
+import { mediaApi } from '@/api/media/mediaApi';
 import { collectionsApi } from '@/api/collections/collectionsApi';
 
 import authReducer from './slices/authSlice';
@@ -9,13 +9,13 @@ export const store = configureStore({
   reducer: {
     auth: authReducer,
     profile: profileReducer,
-    [tmdbApi.reducerPath]: tmdbApi.reducer,
+    [mediaApi.reducerPath]: mediaApi.reducer,
     [collectionsApi.reducerPath]: collectionsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }).concat(tmdbApi.middleware, collectionsApi.middleware),
+    }).concat(mediaApi.middleware, collectionsApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

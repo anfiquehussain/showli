@@ -30,3 +30,4 @@ export type {
 } from './auth.types';
 
 export * from './collections.types';
+export * from './discussions.types';

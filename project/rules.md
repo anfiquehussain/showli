@@ -208,31 +208,11 @@ The application MUST be fully responsive and look premium on all devices (mobile
 -   **No `React.FC`**: Use regular function declarations or typed arrow functions. `React.FC` is discouraged due to implicit `children` and other quirks.
 -   **Variant/Size Maps**: Use `Record<VariantType, string>` for style lookup maps.
 
-```tsx
-// ✅ Correct
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary';
-  size?: 'sm' | 'md' | 'lg';
-}
-const Button = ({ variant = 'primary', ...props }: ButtonProps) => { ... };
-
-// ❌ Wrong
-const Button: React.FC<{ variant?: string }> = (props) => { ... };
-```
-
 ### 12.3 Redux Toolkit Typing
 -   **Store Types**: Export `RootState` and `AppDispatch` from `store/index.ts`.
 -   **Typed Hooks**: Always use `useAppDispatch` and `useAppSelector` from `hooks/useRedux.ts`. NEVER use untyped `useDispatch`/`useSelector`.
 -   **Slice Typing**: Define `interface [Slice]State` for each slice's state shape. Use `PayloadAction<T>` for reducers.
 -   **RTK Query**: Type all endpoints with request arg and response types: `builder.query<ResponseType, ArgType>({ ... })`.
-
-```ts
-// ✅ Correct
-import { useAppDispatch, useAppSelector } from '@/hooks/useRedux';
-
-// ❌ Wrong
-import { useDispatch, useSelector } from 'react-redux';
-```
 
 ### 12.4 API & Data Typing
 -   **Response Types**: Define in `src/types/[domain].types.ts` (e.g., `tmdb.types.ts`).
@@ -254,17 +234,6 @@ import { useDispatch, useSelector } from 'react-redux';
 -   **Error Narrowing**: In `catch` blocks, narrow errors with `instanceof Error` before accessing `.message`.
 -   **RTK Query Errors**: Use RTK Query's error types (`FetchBaseQueryError`, `SerializedError`) for error handling.
 
-```ts
-// ✅ Correct
-try { ... }
-catch (error: unknown) {
-  const message = error instanceof Error ? error.message : 'Unknown error';
-}
-
-// ❌ Wrong
-catch (error: any) { console.log(error.message); }
-```
-
 ### 12.8 Import Ordering
 All imports MUST follow this order, separated by blank lines:
 
@@ -274,17 +243,6 @@ All imports MUST follow this order, separated by blank lines:
 4.  **Type-Only Imports** — `import type { ... }` (grouped with their origin)
 5.  **Relative Imports** — `./components`, `../utils`
 6.  **Styles** — `./styles/index.css`
-
-```ts
-// ✅ Correct order
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Film } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
-
-import Button from '@/components/ui/Button';
-import type { ButtonProps } from '@/components/ui/Button';
-```
 
 ### 12.9 File Naming Standards
 -   **Components**: `PascalCase.tsx` (e.g., `Button.tsx`, `MainLayout.tsx`).
@@ -329,7 +287,17 @@ export default Component;
 
 ---
 
-## 13. Documentation Integrity
+## 13. Discussion & Review System
+
+- **Real-time**: Use `onSnapshot` for discussions to create a "session" feel.
+- **Threading**: Use `parentId` for comments. Fetch a flat list and build the tree in the UI.
+- **Ratings**: Only top-level comments (where `parentId` is null) should carry a `rating`.
+- **Media Mapping**: Use `mediaId` and `mediaType` to associate discussions with TMDb entities.
+- **Default Tab**: Always default to the "Showli" discussion tab to prioritize platform engagement.
+
+---
+
+## 14. Documentation Integrity
 
 - **Source of Truth**: `rules.md` and `files.md` are the single source of truth for the project.
 - **Mandatory Updates**: Whenever a new file is created, a folder structure is changed, or a new architectural pattern is introduced, the corresponding documentation (`files.md` and/or `rules.md`) **MUST** be updated in the same task.

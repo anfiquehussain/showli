@@ -15,12 +15,14 @@ src/
 │   ├── collections/    # Collections service layer
 │   │   ├── collectionsService.ts # Firebase firestore for collections
 │   │   └── collectionsApi.ts     # RTK Query for collections
+│   ├── discussions/    # Discussion service layer
+│   │   └── discussionsService.ts # Firebase firestore for comments/reviews
 │   └── media/           # TMDb specific API endpoints
 │       ├── mediaApi.ts  # RTK Query API for trending, search, etc.
 │       └── mediaDiscovery.ts # Discovery row presets
 ├── assets/             # Static assets (images, global icons)
 ├── components/         # UI Components (3-Layer Architecture)
-│   ├── ui/             # [Layer 1] Primitives (Button.tsx, IconButton.tsx, Input.tsx)
+│   ├── ui/             # [Layer 1] Primitives (Button.tsx, IconButton.tsx, Input.tsx, Rating.tsx)
 │   ├── patterns/       # [Layer 2] Reusable Patterns (Modal, ConfirmationModal, PageHeader, MediaScroll, MediaCard, StatusBadge, SearchBar, ProtectedRoute, ScrollContainer, ScrollToTop)
 │   └── features/       # [Layer 3] Feature Components (Grouped by domain)
 │       ├── auth/       # Authentication (AuthModal.tsx)
@@ -30,7 +32,13 @@ src/
 │       │   │   ├── index.tsx
 │       │   │   ├── MediaHero.tsx
 │       │   │   ├── MediaQuickFacts.tsx
-│       │   │   ├── MediaReviews.tsx
+│       │   │   ├── MediaReviewsSection/ # Unified reviews & discussion
+│       │   │   │   ├── index.tsx
+│       │   │   │   ├── ShowliDiscussion.tsx
+│       │   │   │   ├── TmdbReviews.tsx
+│       │   │   │   ├── CommentItem.tsx
+│       │   │   │   ├── CommentForm.tsx
+│       │   │   │   └── RatingPicker.tsx
 │       │   │   ├── MediaCast.tsx
 │       │   │   ├── MediaCrew.tsx
 │       │   │   ├── MediaImages.tsx
@@ -80,7 +88,7 @@ src/
 │   ├── MediaDetailsPage.tsx   # Media (Movie/TV) detail view
 │   ├── CollectionsPage.tsx # Library dashboard and collections list
 │   └── CollectionDetailsPage.tsx # Individual collection view
-├── routes/             # Route definitions
+│── routes/             # Route definitions
 ├── store/              # Redux store configuration
 │   ├── index.ts        # Store setup, exports RootState & AppDispatch
 │   └── slices/         # Redux Toolkit slices
@@ -92,6 +100,7 @@ src/
 │   ├── tmdb.types.ts   # TMDb API response types
 │   ├── auth.types.ts   # Firebase auth types
 │   ├── collections.types.ts # Collection and media types
+│   ├── discussions.types.ts # Discussion and review types
 │   └── index.ts        # Barrel export for all global types
 ├── utils/              # Helper functions (image.ts, date-fns helpers)
 │   └── image.ts        # TMDb image URL construction

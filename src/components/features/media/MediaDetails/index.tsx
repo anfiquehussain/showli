@@ -6,7 +6,7 @@ import type { TmdbMovieDetails, TmdbTVDetails } from '@/types/tmdb.types';
 // Internal Components
 import MediaHero from './MediaHero';
 import MediaQuickFacts from './MediaQuickFacts';
-import MediaReviews from './MediaReviews';
+import MediaReviewsSection from './MediaReviewsSection';
 import MediaCast from './MediaCast';
 import MediaCrew from './MediaCrew';
 import MediaImages from './MediaImages';
@@ -111,8 +111,8 @@ const MediaDetails = ({ id, type }: MediaDetailsProps) => {
           {/* Media Trailers & Clips */}
           <MediaVideos id={id} type={type} />
 
-          {/* User Reviews */}
-          <MediaReviews id={id} type={type} />
+          {/* User Reviews (Showli & TMDb) */}
+          <MediaReviewsSection id={id} type={type} />
         </div>
 
         {/* Right Column: Quick Facts & Stats */}

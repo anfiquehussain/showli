@@ -7,6 +7,7 @@ import {
   setUser, 
   setLoading, 
   setError, 
+  openModal,
   closeModal 
 } from '@/store/slices/authSlice';
 import { useToast } from './useToast';
@@ -118,5 +119,6 @@ export const useAuth = () => {
     register,
     signInWithGoogle,
     logout,
+    openModal: (mode?: 'login' | 'register') => dispatch(openModal(mode)),
   };
 };

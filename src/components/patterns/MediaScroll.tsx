@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import type { TmdbMedia } from '@/types/tmdb.types';
 import { MediaCard } from './MediaCard';
+import ScrollContainer from './ScrollContainer';
 
 interface MediaScrollProps {
   title: string;
@@ -36,11 +37,13 @@ const MediaScroll = ({ title, icon, items, isLoading, onAddClick }: MediaScrollP
         <span>{title}</span>
       </div>
       
-      <div className="flex gap-4 overflow-x-auto no-scrollbar pb-4 scroll-smooth snap-x snap-mandatory">
+      <ScrollContainer className="gap-4 pb-4">
         {items.map((item) => (
-          <MediaCard key={item.id} item={item} onAddClick={onAddClick} />
+          <div key={item.id} className="flex-shrink-0">
+            <MediaCard item={item} onAddClick={onAddClick} />
+          </div>
         ))}
-      </div>
+      </ScrollContainer>
     </div>
   );
 };

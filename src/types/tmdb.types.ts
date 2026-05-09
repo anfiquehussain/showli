@@ -83,6 +83,23 @@ export interface TmdbTVDetails extends TmdbTV {
   last_episode_to_air: TmdbEpisode | null;
   next_episode_to_air: TmdbEpisode | null;
   images?: TmdbImagesResponse;
+  seasons: TmdbTVSeasonBrief[];
+}
+
+export interface TmdbTVSeasonBrief {
+  air_date: string;
+  episode_count: number;
+  id: number;
+  name: string;
+  overview: string;
+  poster_path: string | null;
+  season_number: number;
+  vote_average: number;
+}
+
+export interface TmdbTVSeason extends TmdbTVSeasonBrief {
+  _id: string;
+  episodes: TmdbEpisode[];
 }
 
 export interface TmdbCreator {
@@ -106,6 +123,9 @@ export interface TmdbEpisode {
   season_number: number;
   show_id: number;
   still_path: string | null;
+  episode_type?: string;
+  crew?: TmdbCrewMember[];
+  guest_stars?: TmdbCastMember[];
 }
 
 export interface TmdbNetwork {

@@ -11,6 +11,7 @@ import {
 import { useGetMediaImagesQuery } from '@/api/media/mediaApi';
 import { getTmdbImageUrl } from '@/utils/image';
 import Button from '@/components/ui/Button';
+import ScrollContainer from '@/components/patterns/ScrollContainer';
 
 interface MediaImagesProps {
   id: number;
@@ -66,43 +67,38 @@ const MediaImages = ({ id, type }: MediaImagesProps) => {
         )}
       </div>
 
-      <div className="relative group">
-        <div className="flex gap-3 md:gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x">
-          {previewBackdrops.map((image, index) => (
-            <motion.div
-              key={image.file_path}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4, delay: index * 0.05 }}
-              viewport={{ once: true }}
-              className="relative shrink-0 w-[240px] md:w-[400px] aspect-video rounded-xl overflow-hidden border border-white/5 snap-start group/image cursor-pointer"
-              onClick={() => setSelectedIndex(index)}
-            >
-              <img
-                src={getTmdbImageUrl(image.file_path, 'w780')}
-                alt={`Backdrop ${index + 1}`}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover/image:scale-110"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/image:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                <div className="p-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 scale-90 group-hover/image:scale-100 transition-transform duration-300">
-                  <Maximize2 className="w-5 h-5 text-white" />
-                </div>
+      <ScrollContainer className="gap-3 md:gap-4 pb-4">
+        {previewBackdrops.map((image, index) => (
+          <motion.div
+            key={image.file_path}
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4, delay: index * 0.05 }}
+            viewport={{ once: true }}
+            className="relative shrink-0 w-[240px] md:w-[400px] aspect-video rounded-xl overflow-hidden border border-white/5 group/image cursor-pointer"
+            onClick={() => setSelectedIndex(index)}
+          >
+            <img
+              src={getTmdbImageUrl(image.file_path, 'w780')}
+              alt={`Backdrop ${index + 1}`}
+              className="w-full h-full object-cover transition-transform duration-700 group-hover/image:scale-110"
+              loading="lazy"
+            />
+            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/image:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+              <div className="p-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 scale-90 group-hover/image:scale-100 transition-transform duration-300">
+                <Maximize2 className="w-5 h-5 text-white" />
               </div>
-              
-              <div className="absolute bottom-3 right-3 opacity-0 group-hover/image:opacity-100 transition-opacity duration-300">
-                <div className="glass-card px-2 py-1 rounded text-[10px] font-bold text-white/80 border-white/10 uppercase tracking-tighter">
-                  {image.width} × {image.height}
-                </div>
+            </div>
+            
+            <div className="absolute bottom-3 right-3 opacity-0 group-hover/image:opacity-100 transition-opacity duration-300">
+              <div className="glass-card px-2 py-1 rounded text-[10px] font-bold text-white/80 border-white/10 uppercase tracking-tighter">
+                {image.width} × {image.height}
               </div>
-            </motion.div>
-          ))}
-        </div>
+            </div>
+          </motion.div>
+        ))}
+      </ScrollContainer>
 
-        {/* Decorative Scroll Indicators */}
-        <div className="absolute top-1/2 -left-4 -translate-y-1/2 w-8 h-12 bg-gradient-to-r from-background to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity" />
-        <div className="absolute top-1/2 -right-4 -translate-y-1/2 w-8 h-12 bg-gradient-to-l from-background to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity" />
-      </div>
 
       {/* 1. Lightbox Modal */}
       <AnimatePresence>

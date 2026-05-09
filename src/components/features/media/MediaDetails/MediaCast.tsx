@@ -2,6 +2,7 @@ import { User, ChevronRight } from 'lucide-react';
 import { useGetCreditsQuery, useGetTVCreditsQuery } from '@/api/media/mediaApi';
 import { getTmdbImageUrl } from '@/utils/image';
 import type { TmdbCastMember } from '@/types/tmdb.types';
+import ScrollContainer from '@/components/patterns/ScrollContainer';
 
 interface MediaCastProps {
   id: number;
@@ -39,11 +40,11 @@ const MediaCast = ({ id, type, onShowFullCredits }: MediaCastProps) => {
         </button>
       </div>
 
-      <div className="flex gap-4 overflow-x-auto pb-4 custom-scrollbar snap-x snap-mandatory">
+      <ScrollContainer className="gap-4 pb-4">
         {topCast.map((person: TmdbCastMember) => (
           <div 
             key={person.id} 
-            className="flex-shrink-0 w-24 md:w-32 snap-start group"
+            className="flex-shrink-0 w-24 md:w-32 group"
           >
             <div className="aspect-[2/3] rounded-2xl bg-white/5 border border-white/5 overflow-hidden mb-3 group-hover:border-brand-primary/50 transition-colors">
               {person.profile_path ? (
@@ -71,7 +72,7 @@ const MediaCast = ({ id, type, onShowFullCredits }: MediaCastProps) => {
         
         <button 
           onClick={onShowFullCredits}
-          className="flex-shrink-0 w-24 md:w-32 snap-start group text-left"
+          className="flex-shrink-0 w-24 md:w-32 group text-left"
         >
           <div className="aspect-[2/3] rounded-2xl bg-white/5 border border-dashed border-white/20 flex flex-col items-center justify-center mb-3 group-hover:border-brand-primary/50 group-hover:bg-brand-primary/5 transition-all">
             <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -87,7 +88,7 @@ const MediaCast = ({ id, type, onShowFullCredits }: MediaCastProps) => {
             </p>
           </div>
         </button>
-      </div>
+      </ScrollContainer>
     </section>
   );
 };

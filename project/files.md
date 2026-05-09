@@ -33,6 +33,7 @@ src/
 │       │   │   ├── MediaReviews.tsx
 │       │   │   ├── MediaCast.tsx
 │       │   │   ├── MediaCrew.tsx
+│       │   │   ├── TVSeasons.tsx
 │       │   │   └── FullCreditsModal.tsx
 │       │   ├── HeroCarousel.tsx
 │       │   └── DiscoveryGrids.tsx

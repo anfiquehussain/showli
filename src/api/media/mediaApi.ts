@@ -14,7 +14,8 @@ import type {
   TmdbAggregateCreditsResponse,
   TmdbWatchProvidersResponse,
   TmdbImagesResponse,
-  TmdbVideosResponse
+  TmdbVideosResponse,
+  TmdbTVSeason
 } from '@/types/tmdb.types';
 
 export const mediaApi = createApi({
@@ -103,6 +104,9 @@ export const mediaApi = createApi({
     getMediaVideos: builder.query<TmdbVideosResponse, { type: 'movie' | 'tv'; id: number }>({
       query: ({ type, id }) => `/${type}/${id}/videos?api_key=${TMDB_API_KEY}`,
     }),
+    getTVSeasonDetails: builder.query<TmdbTVSeason, { tvId: number; seasonNumber: number }>({
+      query: ({ tvId, seasonNumber }) => `/tv/${tvId}/season/${seasonNumber}?api_key=${TMDB_API_KEY}`,
+    }),
   }),
 });
 
@@ -128,5 +132,6 @@ export const {
   useGetSimilarQuery,
   useGetRecommendationsQuery,
   useGetMediaImagesQuery,
-  useGetMediaVideosQuery
+  useGetMediaVideosQuery,
+  useGetTVSeasonDetailsQuery
 } = mediaApi;

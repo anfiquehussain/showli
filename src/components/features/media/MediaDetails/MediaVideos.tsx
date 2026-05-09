@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, X, Video, Grid, ChevronRight } from 'lucide-react';
 import { useGetMediaVideosQuery } from '@/api/media/mediaApi';
+import ScrollContainer from '@/components/patterns/ScrollContainer';
 
 interface MediaVideosProps {
   id: number;
@@ -42,7 +43,7 @@ const MediaVideos = ({ id, type }: MediaVideosProps) => {
         )}
       </div>
 
-      <div className="flex gap-3 md:gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x">
+      <ScrollContainer className="gap-3 md:gap-4 pb-4">
         {previewVideos.map((video, index) => (
           <motion.div
             key={video.id}
@@ -50,7 +51,7 @@ const MediaVideos = ({ id, type }: MediaVideosProps) => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: index * 0.05 }}
             viewport={{ once: true }}
-            className="relative shrink-0 w-[200px] md:w-[320px] aspect-video rounded-xl overflow-hidden border border-white/5 snap-start group cursor-pointer shadow-lg"
+            className="relative shrink-0 w-[200px] md:w-[320px] aspect-video rounded-xl overflow-hidden border border-white/5 group cursor-pointer shadow-lg"
             onClick={() => setActiveVideo(video.key)}
           >
             {/* Thumbnail */}
@@ -78,7 +79,7 @@ const MediaVideos = ({ id, type }: MediaVideosProps) => {
             </div>
           </motion.div>
         ))}
-      </div>
+      </ScrollContainer>
 
       {/* Video Modal Overlay */}
       <AnimatePresence>

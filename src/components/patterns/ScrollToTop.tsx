@@ -13,7 +13,7 @@ const ScrollToTop = () => {
     window.scrollTo({
       top: 0,
       left: 0,
-      behavior: 'instant' // Use instant to prevent awkward scrolling animation during navigation
+      behavior: 'instant' 
     });
   }, [pathname]);
 

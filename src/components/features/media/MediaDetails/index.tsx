@@ -14,6 +14,7 @@ import MediaVideos from './MediaVideos';
 import MediaWatchProviders from './MediaWatchProviders';
 import MediaRecommendations from './MediaRecommendations';
 import MediaSimilar from './MediaSimilar';
+import TVSeasons from './TVSeasons';
 import FullCreditsModal from './FullCreditsModal';
 
 interface MediaDetailsProps {
@@ -57,7 +58,7 @@ const MediaDetails = ({ id, type }: MediaDetailsProps) => {
   return (
     <div className="pb-12 space-y-8">
       {/* 1. Immersive Hero Section */}
-      <MediaHero 
+      <MediaHero
         media={media}
         type={type}
         title={title}
@@ -82,18 +83,26 @@ const MediaDetails = ({ id, type }: MediaDetailsProps) => {
             </p>
           </section>
 
+          {/* TV Seasons & Episodes */}
+          {type === 'tv' && (media as TmdbTVDetails).seasons && (
+            <TVSeasons
+              tvId={id}
+              seasons={(media as TmdbTVDetails).seasons}
+            />
+          )}
+
           {/* Top Cast */}
-          <MediaCast 
-            id={id} 
-            type={type} 
-            onShowFullCredits={() => setIsCreditsModalOpen(true)} 
+          <MediaCast
+            id={id}
+            type={type}
+            onShowFullCredits={() => setIsCreditsModalOpen(true)}
           />
 
           {/* Top Crew */}
-          <MediaCrew 
-            id={id} 
-            type={type} 
-            onShowFullCredits={() => setIsCreditsModalOpen(true)} 
+          <MediaCrew
+            id={id}
+            type={type}
+            onShowFullCredits={() => setIsCreditsModalOpen(true)}
           />
 
           {/* Media Images Gallery */}
@@ -110,18 +119,17 @@ const MediaDetails = ({ id, type }: MediaDetailsProps) => {
         <aside className="lg:col-span-4">
           <div className="sticky top-24 space-y-6">
             <MediaWatchProviders id={id} type={type} />
-            <MediaQuickFacts 
+            <MediaQuickFacts
               media={media}
               type={type}
             />
           </div>
         </aside>
       </div>
-      
+
       {/* Discovery Sections */}
       <MediaRecommendations id={id} type={type} />
       <MediaSimilar id={id} type={type} />
-
 
       {media && (
         <AddToCollectionModal

@@ -9,6 +9,8 @@ import MediaQuickFacts from './MediaQuickFacts';
 import MediaReviews from './MediaReviews';
 import MediaCast from './MediaCast';
 import MediaCrew from './MediaCrew';
+import MediaImages from './MediaImages';
+import MediaVideos from './MediaVideos';
 import MediaWatchProviders from './MediaWatchProviders';
 import MediaRecommendations from './MediaRecommendations';
 import MediaSimilar from './MediaSimilar';
@@ -93,6 +95,12 @@ const MediaDetails = ({ id, type }: MediaDetailsProps) => {
             type={type} 
             onShowFullCredits={() => setIsCreditsModalOpen(true)} 
           />
+
+          {/* Media Images Gallery */}
+          <MediaImages id={id} type={type} />
+
+          {/* Media Trailers & Clips */}
+          <MediaVideos id={id} type={type} />
 
           {/* User Reviews */}
           <MediaReviews id={id} type={type} />

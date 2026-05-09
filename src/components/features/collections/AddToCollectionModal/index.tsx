@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Modal from '@/components/patterns/Modal';
-import { Plus } from 'lucide-react';
+import SearchBar from '@/components/patterns/SearchBar';
+import { Plus, SearchX } from 'lucide-react';
 import type { TmdbMedia } from '@/types/tmdb.types';
 import { 
   useGetCollectionsQuery, 
@@ -35,6 +36,12 @@ export const AddToCollectionModal = ({ isOpen, onClose, media }: AddToCollection
 
   const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredCollections = collections.filter(c => 
+    !c.is_all_media && 
+    c.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const handleCreateAndAdd = async (data: { name: string; description: string; color: string; visibility: 'private' | 'public' }) => {
     if (!user || !media) return;
@@ -112,6 +119,13 @@ export const AddToCollectionModal = ({ isOpen, onClose, media }: AddToCollection
           Select collections to save <strong className="text-primary">{title}</strong>.
         </p>
 
+        <SearchBar
+          value={searchQuery}
+          onChange={setSearchQuery}
+          placeholder="Search collections…"
+          className="bg-card/30 border-white/5"
+        />
+
         {isLoadingCollections ? (
           <div className="space-y-2">
             {[...Array(3)].map((_, i) => (
@@ -120,29 +134,48 @@ export const AddToCollectionModal = ({ isOpen, onClose, media }: AddToCollection
           </div>
         ) : (
           <div className="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
-            <button
-              onClick={() => setIsCollectionModalOpen(true)}
-              className="w-full flex items-center gap-3 p-3 rounded-xl border border-dashed border-white/10 hover:border-brand-primary/50 hover:bg-brand-primary/5 transition-all group mb-2"
-            >
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-white/5 group-hover:bg-brand-primary/20 transition-colors">
-                <Plus className="w-4 h-4 text-text-secondary group-hover:text-brand-primary" />
-              </div>
-              <span className="text-sm font-medium text-text-secondary group-hover:text-primary">Create New Collection</span>
-            </button>
+            {!searchQuery && (
+              <button
+                onClick={() => setIsCollectionModalOpen(true)}
+                className="w-full flex items-center gap-3 p-3 rounded-xl border border-dashed border-white/10 hover:border-brand-primary/50 hover:bg-brand-primary/5 transition-all group mb-2"
+              >
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-white/5 group-hover:bg-brand-primary/20 transition-colors">
+                  <Plus className="w-4 h-4 text-text-secondary group-hover:text-brand-primary" />
+                </div>
+                <span className="text-sm font-medium text-text-secondary group-hover:text-primary">Create New Collection</span>
+              </button>
+            )}
 
-            {collections
-              .filter(c => !c.is_all_media)
-              .map((collection) => (
-                <CollectionItem 
-                  key={collection.id} 
-                  collection={collection} 
-                  mediaId={media.id}
-                  onToggle={(isAdded) => handleToggleCollection(collection.id, isAdded)}
-                />
-              ))}
-            {collections.length === 0 && (
-              <div className="text-center p-4 text-text-secondary text-sm glass-card rounded-xl">
+            {filteredCollections.map((collection) => (
+              <CollectionItem 
+                key={collection.id} 
+                collection={collection} 
+                mediaId={media.id}
+                onToggle={(isAdded) => handleToggleCollection(collection.id, isAdded)}
+              />
+            ))}
+
+            {collections.length === 0 && !isLoadingCollections && (
+              <div className="text-center p-8 text-text-secondary text-sm glass-card rounded-xl">
                 You don't have any collections yet. Create one first!
+              </div>
+            )}
+
+            {collections.length > 0 && filteredCollections.length === 0 && searchQuery && (
+              <div className="text-center py-10 px-4 glass-card rounded-xl border border-white/5 flex flex-col items-center gap-3">
+                <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-text-secondary">
+                  <SearchX className="w-6 h-6" />
+                </div>
+                <div className="space-y-1">
+                  <p className="text-sm font-medium text-primary">No collections found</p>
+                  <p className="text-xs text-text-secondary">Try a different search term or create a new one.</p>
+                </div>
+                <button
+                  onClick={() => setIsCollectionModalOpen(true)}
+                  className="mt-2 px-4 py-1.5 rounded-lg bg-brand-primary/10 text-brand-primary text-xs font-medium hover:bg-brand-primary/20 transition-colors border border-brand-primary/20"
+                >
+                  Create "{searchQuery}"
+                </button>
               </div>
             )}
           </div>

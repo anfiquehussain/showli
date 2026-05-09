@@ -65,11 +65,11 @@ const CollectionMediaCard = ({
           </div>
         )}
         
-        <div className="absolute top-2 left-2 z-10">
+        <div className="absolute top-2 left-2 z-10 hidden md:block">
           <StatusBadge status={item.status || 'planned'} />
         </div>
 
-        <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-3 z-20">
+        <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-3 z-20">
           <div className="flex justify-end">
              <IconButton
                 icon={Trash2}
@@ -78,7 +78,7 @@ const CollectionMediaCard = ({
                   onRemove();
                 }}
                 variant="primary"
-                className="bg-error/80 hover:bg-error w-8 h-8 p-1.5"
+                className="bg-error/80 hover:bg-error w-7 h-7 md:w-8 md:h-8 p-1 md:p-1.5"
                 aria-label="Remove from collection"
               />
           </div>
@@ -176,7 +176,7 @@ const CollectionMediaCard = ({
             onRemove();
           }}
           variant="ghost"
-          className="text-text-secondary hover:text-error hover:bg-error/10 opacity-0 group-hover:opacity-100"
+          className="text-text-secondary hover:text-error hover:bg-error/10 opacity-100 md:opacity-0 md:group-hover:opacity-100 w-8 h-8 p-1.5 md:w-9 md:h-9 md:p-2"
           aria-label="Remove from collection"
         />
       </div>

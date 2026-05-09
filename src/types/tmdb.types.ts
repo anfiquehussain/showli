@@ -56,6 +56,7 @@ export interface TmdbMovieDetails extends TmdbMovie {
   production_companies: TmdbProductionCompany[];
   production_countries: TmdbProductionCountryDetails[];
   spoken_languages: TmdbSpokenLanguage[];
+  images?: TmdbImagesResponse;
 }
 
 export interface TmdbProductionCountryDetails {
@@ -73,10 +74,38 @@ export interface TmdbTVDetails extends TmdbTV {
   homepage: string | null;
   genres: TmdbGenre[];
   production_companies: TmdbProductionCompany[];
+  production_countries: TmdbProductionCountryDetails[];
   spoken_languages: TmdbSpokenLanguage[];
   networks: TmdbNetwork[];
+  created_by: TmdbCreator[];
   in_production: boolean;
   last_air_date: string;
+  last_episode_to_air: TmdbEpisode | null;
+  next_episode_to_air: TmdbEpisode | null;
+  images?: TmdbImagesResponse;
+}
+
+export interface TmdbCreator {
+  id: number;
+  credit_id: string;
+  name: string;
+  gender: number;
+  profile_path: string | null;
+}
+
+export interface TmdbEpisode {
+  id: number;
+  name: string;
+  overview: string;
+  vote_average: number;
+  vote_count: number;
+  air_date: string;
+  episode_number: number;
+  production_code: string;
+  runtime: number | null;
+  season_number: number;
+  show_id: number;
+  still_path: string | null;
 }
 
 export interface TmdbNetwork {
@@ -186,6 +215,41 @@ export interface TmdbWatchProvidersResponse {
     buy?: TmdbWatchProvider[];
     ads?: TmdbWatchProvider[];
   }>;
+}
+
+export interface TmdbImage {
+  aspect_ratio: number;
+  height: number;
+  iso_639_1: string | null;
+  file_path: string;
+  vote_average: number;
+  vote_count: number;
+  width: number;
+}
+
+export interface TmdbImagesResponse {
+  id: number;
+  backdrops: TmdbImage[];
+  logos: TmdbImage[];
+  posters: TmdbImage[];
+}
+
+export interface TmdbVideo {
+  id: string;
+  iso_639_1: string;
+  iso_3166_1: string;
+  name: string;
+  key: string;
+  site: string;
+  size: number;
+  type: string;
+  official: boolean;
+  published_at: string;
+}
+
+export interface TmdbVideosResponse {
+  id: number;
+  results: TmdbVideo[];
 }
 
 export interface TmdbReview {

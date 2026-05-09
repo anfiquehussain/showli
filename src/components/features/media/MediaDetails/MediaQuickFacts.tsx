@@ -13,11 +13,12 @@ import {
   Type
 } from 'lucide-react';
 import type { 
-  TmdbMovieDetails, 
-  TmdbTVDetails, 
   TmdbProductionCompany, 
   TmdbSpokenLanguage,
-  TmdbNetwork
+  TmdbNetwork,
+  TmdbCreator,
+  TmdbMovieDetails,
+  TmdbTVDetails
 } from '@/types/tmdb.types';
 
 interface MediaQuickFactsProps {
@@ -65,6 +66,10 @@ const MediaQuickFacts = ({ media, type }: MediaQuickFactsProps) => {
     ? (media as TmdbTVDetails).origin_country?.[0]
     : (media as TmdbMovieDetails).production_countries?.[0]?.iso_3166_1;
 
+  const productionCountries = type === 'tv'
+    ? (media as TmdbTVDetails).production_countries
+    : (media as TmdbMovieDetails).production_countries;
+
   const originalTitle = 'original_title' in media ? media.original_title : media.original_name;
   const currentTitle = 'title' in media ? media.title : media.name;
   const showOriginalTitle = originalTitle && originalTitle !== currentTitle;
@@ -110,6 +115,12 @@ const MediaQuickFacts = ({ media, type }: MediaQuickFactsProps) => {
               value={formatDate(releaseDate)} 
             />
             <FactItem icon={Clock} label="Status" value={media.status} />
+            {type === 'tv' && (media as TmdbTVDetails).type && (
+              <FactItem icon={Info} label="Show Type" value={(media as TmdbTVDetails).type} />
+            )}
+            {type === 'tv' && (
+              <FactItem icon={Info} label="In Production" value={(media as TmdbTVDetails).in_production ? "Yes" : "No"} />
+            )}
           </div>
         </section>
 
@@ -125,6 +136,24 @@ const MediaQuickFacts = ({ media, type }: MediaQuickFactsProps) => {
                 label="Last Air Date" 
                 value={formatDate((media as TmdbTVDetails).last_air_date)} 
               />
+              
+              {/* TV Creators */}
+              {type === 'tv' && (media as TmdbTVDetails).created_by?.length > 0 && (
+                <div className="space-y-2 pt-1">
+                  <div className="flex items-center gap-2.5 text-muted-foreground opacity-70">
+                    <Users className="w-3.5 h-3.5" />
+                    <span className="text-[10px] font-bold uppercase tracking-wider">Created By</span>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5 pl-[26px]">
+                    {(media as TmdbTVDetails).created_by.map((creator: TmdbCreator) => (
+                      <span key={creator.id} className="text-[10px] font-bold text-white/60 bg-white/5 px-2 py-0.5 rounded border border-white/5">
+                        {creator.name}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {'networks' in media && media.networks.length > 0 && (
                 <div className="space-y-2 pt-1">
                   <div className="flex items-center gap-2.5 text-muted-foreground opacity-70">
@@ -194,7 +223,7 @@ const MediaQuickFacts = ({ media, type }: MediaQuickFactsProps) => {
               </div>
             )}
 
-            {/* Production */}
+            {/* Production Companies */}
             {media.production_companies && media.production_companies.length > 0 && (
               <div className="space-y-2">
                 <div className="flex items-center gap-2.5 text-muted-foreground opacity-70">
@@ -205,6 +234,23 @@ const MediaQuickFacts = ({ media, type }: MediaQuickFactsProps) => {
                   {media.production_companies.map((company: TmdbProductionCompany) => (
                     <span key={company.id} className="text-[10px] font-bold text-white/60 bg-white/5 px-2 py-0.5 rounded border border-white/5 hover:text-white transition-colors">
                       {company.name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Production Countries */}
+            {productionCountries && productionCountries.length > 0 && (
+              <div className="space-y-2">
+                <div className="flex items-center gap-2.5 text-muted-foreground opacity-70">
+                  <Globe className="w-3.5 h-3.5" />
+                  <span className="text-[10px] font-bold uppercase tracking-wider">Production Countries</span>
+                </div>
+                <div className="flex flex-wrap gap-1.5 pl-[26px]">
+                  {productionCountries.map((country) => (
+                    <span key={country.iso_3166_1} className="text-[10px] font-bold text-white/60 bg-white/5 px-2 py-0.5 rounded border border-white/5">
+                      {country.name}
                     </span>
                   ))}
                 </div>

@@ -12,7 +12,9 @@ import type {
   TmdbReview,
   TmdbCreditsResponse,
   TmdbAggregateCreditsResponse,
-  TmdbWatchProvidersResponse
+  TmdbWatchProvidersResponse,
+  TmdbImagesResponse,
+  TmdbVideosResponse
 } from '@/types/tmdb.types';
 
 export const mediaApi = createApi({
@@ -95,6 +97,12 @@ export const mediaApi = createApi({
     getRecommendations: builder.query<TmdbPaginatedResponse<TmdbMedia>, { type: 'movie' | 'tv'; id: number }>({
       query: ({ type, id }) => `/${type}/${id}/recommendations?api_key=${TMDB_API_KEY}`,
     }),
+    getMediaImages: builder.query<TmdbImagesResponse, { type: 'movie' | 'tv'; id: number }>({
+      query: ({ type, id }) => `/${type}/${id}/images?api_key=${TMDB_API_KEY}`,
+    }),
+    getMediaVideos: builder.query<TmdbVideosResponse, { type: 'movie' | 'tv'; id: number }>({
+      query: ({ type, id }) => `/${type}/${id}/videos?api_key=${TMDB_API_KEY}`,
+    }),
   }),
 });
 
@@ -118,5 +126,7 @@ export const {
   useGetTVCreditsQuery,
   useGetWatchProvidersQuery,
   useGetSimilarQuery,
-  useGetRecommendationsQuery
+  useGetRecommendationsQuery,
+  useGetMediaImagesQuery,
+  useGetMediaVideosQuery
 } = mediaApi;

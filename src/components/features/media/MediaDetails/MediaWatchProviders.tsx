@@ -1,6 +1,7 @@
 import { useGetWatchProvidersQuery } from '@/api/media/mediaApi';
 import { getTmdbImageUrl } from '@/utils/image';
 import { ExternalLink, PlayCircle } from 'lucide-react';
+import type { TmdbWatchProvider } from '@/types/tmdb.types';
 
 interface MediaWatchProvidersProps {
   id: number;
@@ -63,7 +64,7 @@ const MediaWatchProviders = ({ id, type }: MediaWatchProvidersProps) => {
   );
 };
 
-const ProviderSection = ({ label, providers, link }: { label: string; providers: any[]; link: string }) => (
+const ProviderSection = ({ label, providers, link }: { label: string; providers: TmdbWatchProvider[]; link: string }) => (
   <div className="space-y-3">
     <div className="flex items-center gap-3">
       <span className="text-[10px] font-black uppercase tracking-[0.15em] text-brand-primary/80 whitespace-nowrap">{label}</span>

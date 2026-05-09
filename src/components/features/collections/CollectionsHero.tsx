@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion';
+import type { LucideIcon } from 'lucide-react';
 import PageHeader from '@/components/patterns/PageHeader';
 
 interface CollectionsHeroProps {
   stats: {
     label: string;
     value: number;
-    icon: any;
+    icon: LucideIcon;
     color: string;
     bg: string;
   }[];

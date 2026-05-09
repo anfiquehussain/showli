@@ -9,7 +9,7 @@ import {
   useGetAllCollectionMediaQuery
 } from '@/api/collections/collectionsApi';
 import { useToast } from '@/hooks/useToast';
-import type { Collection } from '@/types/collections.types';
+import type { Collection, CollectionFormData } from '@/types/collections.types';
 import { Library, ListMusic, Eye, CheckCircle2 } from 'lucide-react';
 
 const DEFAULT_COLORS = {
@@ -138,7 +138,7 @@ export const useCollectionsManagement = () => {
     }
   };
 
-  const handleSubmit = async (data: any) => {
+  const handleSubmit = async (data: CollectionFormData) => {
     if (!user) return;
     try {
       if (editingCollection) {

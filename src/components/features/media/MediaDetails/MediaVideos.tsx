@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Play, X, Video, Grid, ChevronRight } from 'lucide-react';
+import { Play, X, ChevronRight } from 'lucide-react';
 import { useGetMediaVideosQuery } from '@/api/media/mediaApi';
 import ScrollContainer from '@/components/patterns/ScrollContainer';
 

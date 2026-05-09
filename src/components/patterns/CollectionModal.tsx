@@ -2,12 +2,12 @@ import { useState, useEffect } from 'react';
 import Modal from '@/components/patterns/Modal';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
-import type { Collection } from '@/types/collections.types';
+import type { Collection, CollectionFormData } from '@/types/collections.types';
 
 interface CollectionModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: { name: string; description: string; color: string; visibility: 'private' | 'public' }) => void;
+  onSubmit: (data: CollectionFormData) => void;
   collection?: Collection | null;
   isLoading?: boolean;
 }

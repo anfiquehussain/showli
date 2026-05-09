@@ -12,7 +12,7 @@ src/
 │   │   └── authService.ts # Firebase auth implementation
 │   ├── profile/        # Profile service layer
 │   │   └── profileService.ts # Firebase firestore implementation for favorites
-│   ├── collections/    # [NEW] Collections service layer
+│   ├── collections/    # Collections service layer
 │   │   ├── collectionsService.ts # Firebase firestore for collections
 │   │   └── collectionsApi.ts     # RTK Query for collections
 │   └── media/           # TMDb specific API endpoints
@@ -21,7 +21,7 @@ src/
 ├── assets/             # Static assets (images, global icons)
 ├── components/         # UI Components (3-Layer Architecture)
 │   ├── ui/             # [Layer 1] Primitives (Button.tsx, IconButton.tsx, Input.tsx)
-│   ├── patterns/       # [Layer 2] Reusable Patterns (Modal, PageHeader, MediaScroll, MediaCard, StatusBadge, SearchBar)
+│   ├── patterns/       # [Layer 2] Reusable Patterns (Modal, ConfirmationModal, PageHeader, MediaScroll, MediaCard, StatusBadge, SearchBar, ProtectedRoute, ScrollContainer, ScrollToTop)
 │   └── features/       # [Layer 3] Feature Components (Grouped by domain)
 │       ├── auth/       # Authentication (AuthModal.tsx)
 │       ├── layout/     # Global structure (MainLayout.tsx, Navbar.tsx)
@@ -33,6 +33,11 @@ src/
 │       │   │   ├── MediaReviews.tsx
 │       │   │   ├── MediaCast.tsx
 │       │   │   ├── MediaCrew.tsx
+│       │   │   ├── MediaImages.tsx
+│       │   │   ├── MediaVideos.tsx
+│       │   │   ├── MediaWatchProviders.tsx
+│       │   │   ├── MediaRecommendations.tsx
+│       │   │   ├── MediaSimilar.tsx
 │       │   │   ├── TVSeasons.tsx
 │       │   │   └── FullCreditsModal.tsx
 │       │   ├── HeroCarousel.tsx
@@ -42,7 +47,8 @@ src/
 │       │   ├── ProfileSidebar.tsx
 │       │   ├── ProfileSection.tsx
 │       │   ├── ProfileFavorites.tsx
-│       │   └── AddFavoriteModal.tsx
+│       │   ├── AddFavoriteModal.tsx
+│       │   └── profile.types.ts
 │       └── collections/# Collection-related components
 │           ├── CollectionDetails/ # Decomposed
 │           │   ├── index.tsx
@@ -72,12 +78,14 @@ src/
 │   ├── HomePage.tsx      # App landing page
 │   ├── ProfilePage.tsx   # User profile and favorites
 │   ├── MediaDetailsPage.tsx   # Media (Movie/TV) detail view
-│   ├── CollectionsPage.tsx # [NEW] Library dashboard and collections list
-│   └── CollectionDetailsPage.tsx # [NEW] Individual collection view
+│   ├── CollectionsPage.tsx # Library dashboard and collections list
+│   └── CollectionDetailsPage.tsx # Individual collection view
 ├── routes/             # Route definitions
 ├── store/              # Redux store configuration
 │   ├── index.ts        # Store setup, exports RootState & AppDispatch
 │   └── slices/         # Redux Toolkit slices
+│       ├── authSlice.ts
+│       └── profileSlice.ts
 ├── styles/             # Global styles (index.css with theme tokens)
 ├── types/              # Global TypeScript type definitions
 │   ├── env.d.ts        # Vite environment variable types (ImportMetaEnv)
@@ -89,7 +97,7 @@ src/
 │   └── image.ts        # TMDb image URL construction
 ├── App.tsx             # App entry with Router
 ├── main.tsx            # React DOM mounting point
-└── netlify.toml        # [NEW] Netlify deployment configuration
+└── netlify.toml        # Netlify deployment configuration
 ```
 
 ## 1. UI Layering (Strict)

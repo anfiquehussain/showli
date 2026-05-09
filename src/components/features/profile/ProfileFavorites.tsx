@@ -2,9 +2,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Plus, Trash2 } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import ProfileSection from './ProfileSection';
+import type { TmdbMedia } from '@/types/tmdb.types';
+import { getTmdbImageUrl } from '@/utils/image';
 
 interface ProfileFavoritesProps {
-  favorites: any[];
+  favorites: TmdbMedia[];
   onAdd: () => void;
   onRemove: (id: number) => void;
 }
@@ -42,7 +44,7 @@ const ProfileFavorites = ({ favorites, onAdd, onRemove }: ProfileFavoritesProps)
                 className="group relative aspect-[2/3] rounded-2xl overflow-hidden glass-card transition-standard hover:border-brand-primary/50 shadow-xl"
               >
                 <img 
-                  src={`https://image.tmdb.org/t/p/w342${movie.poster_path}`} 
+                  src={getTmdbImageUrl(movie.poster_path, 'w342')} 
                   alt={title}
                   className="w-full h-full object-cover group-hover:scale-110 transition-standard duration-700"
                 />

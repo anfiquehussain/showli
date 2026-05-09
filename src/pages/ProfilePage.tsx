@@ -92,9 +92,9 @@ const ProfilePage = () => {
             <ProfileSection title="Collections" icon={<Layers className="w-5 h-5" />} onSeeAll={() => {}}>
               <div className="space-y-3">
                 {[1, 2].map((i) => (
-                  <div key={i} className="group flex items-center gap-4 p-3 rounded-2xl bg-white/5 border border-white/5 hover:border-brand-primary/30 transition-standard cursor-pointer">
-                    <div className="w-16 h-16 rounded-xl bg-card border border-white/10 flex-shrink-0 overflow-hidden">
-                       <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=100&auto=format&fit=crop" className="w-full h-full object-cover opacity-50" />
+                  <div key={i} className="group flex items-center gap-4 p-3 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-brand-primary/30 transition-standard cursor-pointer">
+                    <div className="w-16 h-16 rounded-xl bg-card border border-white/10 flex-shrink-0 overflow-hidden flex items-center justify-center text-muted-foreground/20">
+                       <Layers className="w-8 h-8" />
                     </div>
                     <div>
                       <h4 className="font-bold text-sm text-white group-hover:text-brand-primary transition-standard">

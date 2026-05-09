@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useGetMovieDetailsQuery, useGetTVDetailsQuery } from '@/api/media/mediaApi';
-import AddToCollectionModal from '@/components/features/collections/AddToCollectionModal/index';
+import AddToCollectionModal from '@/components/patterns/AddToCollectionModal/index';
 import type { TmdbMovieDetails, TmdbTVDetails } from '@/types/tmdb.types';
 
 // Internal Components

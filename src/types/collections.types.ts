@@ -15,6 +15,8 @@ export interface Collection {
   is_pinned?: boolean;
 }
 
+export type CollectionFormData = Omit<Collection, 'id' | 'created_at' | 'updated_at' | 'media_count' | 'is_default' | 'is_all_media'>;
+
 // Global user-media metadata stored in users/{uid}/movies/{movieId}
 export interface UserMediaMetadata {
   tmdb_id: number;

@@ -1,16 +1,13 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Image as ImageIcon, 
   ChevronRight, 
   ChevronLeft, 
   X,
-  Maximize2,
-  Grid
+  Maximize2
 } from 'lucide-react';
 import { useGetMediaImagesQuery } from '@/api/media/mediaApi';
 import { getTmdbImageUrl } from '@/utils/image';
-import Button from '@/components/ui/Button';
 import ScrollContainer from '@/components/patterns/ScrollContainer';
 
 interface MediaImagesProps {

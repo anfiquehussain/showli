@@ -1,17 +1,18 @@
 import { 
-  Info, 
-  Globe, 
-  TrendingUp, 
-  Users, 
-  Building2, 
-  Wallet, 
-  DollarSign, 
-  Play, 
-  Clock,
+  Building2,
   Calendar,
+  Clock,
+  DollarSign,
+  Globe,
+  Info,
   Monitor,
-  Type
+  Play,
+  TrendingUp,
+  Type,
+  Users,
+  Wallet
 } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import type { 
   TmdbProductionCompany, 
   TmdbSpokenLanguage,
@@ -25,6 +26,7 @@ interface MediaQuickFactsProps {
   media: TmdbMovieDetails | TmdbTVDetails;
   type: 'movie' | 'tv';
 }
+
 
 const MediaQuickFacts = ({ media, type }: MediaQuickFactsProps) => {
   const languageNames = new Intl.DisplayNames(['en'], { type: 'language' });
@@ -271,7 +273,7 @@ const SectionHeader = ({ label }: { label: string }) => (
 );
 
 interface FactItemProps {
-  icon: any;
+  icon: LucideIcon;
   label: string;
   value: string | number;
 }

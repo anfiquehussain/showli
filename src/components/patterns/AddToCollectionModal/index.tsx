@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import Modal from '@/components/patterns/Modal';
 import SearchBar from '@/components/patterns/SearchBar';
+import CollectionModal from '@/components/patterns/CollectionModal';
 import { Plus, SearchX } from 'lucide-react';
 import type { TmdbMedia } from '@/types/tmdb.types';
+import type { CollectionFormData } from '@/types/collections.types';
 import { 
   useGetCollectionsQuery, 
   useAddMediaToCollectionMutation, 
@@ -11,7 +13,6 @@ import {
 } from '@/api/collections/collectionsApi';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
-import CollectionModal from '../CollectionModal';
 
 // Internal Components
 import CollectionItem from './CollectionItem';
@@ -43,7 +44,7 @@ export const AddToCollectionModal = ({ isOpen, onClose, media }: AddToCollection
     c.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleCreateAndAdd = async (data: { name: string; description: string; color: string; visibility: 'private' | 'public' }) => {
+  const handleCreateAndAdd = async (data: CollectionFormData) => {
     if (!user || !media) return;
 
     setIsSubmitting(true);

@@ -48,7 +48,14 @@ src/
 │       │   │   ├── MediaSimilar.tsx
 │       │   │   ├── TVSeasons.tsx
 │       │   │   └── FullCreditsModal.tsx
+│       │   ├── Browse/ # Advanced search & filters
+│       │   │   ├── index.tsx
+│       │   │   ├── BrowseToolbar.tsx
+│       │   │   ├── BrowseFilters.tsx
+│       │   │   ├── BrowseResults.tsx
+│       │   │   └── FilterChips.tsx
 │       │   ├── HeroCarousel.tsx
+│       │   ├── QuickBrowseEntry.tsx
 │       │   └── DiscoveryGrids.tsx
 │       ├── profile/    # Profile-related components
 │       │   ├── ProfileHero.tsx
@@ -84,6 +91,7 @@ src/
 │   └── firebase.ts     # Firebase initialization (typed with FirebaseOptions)
 ├── pages/              # Routed page components
 │   ├── HomePage.tsx      # App landing page
+│   ├── BrowsePage.tsx    # Advanced search and filters
 │   ├── ProfilePage.tsx   # User profile and favorites
 │   ├── MediaDetailsPage.tsx   # Media (Movie/TV) detail view
 │   ├── CollectionsPage.tsx # Library dashboard and collections list

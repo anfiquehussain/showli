@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { User, Menu, X, Film, Calendar, Folder, Loader2 } from 'lucide-react';
+import { User, Menu, X, Film, Calendar, Folder, Loader2, Search } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
 import { useAppDispatch } from '@/hooks/useRedux';
@@ -21,6 +21,7 @@ interface NavLink {
 
 const NAV_LINKS: NavLink[] = [
   { label: 'Discover', path: '/', icon: Film },
+  { label: 'Browse', path: '/browse', icon: Search },
   { label: 'Schedule', path: '/schedule', icon: Calendar },
   { label: 'Collections', path: '/collections', icon: Folder },
 ];

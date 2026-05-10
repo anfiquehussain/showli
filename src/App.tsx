@@ -10,6 +10,7 @@ const ProfilePage = lazy(() => import('./pages/ProfilePage'));
 const MediaDetailsPage = lazy(() => import('./pages/MediaDetailsPage'));
 const CollectionsPage = lazy(() => import('./pages/CollectionsPage'));
 const CollectionDetailsPage = lazy(() => import('./pages/CollectionDetailsPage'));
+const BrowsePage = lazy(() => import('./pages/BrowsePage'));
 
 // --- App Root ---
 
@@ -25,6 +26,7 @@ function App() {
         }>
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/browse" element={<BrowsePage />} />
             <Route path="/movie/:id" element={<MediaDetailsPage />} />
             <Route path="/tv/:id" element={<MediaDetailsPage />} />
             <Route 

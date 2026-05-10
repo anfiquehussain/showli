@@ -35,7 +35,7 @@ export const MediaCard = ({ item, onAddClick }: MediaCardProps) => {
           {/* Rating Badge */}
           <div className="absolute top-2 right-2 px-1.5 py-0.5 rounded-md bg-background/60 backdrop-blur-md border border-white/10 flex items-center gap-1 text-[10px] font-bold text-warning shadow-lg">
             <Star className="w-2.5 h-2.5 fill-current" />
-            <span>{item.vote_average.toFixed(1)}</span>
+            <span>{item.vote_average?.toFixed(1) || '0.0'}</span>
           </div>
 
           <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-3">

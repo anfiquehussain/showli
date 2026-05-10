@@ -1,4 +1,4 @@
-import { Search, Filter, ChevronDown } from 'lucide-react';
+import { Filter, ChevronDown } from 'lucide-react';
 import SearchBar from '@/components/patterns/SearchBar';
 import Button from '@/components/ui/Button';
 
@@ -55,12 +55,12 @@ const BrowseToolbar = ({
             value={sortBy}
             onChange={(e) => onUpdateParam('sort', e.target.value)}
             className="bg-transparent border-none focus:ring-0 text-foreground cursor-pointer appearance-none pr-6 relative"
-            style={{ backgroundImage: 'none' }}
+            style={{ backgroundImage: 'none', colorScheme: 'dark' }}
           >
-            <option value="popularity.desc">Popularity</option>
-            <option value="vote_average.desc">Rating</option>
-            <option value="primary_release_date.desc">Release Date</option>
-            <option value="revenue.desc">Revenue</option>
+            <option value="popularity.desc" className="bg-card text-foreground">Popularity</option>
+            <option value="vote_average.desc" className="bg-card text-foreground">Rating</option>
+            <option value="primary_release_date.desc" className="bg-card text-foreground">Release Date</option>
+            <option value="revenue.desc" className="bg-card text-foreground">Revenue</option>
           </select>
           <ChevronDown className="w-4 h-4 text-muted-foreground -ml-5 pointer-events-none" />
         </div>

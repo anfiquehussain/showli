@@ -2,8 +2,7 @@ import { X, RotateCcw } from 'lucide-react';
 import { 
   useGetMovieGenresQuery, 
   useGetTVGenresQuery, 
-  useGetLanguagesQuery, 
-  useGetCountriesQuery 
+  useGetLanguagesQuery
 } from '@/api/media/mediaApi';
 import Button from '@/components/ui/Button';
 
@@ -30,12 +29,10 @@ const BrowseFilters = ({
   const { data: movieGenres } = useGetMovieGenresQuery(undefined, { skip: mediaType === 'tv' });
   const { data: tvGenres } = useGetTVGenresQuery(undefined, { skip: mediaType === 'movie' });
   const { data: languages } = useGetLanguagesQuery();
-  const { data: countries } = useGetCountriesQuery();
 
   const genres = mediaType === 'tv' ? tvGenres?.genres : movieGenres?.genres;
 
   const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 50 }, (_, i) => currentYear - i);
 
   return (
     <div className="space-y-8 flex flex-col h-full">
@@ -79,16 +76,25 @@ const BrowseFilters = ({
           <label className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
             Release Year
           </label>
-          <select
-            value={year}
-            onChange={(e) => onUpdateParam('year', e.target.value)}
-            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-primary/50 focus:outline-none appearance-none"
-          >
-            <option value="">All Years</option>
-            {years.map((y) => (
-              <option key={y} value={y}>{y}</option>
-            ))}
-          </select>
+          <div className="relative group">
+            <input
+              type="number"
+              min="1900"
+              max={currentYear + 5}
+              value={year}
+              onChange={(e) => onUpdateParam('year', e.target.value)}
+              placeholder="e.g. 2024"
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-primary/50 focus:outline-none transition-standard placeholder:text-muted-foreground/30"
+            />
+            {year && (
+              <button 
+                onClick={() => onUpdateParam('year', '')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Language */}
@@ -100,10 +106,11 @@ const BrowseFilters = ({
             value={language}
             onChange={(e) => onUpdateParam('language', e.target.value)}
             className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-primary/50 focus:outline-none appearance-none"
+            style={{ colorScheme: 'dark' }}
           >
-            <option value="">All Languages</option>
+            <option value="" className="bg-card text-foreground">All Languages</option>
             {languages?.map((lang) => (
-              <option key={lang.iso_639_1} value={lang.iso_639_1}>
+              <option key={lang.iso_639_1} value={lang.iso_639_1} className="bg-card text-foreground">
                 {lang.english_name}
               </option>
             ))}

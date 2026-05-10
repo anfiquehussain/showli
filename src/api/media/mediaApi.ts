@@ -62,8 +62,8 @@ export const mediaApi = createApi({
     getTVDetails: builder.query<TmdbTVDetails, number>({
       query: (id) => `/tv/${id}?api_key=${TMDB_API_KEY}`,
     }),
-    searchMedia: builder.query<TmdbPaginatedResponse<TmdbMedia>, string>({
-      query: (query) => `/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}`,
+    searchMedia: builder.query<TmdbPaginatedResponse<TmdbMedia>, { query: string; page?: number }>({
+      query: ({ query, page = 1 }) => `/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&page=${page}`,
     }),
     getCountries: builder.query<TmdbCountry[], void>({
       query: () => `/configuration/countries?api_key=${TMDB_API_KEY}`,

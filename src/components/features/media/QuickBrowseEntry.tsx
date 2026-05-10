@@ -4,13 +4,7 @@ import { Search, Filter, ArrowRight, Film, Tv, Star } from 'lucide-react';
 import { useSearchMediaQuery } from '@/api/media/mediaApi';
 import { getTmdbImageUrl } from '@/utils/image';
 import Button from '@/components/ui/Button';
-import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
 import type { TmdbMedia } from '@/types/tmdb.types';
-
-function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
 
 const QuickBrowseEntry = () => {
   const [query, setQuery] = useState('');
@@ -28,7 +22,7 @@ const QuickBrowseEntry = () => {
   }, [query]);
 
   // Fetch suggestions
-  const { data: searchResults, isFetching } = useSearchMediaQuery(debouncedQuery, {
+  const { data: searchResults, isFetching } = useSearchMediaQuery({ query: debouncedQuery }, {
     skip: debouncedQuery.length < 2,
   });
 

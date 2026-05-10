@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useDiscoverQuery, useSearchMediaQuery, useGetMovieGenresQuery, useGetTVGenresQuery } from '@/api/media/mediaApi';
+import { useDiscoverQuery, useSearchMediaQuery } from '@/api/media/mediaApi';
 import BrowseToolbar from '@/components/features/media/Browse/BrowseToolbar';
 import BrowseFilters from '@/components/features/media/Browse/BrowseFilters';
 import BrowseResults from '@/components/features/media/Browse/BrowseResults';
@@ -17,6 +17,7 @@ const Browse = () => {
   const genreId = searchParams.get('genre') || '';
   const year = searchParams.get('year') || '';
   const language = searchParams.get('language') || '';
+  const page = Number(searchParams.get('page')) || 1;
 
   // Handle 'focus=filters' to open sidebar automatically
   useEffect(() => {
@@ -29,6 +30,11 @@ const Browse = () => {
     }
   }, [searchParams, setSearchParams]);
 
+  // Smooth scroll to top when page changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [page]);
+
   // Data fetching
   const isSearching = !!query;
 
@@ -39,7 +45,7 @@ const Browse = () => {
     isFetching: isSearchFetching,
     error: searchError,
     refetch: refetchSearch
-  } = useSearchMediaQuery(query, { skip: !isSearching });
+  } = useSearchMediaQuery({ query, page }, { skip: !isSearching });
 
   // Discovery API (Only one type at a time for discover)
   const discoverType = mediaType === 'all' ? 'movie' : mediaType;
@@ -57,6 +63,7 @@ const Browse = () => {
       primary_release_year: year,
       first_air_date_year: year, // for TV
       with_original_language: language,
+      page,
     }
   }, { skip: isSearching });
 
@@ -71,10 +78,31 @@ const Browse = () => {
     
     const seen = new Set<string>();
     const filteredResults = results.results.filter((item: any) => {
-      // In multi-search, it can be 'movie', 'tv', or 'person'
+      // 1. Resolve media type
       const type = item.media_type || ('title' in item ? 'movie' : ('name' in item && !('profile_path' in item) ? 'tv' : null));
       if (!type || type === 'person') return false;
+
+      // 2. Client-side filtering (especially important when isSearching is true)
+      // TMDb Search API does not support advanced filters, so we apply them here.
       
+      // Media Type Filter
+      if (mediaType !== 'all' && type !== mediaType) return false;
+
+      if (isSearching) {
+        // Genre Filter
+        if (genreId && !item.genre_ids?.includes(Number(genreId))) return false;
+        
+        // Year Filter
+        if (year) {
+          const itemYear = (item.release_date || item.first_air_date)?.split('-')[0];
+          if (itemYear !== year) return false;
+        }
+        
+        // Language Filter
+        if (language && item.original_language !== language) return false;
+      }
+      
+      // 3. Deduplication
       const key = `${item.id}-${type}`;
       if (seen.has(key)) return false;
       seen.add(key);
@@ -85,7 +113,7 @@ const Browse = () => {
       ...results,
       results: filteredResults
     };
-  }, [results]);
+  }, [results, isSearching, mediaType, genreId, year, language]);
 
   const handleUpdateParam = (key: string, value: string) => {
     const newParams = new URLSearchParams(searchParams);
@@ -95,10 +123,8 @@ const Browse = () => {
       newParams.delete(key);
     }
     
-    // If updating filters, clear search query to avoid confusion
-    if (key !== 'q' && key !== 'page') {
-      newParams.delete('q');
-    }
+    // If updating filters, we no longer clear the search query
+    // This allows hybrid filtering (search text + filters)
 
     // If updating search, reset page
     if (key === 'q' || key === 'genre' || key === 'type' || key === 'year' || key === 'language') {
@@ -173,6 +199,8 @@ const Browse = () => {
             isLoading={isLoading || isFetching}
             error={error}
             onRetry={isSearching ? refetchSearch : refetchDiscover}
+            currentPage={page}
+            onPageChange={(newPage) => handleUpdateParam('page', String(newPage))}
           />
         </div>
       </div>

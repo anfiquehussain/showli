@@ -2,19 +2,24 @@ import MediaCard from '@/components/patterns/MediaCard';
 import type { TmdbPaginatedResponse, TmdbMedia } from '@/types/tmdb.types';
 import { AlertCircle, RotateCcw } from 'lucide-react';
 import Button from '@/components/ui/Button';
+import PaginationControls from '@/components/patterns/PaginationControls';
 
 interface BrowseResultsProps {
   results?: TmdbPaginatedResponse<TmdbMedia>;
   isLoading: boolean;
   error: any;
   onRetry: () => void;
+  currentPage: number;
+  onPageChange: (page: number) => void;
 }
 
 const BrowseResults = ({
   results,
   isLoading,
   error,
-  onRetry
+  onRetry,
+  currentPage,
+  onPageChange
 }: BrowseResultsProps) => {
   if (isLoading && !results) {
     return (
@@ -64,31 +69,42 @@ const BrowseResults = ({
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between text-sm text-muted-foreground">
-        <span>Showing {items.length} of {results?.total_results?.toLocaleString() || 0} results</span>
+    <div className="space-y-12">
+      <div className="space-y-6">
+        <div className="flex items-center justify-between text-sm text-muted-foreground">
+          <span>Showing {items.length} of {results?.total_results?.toLocaleString() || 0} results</span>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+          {items.map((item) => (
+            <MediaCard 
+              key={`${item.media_type || ('title' in item ? 'movie' : 'tv')}-${item.id}`} 
+              item={item} 
+            />
+          ))}
+
+          {isLoading && Array.from({ length: 5 }).map((_, i) => (
+            <div key={`loading-${i}`} className="space-y-3 animate-pulse">
+              <div className="aspect-[2/3] bg-white/5 rounded-xl border border-white/5" />
+              <div className="h-4 bg-white/5 rounded w-3/4" />
+            </div>
+          ))}
+        </div>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-        {items.map((item) => (
-          <MediaCard 
-            key={`${item.media_type}-${item.id}`} 
-            item={item} 
-          />
-        ))}
-
-        {isLoading && Array.from({ length: 5 }).map((_, i) => (
-          <div key={`loading-${i}`} className="space-y-3 animate-pulse">
-            <div className="aspect-[2/3] bg-white/5 rounded-xl border border-white/5" />
-            <div className="h-4 bg-white/5 rounded w-3/4" />
-          </div>
-        ))}
-      </div>
+      {results && results.total_pages > 1 && (
+        <PaginationControls 
+          currentPage={currentPage}
+          totalPages={Math.min(results.total_pages, 500)} // TMDb limit is 500
+          onPageChange={onPageChange}
+          className="pt-6 border-t border-white/5"
+        />
+      )}
     </div>
   );
 };
 
-// SearchX icon helper since lucide-react might not have it in the expected name or I want a specific look
+// SearchX icon helper
 import { Search } from 'lucide-react';
 const SearchX = ({ className }: { className?: string }) => (
   <div className="relative">

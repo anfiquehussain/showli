@@ -31,7 +31,7 @@ const AddFavoriteModal = ({ isOpen, onClose }: AddFavoriteModalProps) => {
     return () => clearTimeout(timer);
   }, [query]);
 
-  const { data, isLoading } = useSearchMediaQuery(debouncedQuery, {
+  const { data, isLoading } = useSearchMediaQuery({ query: debouncedQuery }, {
     skip: debouncedQuery.length < 2,
   });
 

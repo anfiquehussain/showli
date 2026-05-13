@@ -44,6 +44,13 @@ export interface TmdbTV {
 
 export type TmdbMedia = TmdbMovie | TmdbTV;
 
+export interface TmdbCollectionBrief {
+  id: number;
+  name: string;
+  poster_path: string | null;
+  backdrop_path: string | null;
+}
+
 export interface TmdbMovieDetails extends TmdbMovie {
   budget: number;
   revenue: number;
@@ -57,6 +64,7 @@ export interface TmdbMovieDetails extends TmdbMovie {
   production_countries: TmdbProductionCountryDetails[];
   spoken_languages: TmdbSpokenLanguage[];
   images?: TmdbImagesResponse;
+  belongs_to_collection: TmdbCollectionBrief | null;
 }
 
 export interface TmdbProductionCountryDetails {

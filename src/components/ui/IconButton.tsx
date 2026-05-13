@@ -14,9 +14,9 @@ interface IconButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 
 // --- Style Maps ---
 
 const variants: Record<IconButtonVariant, string> = {
-  primary: 'bg-brand-primary text-primary-foreground hover:bg-brand-accent',
-  secondary: 'bg-secondary text-primary border border-gray-border hover:bg-gray-light hover:border-brand-primary/30',
-  ghost: 'bg-transparent text-secondary hover:bg-gray-light hover:text-primary',
+  primary: 'bg-brand-primary text-primary-foreground hover:bg-brand-accent shadow-lg shadow-brand-primary/20',
+  secondary: 'bg-secondary text-primary border border-white/10 hover:bg-white/5 hover:border-brand-primary/30',
+  ghost: 'bg-transparent text-muted-foreground hover:bg-white/5 hover:text-white',
 };
 
 // --- Component ---

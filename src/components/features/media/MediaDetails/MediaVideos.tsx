@@ -19,7 +19,7 @@ const MediaVideos = ({ id, type }: MediaVideosProps) => {
   // Filter for YouTube trailers and teasers
   const allVideos = videoData.results
     .filter(v => v.site === 'YouTube' && (v.type === 'Trailer' || v.type === 'Teaser' || v.type === 'Clip'));
-  
+
   const previewVideos = allVideos.slice(0, 8);
 
   if (allVideos.length === 0) return null;
@@ -31,9 +31,9 @@ const MediaVideos = ({ id, type }: MediaVideosProps) => {
           <span className="w-1 h-5 bg-brand-primary rounded-full shadow-[0_0_8px_rgba(99,102,241,0.5)]" />
           Trailers & Clips
         </h2>
-        
+
         {allVideos.length > 8 && (
-          <button 
+          <button
             onClick={() => setIsViewAllOpen(true)}
             className="group flex items-center gap-2 text-xs font-bold text-muted-foreground hover:text-white transition-colors"
           >
@@ -60,7 +60,7 @@ const MediaVideos = ({ id, type }: MediaVideosProps) => {
               alt={video.name}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-60 group-hover:opacity-80"
             />
-            
+
             {/* Play Overlay */}
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="w-12 h-12 rounded-full bg-brand-primary/90 flex items-center justify-center text-white shadow-xl transform transition-transform group-hover:scale-110 active:scale-95">
@@ -104,7 +104,7 @@ const MediaVideos = ({ id, type }: MediaVideosProps) => {
               >
                 <X className="w-5 h-5" />
               </button>
-              
+
               <iframe
                 src={`https://www.youtube.com/embed/${activeVideo}?autoplay=1`}
                 title="YouTube video player"

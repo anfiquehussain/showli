@@ -38,7 +38,12 @@ const CollectionItem = ({
         >
           <Folder className="w-4 h-4 text-white" />
         </div>
-        <span className="text-sm font-medium text-primary">{collection.name}</span>
+        <div className="flex flex-col gap-0.5">
+          <span className="text-sm font-medium text-primary">{collection.name}</span>
+          <span className="text-[10px] text-text-secondary leading-none">
+            {collection.media_count || 0} {collection.media_count === 1 ? 'item' : 'items'}
+          </span>
+        </div>
       </div>
       
       {isAdded && (

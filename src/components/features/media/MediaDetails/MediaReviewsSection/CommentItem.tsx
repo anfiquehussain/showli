@@ -56,7 +56,7 @@ const CommentItem = ({
 
   const totalThreadReplies = useMemo(() => {
     let count = 0;
-    const countAll = (replies: any[]) => {
+    const countAll = (replies: CommentWithReplies[]) => {
       count += replies.length;
       replies.forEach(r => countAll(r.replies));
     };

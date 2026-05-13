@@ -9,6 +9,8 @@ import type { Comment, CommentWithReplies } from '@/types/discussions.types';
 import CommentItem from './CommentItem';
 import CommentForm from './CommentForm';
 
+import { useToast } from '@/hooks/useToast';
+
 interface ShowliDiscussionProps {
   mediaId: number;
   mediaType: 'movie' | 'tv';
@@ -16,6 +18,7 @@ interface ShowliDiscussionProps {
 
 const ShowliDiscussion = ({ mediaId, mediaType }: ShowliDiscussionProps) => {
   const { user } = useAuth();
+  const { success, error: toastError } = useToast();
   const [comments, setComments] = useState<Comment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'rating'>('newest');
@@ -75,36 +78,50 @@ const ShowliDiscussion = ({ mediaId, mediaType }: ShowliDiscussionProps) => {
 
   const handleAddComment = async (content: string, rating: number | null) => {
     if (!user) return;
-    await discussionsService.addComment({
-      mediaId,
-      mediaType,
-      userId: user.uid,
-      userName: user.displayName || 'Anonymous',
-      userAvatar: user.photoURL,
-      content,
-      rating,
-      parentId: null,
-    });
-    setIsReviewModalOpen(false);
+    try {
+      await discussionsService.addComment({
+        mediaId,
+        mediaType,
+        userId: user.uid,
+        userName: user.displayName || 'Anonymous',
+        userAvatar: user.photoURL,
+        content,
+        rating,
+        parentId: null,
+      });
+      success(rating !== null ? 'Review shared!' : 'Comment posted!');
+      setIsReviewModalOpen(false);
+    } catch (err) {
+      toastError('Failed to post. Please try again.');
+    }
   };
 
   const handleReply = async (content: string, parentId: string) => {
     if (!user) return;
-    await discussionsService.addComment({
-      mediaId,
-      mediaType,
-      userId: user.uid,
-      userName: user.displayName || 'Anonymous',
-      userAvatar: user.photoURL,
-      content,
-      rating: null,
-      parentId,
-    });
+    try {
+      await discussionsService.addComment({
+        mediaId,
+        mediaType,
+        userId: user.uid,
+        userName: user.displayName || 'Anonymous',
+        userAvatar: user.photoURL,
+        content,
+        rating: null,
+        parentId,
+      });
+      success('Reply posted!');
+    } catch (err) {
+      toastError('Failed to reply.');
+    }
   };
 
   const handleLike = async (commentId: string, isLiked: boolean) => {
     if (!user) return;
-    await discussionsService.toggleLike(commentId, user.uid, isLiked);
+    try {
+      await discussionsService.toggleLike(commentId, user.uid, isLiked);
+    } catch (err) {
+      toastError('Action failed.');
+    }
   };
 
   const confirmDelete = async () => {
@@ -113,7 +130,10 @@ const ShowliDiscussion = ({ mediaId, mediaType }: ShowliDiscussionProps) => {
     setIsDeleting(true);
     try {
       await discussionsService.deleteComment(commentToDelete);
+      success('Comment deleted.');
       setCommentToDelete(null);
+    } catch (err) {
+      toastError('Failed to delete.');
     } finally {
       setIsDeleting(false);
     }
@@ -158,12 +178,12 @@ const ShowliDiscussion = ({ mediaId, mediaType }: ShowliDiscussionProps) => {
         <div className="flex items-center gap-3 w-full sm:w-auto">
           <select 
             value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as any)}
-            className="flex-1 sm:flex-initial bg-[#0a0a0a] border border-white/10 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest text-white/60 hover:text-white hover:border-white/20 transition-all outline-none cursor-pointer appearance-none"
+            onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+            className="flex-1 sm:flex-initial bg-card border border-white/10 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest text-white/60 hover:text-white hover:border-white/20 transition-all outline-none cursor-pointer appearance-none"
           >
-            <option value="newest" className="bg-[#0a0a0a] text-white">Sort by: Newest</option>
-            <option value="oldest" className="bg-[#0a0a0a] text-white">Sort by: Oldest</option>
-            <option value="rating" className="bg-[#0a0a0a] text-white">Sort by: Highest Rating</option>
+            <option value="newest" className="bg-card text-white">Sort by: Newest</option>
+            <option value="oldest" className="bg-card text-white">Sort by: Oldest</option>
+            <option value="rating" className="bg-card text-white">Sort by: Highest Rating</option>
           </select>
 
           <Button 
@@ -194,7 +214,7 @@ const ShowliDiscussion = ({ mediaId, mediaType }: ShowliDiscussionProps) => {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-[95vw] sm:w-full max-w-lg bg-[#0a0a0a] border border-white/10 rounded-2xl md:rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+              className="relative w-[95vw] sm:w-full max-w-lg bg-card border border-white/10 rounded-2xl md:rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
             >
               {/* Fixed Header */}
               <div className="flex items-center justify-between p-4 md:p-8 border-b border-white/5 shrink-0">

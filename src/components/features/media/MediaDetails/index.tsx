@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useGetMovieDetailsQuery, useGetTVDetailsQuery } from '@/api/media/mediaApi';
-import AddToCollectionModal from '@/components/patterns/AddToCollectionModal/index';
 import type { TmdbMovieDetails, TmdbTVDetails } from '@/types/tmdb.types';
 
 // Internal Components
@@ -20,10 +19,10 @@ import FullCreditsModal from './FullCreditsModal';
 interface MediaDetailsProps {
   id: number;
   type: 'movie' | 'tv';
+  onAddToCollection?: () => void;
 }
 
-const MediaDetails = ({ id, type }: MediaDetailsProps) => {
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+const MediaDetails = ({ id, type, onAddToCollection }: MediaDetailsProps) => {
   const [isCreditsModalOpen, setIsCreditsModalOpen] = useState(false);
 
   const movieQuery = useGetMovieDetailsQuery(id, { skip: type !== 'movie' });
@@ -65,7 +64,7 @@ const MediaDetails = ({ id, type }: MediaDetailsProps) => {
         year={year}
         runtime={runtime}
         tagline={tagline}
-        onAddToCollection={() => setIsAddModalOpen(true)}
+        onAddToCollection={onAddToCollection}
       />
 
       {/* 2. Content Sections */}
@@ -106,7 +105,11 @@ const MediaDetails = ({ id, type }: MediaDetailsProps) => {
           />
 
           {/* Media Images Gallery */}
-          <MediaImages id={id} type={type} />
+          <MediaImages 
+            id={id} 
+            type={type} 
+            collectionId={type === 'movie' ? (media as TmdbMovieDetails).belongs_to_collection?.id : undefined}
+          />
 
           {/* Media Trailers & Clips */}
           <MediaVideos id={id} type={type} />
@@ -130,14 +133,6 @@ const MediaDetails = ({ id, type }: MediaDetailsProps) => {
       {/* Discovery Sections */}
       <MediaRecommendations id={id} type={type} />
       <MediaSimilar id={id} type={type} />
-
-      {media && (
-        <AddToCollectionModal
-          isOpen={isAddModalOpen}
-          onClose={() => setIsAddModalOpen(false)}
-          media={media}
-        />
-      )}
 
       <FullCreditsModal
         isOpen={isCreditsModalOpen}

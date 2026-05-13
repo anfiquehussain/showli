@@ -78,9 +78,9 @@ const TmdbReviews = ({ mediaId, mediaType }: TmdbReviewsProps) => {
               </div>
               
               {review.author_details.rating && (
-                <div className="flex items-center gap-1.5 bg-yellow-500/10 border border-yellow-500/20 px-2 py-1 rounded-lg shrink-0">
-                  <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
-                  <span className="text-[11px] font-black text-yellow-500">{review.author_details.rating}</span>
+                <div className="flex items-center gap-1.5 bg-warning/10 border border-warning/20 px-2 py-1 rounded-lg shrink-0">
+                  <Star className="w-3 h-3 text-warning fill-warning" />
+                  <span className="text-[11px] font-black text-warning">{review.author_details.rating}</span>
                 </div>
               )}
             </div>

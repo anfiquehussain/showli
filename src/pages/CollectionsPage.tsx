@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import ConfirmationModal from '@/components/patterns/ConfirmationModal';
 import CollectionList from '@/components/features/collections/CollectionList/index';
-import CollectionModal from '@/components/patterns/CollectionModal';
+import CollectionModal from '@/components/features/collections/CollectionModal';
 import CollectionsHero from '@/components/features/collections/CollectionsHero';
 import { useCollectionsManagement } from '@/components/features/collections/hooks/useCollectionsManagement';
 

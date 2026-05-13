@@ -12,7 +12,7 @@ interface MediaHeroProps {
   year: string | undefined;
   runtime: number | null;
   tagline: string | null;
-  onAddToCollection: () => void;
+  onAddToCollection?: () => void;
 }
 
 const MediaHero = ({ 
@@ -120,7 +120,7 @@ const MediaHero = ({
                 variant="secondary" 
                 size="sm" 
                 className="flex-none gap-1.5 glass-card px-2.5 sm:px-3.5 h-8 sm:h-9 text-[10px] sm:text-xs font-bold border-white/10 hover:border-white/20"
-                onClick={onAddToCollection}
+                onClick={() => onAddToCollection?.()}
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">Collections</span>

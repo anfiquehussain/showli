@@ -47,6 +47,7 @@ src/
 │       │   │   ├── MediaRecommendations.tsx
 │       │   │   ├── MediaSimilar.tsx
 │       │   │   ├── TVSeasons.tsx
+│       │   │   ├── EpisodeCard.tsx
 │       │   │   └── FullCreditsModal.tsx
 │       │   ├── Browse/ # Advanced search & filters
 │       │   │   ├── index.tsx

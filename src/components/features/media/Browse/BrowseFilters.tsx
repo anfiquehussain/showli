@@ -2,7 +2,8 @@ import { X, RotateCcw } from 'lucide-react';
 import { 
   useGetMovieGenresQuery, 
   useGetTVGenresQuery, 
-  useGetLanguagesQuery
+  useGetLanguagesQuery,
+  useGetCountriesQuery
 } from '@/api/media/mediaApi';
 import Button from '@/components/ui/Button';
 
@@ -11,6 +12,7 @@ interface BrowseFiltersProps {
   genreId: string;
   year: string;
   language: string;
+  country: string;
   onUpdateParam: (key: string, value: string) => void;
   onClear: () => void;
   onClose?: () => void;
@@ -21,6 +23,7 @@ const BrowseFilters = ({
   genreId,
   year,
   language,
+  country,
   onUpdateParam,
   onClear,
   onClose
@@ -29,6 +32,7 @@ const BrowseFilters = ({
   const { data: movieGenres } = useGetMovieGenresQuery(undefined, { skip: mediaType === 'tv' });
   const { data: tvGenres } = useGetTVGenresQuery(undefined, { skip: mediaType === 'movie' });
   const { data: languages } = useGetLanguagesQuery();
+  const { data: countries } = useGetCountriesQuery();
 
   const genres = mediaType === 'tv' ? tvGenres?.genres : movieGenres?.genres;
 
@@ -112,6 +116,26 @@ const BrowseFilters = ({
             {languages?.map((lang) => (
               <option key={lang.iso_639_1} value={lang.iso_639_1} className="bg-card text-foreground">
                 {lang.english_name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Country */}
+        <div className="space-y-3">
+          <label className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+            Country
+          </label>
+          <select
+            value={country}
+            onChange={(e) => onUpdateParam('country', e.target.value)}
+            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-primary/50 focus:outline-none appearance-none"
+            style={{ colorScheme: 'dark' }}
+          >
+            <option value="" className="bg-card text-foreground">All Countries</option>
+            {countries?.map((c) => (
+              <option key={c.iso_3166_1} value={c.iso_3166_1} className="bg-card text-foreground">
+                {c.english_name}
               </option>
             ))}
           </select>

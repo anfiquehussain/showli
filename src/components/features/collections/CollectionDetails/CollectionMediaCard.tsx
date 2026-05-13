@@ -106,7 +106,7 @@ const CollectionMediaCard = ({
                 className="w-full bg-white/10 border border-white/20 rounded-lg px-2 py-1 text-[10px] font-medium text-white focus:outline-none focus:ring-1 focus:ring-brand-primary"
               >
                 {statusOptions.map((opt) => (
-                  <option key={opt.value} value={opt.value} className="bg-slate-900 text-white">
+                  <option key={opt.value} value={opt.value} className="bg-card text-white">
                     {opt.label}
                   </option>
                 ))}
@@ -160,7 +160,7 @@ const CollectionMediaCard = ({
               className="w-full bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-xs font-medium text-primary focus:outline-none focus:ring-1 focus:ring-brand-primary"
             >
               {statusOptions.map((opt) => (
-                <option key={opt.value} value={opt.value} className="bg-slate-900 text-white">
+                <option key={opt.value} value={opt.value} className="bg-card text-white">
                   {opt.label}
                 </option>
               ))}

@@ -6,6 +6,8 @@ import BrowseFilters from '@/components/features/media/Browse/BrowseFilters';
 import BrowseResults from '@/components/features/media/Browse/BrowseResults';
 import FilterChips from '@/components/features/media/Browse/FilterChips';
 
+import type { TmdbMedia } from '@/types/tmdb.types';
+
 const Browse = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [isFilterSidebarOpen, setIsFilterSidebarOpen] = useState(false);
@@ -17,6 +19,7 @@ const Browse = () => {
   const genreId = searchParams.get('genre') || '';
   const year = searchParams.get('year') || '';
   const language = searchParams.get('language') || '';
+  const country = searchParams.get('country') || '';
   const page = Number(searchParams.get('page')) || 1;
 
   // Handle 'focus=filters' to open sidebar automatically
@@ -63,6 +66,7 @@ const Browse = () => {
       primary_release_year: year,
       first_air_date_year: year, // for TV
       with_original_language: language,
+      with_origin_country: country,
       page,
     }
   }, { skip: isSearching });
@@ -77,10 +81,10 @@ const Browse = () => {
     if (!results?.results) return results;
     
     const seen = new Set<string>();
-    const filteredResults = results.results.filter((item: any) => {
+    const filteredResults = results.results.filter((item: TmdbMedia) => {
       // 1. Resolve media type
       const type = item.media_type || ('title' in item ? 'movie' : ('name' in item && !('profile_path' in item) ? 'tv' : null));
-      if (!type || type === 'person') return false;
+      if (!type) return false;
 
       // 2. Client-side filtering (especially important when isSearching is true)
       // TMDb Search API does not support advanced filters, so we apply them here.
@@ -94,12 +98,19 @@ const Browse = () => {
         
         // Year Filter
         if (year) {
-          const itemYear = (item.release_date || item.first_air_date)?.split('-')[0];
+          const releaseDate = 'release_date' in item ? item.release_date : ('first_air_date' in item ? item.first_air_date : null);
+          const itemYear = releaseDate?.split('-')[0];
           if (itemYear !== year) return false;
         }
         
         // Language Filter
         if (language && item.original_language !== language) return false;
+
+        // Country Filter
+        if (country) {
+          const originCountry = 'origin_country' in item ? item.origin_country : [];
+          if (!originCountry?.includes(country)) return false;
+        }
       }
       
       // 3. Deduplication
@@ -113,7 +124,7 @@ const Browse = () => {
       ...results,
       results: filteredResults
     };
-  }, [results, isSearching, mediaType, genreId, year, language]);
+  }, [results, isSearching, mediaType, genreId, year, language, country]);
 
   const handleUpdateParam = (key: string, value: string) => {
     const newParams = new URLSearchParams(searchParams);
@@ -127,7 +138,7 @@ const Browse = () => {
     // This allows hybrid filtering (search text + filters)
 
     // If updating search, reset page
-    if (key === 'q' || key === 'genre' || key === 'type' || key === 'year' || key === 'language') {
+    if (key === 'q' || key === 'genre' || key === 'type' || key === 'year' || key === 'language' || key === 'country') {
       newParams.delete('page');
     }
 
@@ -158,6 +169,7 @@ const Browse = () => {
             genreId={genreId}
             year={year}
             language={language}
+            country={country}
             onUpdateParam={handleUpdateParam}
             onClear={handleClearFilters}
           />
@@ -176,6 +188,7 @@ const Browse = () => {
                 genreId={genreId}
                 year={year}
                 language={language}
+                country={country}
                 onUpdateParam={handleUpdateParam}
                 onClear={handleClearFilters}
                 onClose={toggleSidebar}
@@ -191,7 +204,9 @@ const Browse = () => {
             genreId={genreId}
             year={year}
             language={language}
+            country={country}
             onRemove={handleUpdateParam}
+            onClearAll={handleClearFilters}
           />
 
           <BrowseResults 

@@ -1,7 +1,7 @@
 import { ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 import CollectionDetails from '@/components/features/collections/CollectionDetails/index';
-import CollectionModal from '@/components/patterns/CollectionModal';
+import CollectionModal from '@/components/features/collections/CollectionModal';
 import AddMediaModal from '@/components/features/collections/AddMediaModal';
 import ConfirmationModal from '@/components/patterns/ConfirmationModal';
 import { useCollectionDetails } from '@/components/features/collections/hooks/useCollectionDetails';

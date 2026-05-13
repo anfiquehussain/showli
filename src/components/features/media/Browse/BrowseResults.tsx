@@ -7,7 +7,7 @@ import PaginationControls from '@/components/patterns/PaginationControls';
 interface BrowseResultsProps {
   results?: TmdbPaginatedResponse<TmdbMedia>;
   isLoading: boolean;
-  error: any;
+  error: unknown;
   onRetry: () => void;
   currentPage: number;
   onPageChange: (page: number) => void;

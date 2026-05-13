@@ -32,7 +32,7 @@ const QuickBrowseEntry = () => {
     // Filter out non-media (people) and duplicates
     const seen = new Set<string>();
     return searchResults.results
-      .filter((item: any) => {
+      .filter((item: TmdbMedia) => {
         const type = 'title' in item ? 'movie' : ('name' in item && !('profile_path' in item) ? 'tv' : null);
         if (!type) return false;
         

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import Modal from '@/components/patterns/Modal';
 import SearchBar from '@/components/patterns/SearchBar';
-import CollectionModal from '@/components/patterns/CollectionModal';
-import { Plus, SearchX } from 'lucide-react';
+import CollectionModal from '@/components/features/collections/CollectionModal';
+import { Plus, SearchX, ArrowUpDown, Clock, Type, Hash } from 'lucide-react';
 import type { TmdbMedia } from '@/types/tmdb.types';
 import type { CollectionFormData } from '@/types/collections.types';
 import { 
@@ -38,11 +38,25 @@ export const AddToCollectionModal = ({ isOpen, onClose, media }: AddToCollection
   const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [sortBy, setSortBy] = useState<'name' | 'count' | 'recent'>('recent');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   const filteredCollections = collections.filter(c => 
     !c.is_all_media && 
     c.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const sortedCollections = [...filteredCollections].sort((a, b) => {
+    let comparison = 0;
+    if (sortBy === 'name') {
+      comparison = a.name.localeCompare(b.name);
+    } else if (sortBy === 'count') {
+      comparison = (a.media_count || 0) - (b.media_count || 0);
+    } else if (sortBy === 'recent') {
+      comparison = (a.created_at || 0) - (b.created_at || 0);
+    }
+    return sortOrder === 'asc' ? comparison : -comparison;
+  });
 
   const handleCreateAndAdd = async (data: CollectionFormData) => {
     if (!user || !media) return;
@@ -127,6 +141,51 @@ export const AddToCollectionModal = ({ isOpen, onClose, media }: AddToCollection
           className="bg-card/30 border-white/5"
         />
 
+        {collections.length > 0 && (
+          <div className="flex items-center justify-between gap-2 px-1">
+            <div className="flex items-center gap-1 bg-white/5 p-1 rounded-lg border border-white/5">
+              <button
+                onClick={() => {
+                  if (sortBy === 'name') setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
+                  else { setSortBy('name'); setSortOrder('asc'); }
+                }}
+                className={`px-2 py-1 rounded-md transition-all flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-bold ${sortBy === 'name' ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-text-secondary hover:text-primary hover:bg-white/5'}`}
+              >
+                <Type className="w-3 h-3" />
+                <span>Name</span>
+              </button>
+              <button
+                onClick={() => {
+                  if (sortBy === 'count') setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
+                  else { setSortBy('count'); setSortOrder('desc'); }
+                }}
+                className={`px-2 py-1 rounded-md transition-all flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-bold ${sortBy === 'count' ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-text-secondary hover:text-primary hover:bg-white/5'}`}
+              >
+                <Hash className="w-3 h-3" />
+                <span>Count</span>
+              </button>
+              <button
+                onClick={() => {
+                  if (sortBy === 'recent') setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
+                  else { setSortBy('recent'); setSortOrder('desc'); }
+                }}
+                className={`px-2 py-1 rounded-md transition-all flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-bold ${sortBy === 'recent' ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-text-secondary hover:text-primary hover:bg-white/5'}`}
+              >
+                <Clock className="w-3 h-3" />
+                <span>Recent</span>
+              </button>
+            </div>
+            
+            <button 
+              onClick={() => setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc')}
+              className="p-1.5 rounded-lg bg-white/5 border border-white/5 text-text-secondary hover:text-primary hover:border-white/10 transition-all active:scale-95"
+              title={`Sort ${sortOrder === 'asc' ? 'Descending' : 'Ascending'}`}
+            >
+              <ArrowUpDown className={`w-3.5 h-3.5 transition-transform duration-300 ${sortOrder === 'desc' ? 'rotate-180' : ''}`} />
+            </button>
+          </div>
+        )}
+
         {isLoadingCollections ? (
           <div className="space-y-2">
             {[...Array(3)].map((_, i) => (
@@ -147,7 +206,7 @@ export const AddToCollectionModal = ({ isOpen, onClose, media }: AddToCollection
               </button>
             )}
 
-            {filteredCollections.map((collection) => (
+            {sortedCollections.map((collection) => (
               <CollectionItem 
                 key={collection.id} 
                 collection={collection} 

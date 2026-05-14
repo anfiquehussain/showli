@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ChevronRight,
@@ -16,12 +16,15 @@ interface MediaImagesProps {
   collectionId?: number;
 }
 
+const ITEMS_PER_PAGE = 24;
+
 const MediaImages = ({ id, type, collectionId }: MediaImagesProps) => {
   const [activeTab, setActiveTab] = useState<'backdrops' | 'posters'>('backdrops');
   const { data: images, isLoading } = useGetMediaImagesQuery({ id, type });
   const { data: collectionImages } = useGetCollectionImagesQuery(collectionId!, { skip: !collectionId });
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [isViewAllOpen, setIsViewAllOpen] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
 
   // Keyboard navigation
   useEffect(() => {
@@ -35,8 +38,14 @@ const MediaImages = ({ id, type, collectionId }: MediaImagesProps) => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedIndex]);
 
-  if (isLoading || !images) return null;
+  const handleLoadMore = useCallback(() => {
+    setVisibleCount(prev => prev + ITEMS_PER_PAGE);
+  }, []);
 
+  const observer = useRef<IntersectionObserver | null>(null);
+
+  // We'll define the observerTarget hook here, but it needs hasMore
+  // Since hasMore depends on data, we'll calculate it safely
   const allBackdrops = [
     ...(images?.backdrops || []),
     ...(collectionImages?.backdrops || [])
@@ -48,7 +57,26 @@ const MediaImages = ({ id, type, collectionId }: MediaImagesProps) => {
   ].filter((v, i, a) => a.findIndex(t => t.file_path === v.file_path) === i);
 
   const currentImages = activeTab === 'backdrops' ? allBackdrops : allPosters;
+  const hasMore = visibleCount < currentImages.length;
+
+  const observerTarget = useCallback((node: HTMLDivElement | null) => {
+    if (observer.current) observer.current.disconnect();
+
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0]?.isIntersecting && hasMore) {
+        handleLoadMore();
+      }
+    }, {
+      rootMargin: '400px',
+    });
+
+    if (node) observer.current.observe(node);
+  }, [hasMore, handleLoadMore]);
+
+  if (isLoading || !images) return null;
+
   const previewImages = currentImages.slice(0, 10);
+  const displayedImages = currentImages.slice(0, visibleCount);
 
   const handleNext = () => {
     setSelectedIndex(prev => (prev !== null && prev < currentImages.length - 1 ? prev + 1 : 0));
@@ -71,7 +99,11 @@ const MediaImages = ({ id, type, collectionId }: MediaImagesProps) => {
 
           <div className="flex items-center bg-white/5 rounded-full p-1 border border-white/10">
             <button
-              onClick={() => { setActiveTab('backdrops'); setSelectedIndex(null); }}
+              onClick={() => { 
+                setActiveTab('backdrops'); 
+                setSelectedIndex(null); 
+                setVisibleCount(ITEMS_PER_PAGE);
+              }}
               className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all ${activeTab === 'backdrops'
                   ? 'bg-brand-primary text-white shadow-[0_0_15px_rgba(99,102,241,0.4)]'
                   : 'text-muted-foreground hover:text-white'
@@ -80,7 +112,11 @@ const MediaImages = ({ id, type, collectionId }: MediaImagesProps) => {
               Backdrops ({allBackdrops.length})
             </button>
             <button
-              onClick={() => { setActiveTab('posters'); setSelectedIndex(null); }}
+              onClick={() => { 
+                setActiveTab('posters'); 
+                setSelectedIndex(null); 
+                setVisibleCount(ITEMS_PER_PAGE);
+              }}
               className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all ${activeTab === 'posters'
                   ? 'bg-brand-primary text-white shadow-[0_0_15px_rgba(99,102,241,0.4)]'
                   : 'text-muted-foreground hover:text-white'
@@ -221,7 +257,7 @@ const MediaImages = ({ id, type, collectionId }: MediaImagesProps) => {
               <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
                 <div className={`grid gap-4 md:gap-6 pb-12 ${activeTab === 'backdrops' ? 'grid-cols-2 lg:grid-cols-3' : 'grid-cols-3 md:grid-cols-4 lg:grid-cols-6'
                   }`}>
-                  {currentImages.map((image, index) => (
+                  {displayedImages.map((image, index) => (
                     <motion.div
                       key={image.file_path}
                       initial={{ opacity: 0, y: 20 }}
@@ -245,6 +281,12 @@ const MediaImages = ({ id, type, collectionId }: MediaImagesProps) => {
                     </motion.div>
                   ))}
                 </div>
+                
+                {hasMore && (
+                  <div ref={observerTarget} className="w-full h-20 flex items-center justify-center pb-12">
+                    <div className="w-6 h-6 border-2 border-brand-primary border-t-transparent rounded-full animate-spin"></div>
+                  </div>
+                )}
               </div>
             </div>
           </motion.div>

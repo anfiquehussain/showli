@@ -9,8 +9,8 @@ interface BrowseResultsProps {
   isLoading: boolean;
   error: unknown;
   onRetry: () => void;
-  currentPage: number;
-  onPageChange: (page: number) => void;
+  hasMore: boolean;
+  observerTarget: (node: HTMLDivElement | null) => void;
 }
 
 const BrowseResults = ({
@@ -18,8 +18,8 @@ const BrowseResults = ({
   isLoading,
   error,
   onRetry,
-  currentPage,
-  onPageChange
+  hasMore,
+  observerTarget
 }: BrowseResultsProps) => {
   if (isLoading && !results) {
     return (
@@ -69,7 +69,6 @@ const BrowseResults = ({
   }
 
   return (
-    <div className="space-y-12">
       <div className="space-y-6">
         <div className="flex items-center justify-between text-sm text-muted-foreground">
           <span>Showing {items.length} of {results?.total_results?.toLocaleString() || 0} results</span>
@@ -82,25 +81,20 @@ const BrowseResults = ({
               item={item} 
             />
           ))}
-
-          {isLoading && Array.from({ length: 5 }).map((_, i) => (
-            <div key={`loading-${i}`} className="space-y-3 animate-pulse">
-              <div className="aspect-[2/3] bg-white/5 rounded-xl border border-white/5" />
-              <div className="h-4 bg-white/5 rounded w-3/4" />
-            </div>
-          ))}
         </div>
-      </div>
 
-      {results && results.total_pages > 1 && (
-        <PaginationControls 
-          currentPage={currentPage}
-          totalPages={Math.min(results.total_pages, 500)} // TMDb limit is 500
-          onPageChange={onPageChange}
-          className="pt-6 border-t border-white/5"
-        />
-      )}
-    </div>
+        {hasMore && (
+          <div ref={observerTarget} className="w-full h-32 flex items-center justify-center pt-8">
+            <div className="w-8 h-8 border-4 border-brand-primary/20 border-t-brand-primary rounded-full animate-spin" />
+          </div>
+        )}
+
+        {!hasMore && items.length > 0 && (
+          <div className="py-12 text-center text-muted-foreground text-sm border-t border-white/5">
+            You've reached the end of the results
+          </div>
+        )}
+      </div>
   );
 };
 

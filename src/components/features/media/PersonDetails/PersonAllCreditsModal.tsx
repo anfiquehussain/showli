@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { Search, X, TrendingUp, Filter } from 'lucide-react';
 import Modal from '@/components/patterns/Modal';
 import { MediaCard } from '@/components/patterns/MediaCard';
@@ -61,9 +61,25 @@ const PersonAllCreditsModal = ({ isOpen, onClose, credits, personName }: PersonA
   const displayedCredits = filteredAndSortedCredits.slice(0, visibleCount);
   const hasMore = visibleCount < filteredAndSortedCredits.length;
 
-  const handleLoadMore = () => {
+  const handleLoadMore = useCallback(() => {
     setVisibleCount(prev => prev + ITEMS_PER_PAGE);
-  };
+  }, []);
+
+  const observer = useRef<IntersectionObserver | null>(null);
+  
+  const observerTarget = useCallback((node: HTMLDivElement | null) => {
+    if (observer.current) observer.current.disconnect();
+    
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0]?.isIntersecting && hasMore) {
+        handleLoadMore();
+      }
+    }, {
+      rootMargin: '400px', // Trigger well before reaching the bottom
+    });
+    
+    if (node) observer.current.observe(node);
+  }, [hasMore, handleLoadMore]);
 
   const resetFilters = () => {
     setSearchQuery('');
@@ -156,13 +172,8 @@ const PersonAllCreditsModal = ({ isOpen, onClose, credits, personName }: PersonA
               </div>
               
               {hasMore && (
-                <div className="flex justify-center pb-8">
-                  <button
-                    onClick={handleLoadMore}
-                    className="px-8 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-sm font-bold uppercase tracking-widest transition-all hover:scale-105 active:scale-95"
-                  >
-                    Load More
-                  </button>
+                <div ref={observerTarget} className="w-full h-20 flex items-center justify-center">
+                  <div className="w-6 h-6 border-2 border-brand-primary border-t-transparent rounded-full animate-spin"></div>
                 </div>
               )}
             </div>

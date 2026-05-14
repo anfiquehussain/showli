@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import Navbar from './Navbar';
 import AuthModal from '../auth/AuthModal';
 import { useAuth } from '@/hooks/useAuth';
+import BackToTopButton from '@/components/patterns/BackToTopButton';
 
 // --- Types ---
 
@@ -23,6 +24,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       </main>
       
       <AuthModal />
+      <BackToTopButton />
     </div>
   );
 };

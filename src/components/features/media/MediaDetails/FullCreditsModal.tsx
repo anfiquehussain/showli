@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useGetCreditsQuery, useGetTVCreditsQuery } from '@/api/media/mediaApi';
 import { getTmdbImageUrl } from '@/utils/image';
 import { User, Search } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import type { TmdbCastMember, TmdbCrewMember } from '@/types/tmdb.types';
 
 interface FullCreditsModalProps {
@@ -14,9 +14,12 @@ interface FullCreditsModalProps {
   title: string;
 }
 
+const ITEMS_PER_PAGE = 24;
+
 const FullCreditsModal = ({ isOpen, onClose, id, type, title }: FullCreditsModalProps) => {
   const [activeTab, setActiveTab] = useState<'cast' | 'crew'>('cast');
   const [searchQuery, setSearchQuery] = useState('');
+  const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
   
   const movieCredits = useGetCreditsQuery(id, { skip: type !== 'movie' || !isOpen });
   const tvCredits = useGetTVCreditsQuery(id, { skip: type !== 'tv' || !isOpen });
@@ -36,6 +39,30 @@ const FullCreditsModal = ({ isOpen, onClose, id, type, title }: FullCreditsModal
     (type === 'movie' ? person.job?.toLowerCase().includes(query) : person.jobs?.[0]?.job?.toLowerCase().includes(query)) ||
     person.department.toLowerCase().includes(query)
   );
+
+  const activeData = activeTab === 'cast' ? cast : crew;
+  const displayedData = activeData.slice(0, visibleCount);
+  const hasMore = visibleCount < activeData.length;
+
+  const handleLoadMore = useCallback(() => {
+    setVisibleCount(prev => prev + ITEMS_PER_PAGE);
+  }, []);
+
+  const observer = useRef<IntersectionObserver | null>(null);
+  
+  const observerTarget = useCallback((node: HTMLDivElement | null) => {
+    if (observer.current) observer.current.disconnect();
+    
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0]?.isIntersecting && hasMore) {
+        handleLoadMore();
+      }
+    }, {
+      rootMargin: '400px',
+    });
+    
+    if (node) observer.current.observe(node);
+  }, [hasMore, handleLoadMore]);
 
   return (
     <Modal 
@@ -64,7 +91,10 @@ const FullCreditsModal = ({ isOpen, onClose, id, type, title }: FullCreditsModal
           {/* Tabs */}
           <div className="flex gap-2 p-1 bg-white/5 rounded-xl border border-white/5 w-full md:w-auto shrink-0">
             <button
-              onClick={() => setActiveTab('cast')}
+              onClick={() => {
+                setActiveTab('cast');
+                setVisibleCount(ITEMS_PER_PAGE);
+              }}
               className={`flex-1 md:flex-none md:px-8 py-2 text-[10px] font-bold uppercase tracking-widest rounded-lg transition-all ${
                 activeTab === 'cast' 
                   ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' 
@@ -74,7 +104,10 @@ const FullCreditsModal = ({ isOpen, onClose, id, type, title }: FullCreditsModal
               Cast ({cast.length})
             </button>
             <button
-              onClick={() => setActiveTab('crew')}
+              onClick={() => {
+                setActiveTab('crew');
+                setVisibleCount(ITEMS_PER_PAGE);
+              }}
               className={`flex-1 md:flex-none md:px-8 py-2 text-[10px] font-bold uppercase tracking-widest rounded-lg transition-all ${
                 activeTab === 'crew' 
                   ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' 
@@ -95,14 +128,15 @@ const FullCreditsModal = ({ isOpen, onClose, id, type, title }: FullCreditsModal
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-x-2 sm:gap-x-4 gap-y-4 sm:gap-y-6">
-              {(activeTab === 'cast' ? cast : crew).map((person, idx) => (
-                <Link 
-                  key={`${person.id}-${idx}`}
-                  to={`/person/${person.id}`}
-                  onClick={onClose}
-                  className="flex flex-col group block"
-                >
+            <div className="space-y-8">
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-x-2 sm:gap-x-4 gap-y-4 sm:gap-y-6">
+                {displayedData.map((person, idx) => (
+                  <Link 
+                    key={`${person.id}-${idx}`}
+                    to={`/person/${person.id}`}
+                    onClick={onClose}
+                    className="flex flex-col group block"
+                  >
                   <div className="aspect-[2/3] rounded-xl sm:rounded-2xl overflow-hidden bg-white/5 border border-white/5 group-hover:border-brand-primary/50 transition-all duration-300 mb-2 sm:mb-3 shadow-lg">
                     {person.profile_path ? (
                       <img 
@@ -139,8 +173,16 @@ const FullCreditsModal = ({ isOpen, onClose, id, type, title }: FullCreditsModal
                   </div>
                 </Link>
               ))}
-              {((activeTab === 'cast' ? cast : crew).length === 0) && (
-                <div className="col-span-full flex flex-col items-center justify-center py-12 text-muted-foreground">
+              </div>
+              
+              {hasMore && (
+                <div ref={observerTarget} className="w-full h-20 flex items-center justify-center">
+                  <div className="w-6 h-6 border-2 border-brand-primary border-t-transparent rounded-full animate-spin"></div>
+                </div>
+              )}
+              
+              {activeData.length === 0 && (
+                <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
                   <User className="w-12 h-12 mb-4 opacity-20" />
                   <p className="text-sm font-medium">No results found for "{searchQuery}"</p>
                 </div>

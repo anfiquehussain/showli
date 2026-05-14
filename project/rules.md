@@ -302,3 +302,37 @@ export default Component;
 - **Source of Truth**: `rules.md` and `files.md` are the single source of truth for the project.
 - **Mandatory Updates**: Whenever a new file is created, a folder structure is changed, or a new architectural pattern is introduced, the corresponding documentation (`files.md` and/or `rules.md`) **MUST** be updated in the same task.
 - **Consistency**: Never allow the codebase and these documentation files to become inconsistent.
+
+---
+
+## 15. Performance & Data Fetching Patterns
+
+### 15.1 Infinite Scrolling
+
+- **Server-Side (Paginated API)**:
+    - Use RTK Query's `merge` logic in the endpoint definition to append new results to the cache.
+    - Always implement `serializeQueryArgs` to ensure different pages are merged into the same cache key.
+    - Sync the `page` state with URL parameters (e.g., `?page=2`) so that the user's scroll position and current view are shareable.
+- **Client-Side (Local Data)**:
+    - Use a `visibleCount` state variable to control the number of rendered items.
+    - Implement an `IntersectionObserver` at the bottom of the list to increment `visibleCount`.
+- **Internal Scrollboxes**: For secondary content (e.g., Discussions), wrap the list in a `max-height` container with `overflow-y-auto`. The `IntersectionObserver` MUST use this container as its `root`.
+
+### 15.2 Lazy-Loading
+
+- **Deferred Fetching**: For below-the-fold sections (e.g., Similar Movies), use an `IntersectionObserver` and RTK Query's `skip` option to delay the API call until the section is about to scroll into view (`rootMargin: '600px'`).
+
+### 15.3 Intersection Observer Implementation
+
+- **Pattern**: Use a `useCallback` ref for the target node to handle disconnection and reconnection cleanly.
+- **Stability**: Always ensure all hooks (including observer creation) are defined above any conditional returns to follow the "Rules of Hooks".
+
+---
+
+## 16. Navigation UX
+
+### 16.1 Back to Top
+
+- **Pattern**: Use the `BackToTopButton` pattern for any page with infinite scrolling.
+- **Visibility**: The button should appear after the user has scrolled significantly (e.g., > 600px).
+- **Positioning**: On mobile, ensure it is positioned above the bottom navigation bar (`bottom-24`).

@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, X, ChevronRight } from 'lucide-react';
 import { useGetMediaVideosQuery } from '@/api/media/mediaApi';
 import ScrollContainer from '@/components/patterns/ScrollContainer';
+
+const ITEMS_PER_PAGE = 24;
 
 interface MediaVideosProps {
   id: number;
@@ -13,16 +15,41 @@ const MediaVideos = ({ id, type }: MediaVideosProps) => {
   const { data: videoData, isLoading } = useGetMediaVideosQuery({ id, type });
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
   const [isViewAllOpen, setIsViewAllOpen] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
 
-  if (isLoading || !videoData || videoData.results.length === 0) return null;
+  // Reset visible count when modal closes
+  useEffect(() => {
+    if (!isViewAllOpen) {
+      setVisibleCount(ITEMS_PER_PAGE);
+    }
+  }, [isViewAllOpen]);
 
-  // Filter for YouTube trailers and teasers
-  const allVideos = videoData.results
-    .filter(v => v.site === 'YouTube' && (v.type === 'Trailer' || v.type === 'Teaser' || v.type === 'Clip'));
+  // Filter for YouTube trailers and teasers - calculated safely
+  const allVideos = videoData?.results
+    ?.filter(v => v.site === 'YouTube' && (v.type === 'Trailer' || v.type === 'Teaser' || v.type === 'Clip')) || [];
 
   const previewVideos = allVideos.slice(0, 8);
+  const displayedVideos = allVideos.slice(0, visibleCount);
+  const hasMore = visibleCount < allVideos.length;
 
-  if (allVideos.length === 0) return null;
+  const handleLoadMore = useCallback(() => {
+    setVisibleCount(prev => prev + ITEMS_PER_PAGE);
+  }, []);
+
+  const observer = useRef<IntersectionObserver | null>(null);
+  const observerTarget = useCallback((node: HTMLDivElement | null) => {
+    if (observer.current) observer.current.disconnect();
+
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0]?.isIntersecting && hasMore) {
+        handleLoadMore();
+      }
+    }, { rootMargin: '400px' });
+
+    if (node) observer.current.observe(node);
+  }, [hasMore, handleLoadMore]);
+
+  if (isLoading || !videoData || allVideos.length === 0) return null;
 
   return (
     <section className="space-y-4">
@@ -144,7 +171,7 @@ const MediaVideos = ({ id, type }: MediaVideosProps) => {
 
               <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
                 <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 pb-12">
-                  {allVideos.map((video, index) => (
+                  {displayedVideos.map((video, index) => (
                     <motion.div
                       key={video.id}
                       initial={{ opacity: 0, y: 20 }}
@@ -178,6 +205,12 @@ const MediaVideos = ({ id, type }: MediaVideosProps) => {
                     </motion.div>
                   ))}
                 </div>
+
+                {hasMore && (
+                  <div ref={observerTarget} className="w-full h-32 flex items-center justify-center pb-12">
+                    <div className="w-8 h-8 border-4 border-brand-primary/20 border-t-brand-primary rounded-full animate-spin" />
+                  </div>
+                )}
               </div>
             </div>
           </motion.div>

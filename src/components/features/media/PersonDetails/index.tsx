@@ -11,7 +11,7 @@ const PersonDetails = () => {
 
   const { data: person, isLoading: isPersonLoading } = useGetPersonDetailsQuery(personId);
   const { data: credits, isLoading: isCreditsLoading } = useGetPersonCombinedCreditsQuery(personId);
-  const { data: taggedImages, isLoading: isTaggedImagesLoading } = useGetPersonTaggedImagesQuery(personId);
+  const { data: taggedImages, isLoading: isTaggedImagesLoading } = useGetPersonTaggedImagesQuery({ id: personId });
   const { data: profileImages, isLoading: isProfileImagesLoading } = useGetPersonImagesQuery(personId);
   const { data: externalIds } = useGetPersonExternalIdsQuery(personId);
 
@@ -78,7 +78,7 @@ const PersonDetails = () => {
 
             {/* Unified Gallery Section */}
             <PersonGallery 
-              taggedImages={taggedImages?.results} 
+              personId={personId}
               profileImages={profileImages?.profiles} 
             />
             

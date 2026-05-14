@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, Star } from 'lucide-react';
 import { discussionsService } from '@/api/discussions/discussionsService';
@@ -22,7 +22,8 @@ const ShowliDiscussion = ({ mediaId, mediaType }: ShowliDiscussionProps) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'rating'>('newest');
-  const [visibleCount, setVisibleCount] = useState(5);
+  const ITEMS_PER_PAGE = 5;
+  const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -75,6 +76,30 @@ const ShowliDiscussion = ({ mediaId, mediaType }: ShowliDiscussionProps) => {
 
     return roots;
   }, [comments, sortBy]);
+
+  const hasMore = visibleCount < threadedComments.length;
+
+  const handleLoadMore = useCallback(() => {
+    setVisibleCount(prev => prev + ITEMS_PER_PAGE);
+  }, []);
+
+  const observer = useRef<IntersectionObserver | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  
+  const observerTarget = useCallback((node: HTMLDivElement | null) => {
+    if (observer.current) observer.current.disconnect();
+
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0]?.isIntersecting && hasMore) {
+        handleLoadMore();
+      }
+    }, {
+      root: scrollContainerRef.current, // Listen to the internal scrollbox
+      rootMargin: '200px',
+    });
+
+    if (node) observer.current.observe(node);
+  }, [hasMore, handleLoadMore]);
 
   const handleAddComment = async (content: string, rating: number | null) => {
     if (!user) return;
@@ -245,8 +270,11 @@ const ShowliDiscussion = ({ mediaId, mediaType }: ShowliDiscussionProps) => {
         )}
       </AnimatePresence>
 
-      {/* Threaded Comments List */}
-      <div className="space-y-6">
+      {/* Threaded Comments List - Contained in a scrollbox for better UX */}
+      <div 
+        ref={scrollContainerRef}
+        className="space-y-6 max-h-[800px] overflow-y-auto pr-2 custom-scrollbar"
+      >
         {threadedComments.length > 0 ? (
           <>
             {threadedComments.slice(0, visibleCount).map((comment) => (
@@ -259,14 +287,9 @@ const ShowliDiscussion = ({ mediaId, mediaType }: ShowliDiscussionProps) => {
               />
             ))}
 
-            {visibleCount < threadedComments.length && (
-              <div className="pt-4 flex justify-center">
-                <button
-                  onClick={() => setVisibleCount(prev => prev + 5)}
-                  className="px-8 py-3 bg-white/5 border border-white/10 rounded-2xl text-xs font-black uppercase tracking-[0.2em] text-white/40 hover:text-white hover:bg-white/10 transition-all shadow-xl"
-                >
-                  Load more reviews
-                </button>
+            {hasMore && (
+              <div ref={observerTarget} className="w-full h-20 flex items-center justify-center">
+                <div className="w-6 h-6 border-2 border-brand-primary border-t-transparent rounded-full animate-spin"></div>
               </div>
             )}
           </>

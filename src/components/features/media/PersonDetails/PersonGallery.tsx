@@ -1,16 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ChevronLeft, X, Maximize2 } from 'lucide-react';
 import { getTmdbImageUrl } from '@/utils/image';
 import ScrollContainer from '@/components/patterns/ScrollContainer';
 import type { TmdbImage, TmdbMedia } from '@/types/tmdb.types';
+import { useGetPersonTaggedImagesQuery } from '@/api/media/mediaApi';
 
 interface PersonGalleryProps {
-  taggedImages?: (TmdbImage & { image_type: string, media: TmdbMedia })[];
+  personId: number;
   profileImages?: TmdbImage[];
 }
 
-const PersonGallery = ({ taggedImages = [], profileImages = [] }: PersonGalleryProps) => {
+const PersonGallery = ({ personId, profileImages = [] }: PersonGalleryProps) => {
+  const [page, setPage] = useState(1);
+  const { data: taggedImagesData, isFetching } = useGetPersonTaggedImagesQuery({ id: personId, page });
+  const taggedImages = taggedImagesData?.results || [];
   const [activeTab, setActiveTab] = useState<'profiles' | 'tagged'>(
     profileImages.length > 0 ? 'profiles' : 'tagged'
   );
@@ -18,6 +22,28 @@ const PersonGallery = ({ taggedImages = [], profileImages = [] }: PersonGalleryP
   const [isViewAllOpen, setIsViewAllOpen] = useState(false);
 
   const currentImages = activeTab === 'profiles' ? profileImages : taggedImages;
+
+  const hasMore = (taggedImagesData?.page || 1) < (taggedImagesData?.total_pages || 1);
+
+  const handleLoadMore = useCallback(() => {
+    if (!isFetching && hasMore) {
+      setPage(prev => prev + 1);
+    }
+  }, [isFetching, hasMore]);
+
+  const observer = useRef<IntersectionObserver | null>(null);
+  
+  const observerTarget = useCallback((node: HTMLDivElement | null) => {
+    if (observer.current) observer.current.disconnect();
+
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0]?.isIntersecting && hasMore) {
+        handleLoadMore();
+      }
+    }, { rootMargin: '400px' });
+
+    if (node) observer.current.observe(node);
+  }, [hasMore, handleLoadMore]);
 
   // Keyboard navigation for lightbox
   useEffect(() => {
@@ -245,6 +271,12 @@ const PersonGallery = ({ taggedImages = [], profileImages = [] }: PersonGalleryP
                     </motion.div>
                   ))}
                 </div>
+                
+                {activeTab === 'tagged' && hasMore && (
+                  <div ref={observerTarget} className="w-full h-20 flex items-center justify-center pb-12">
+                    <div className="w-6 h-6 border-2 border-brand-primary border-t-transparent rounded-full animate-spin"></div>
+                  </div>
+                )}
               </div>
             </div>
           </motion.div>

@@ -58,6 +58,21 @@ export const mediaApi = createApi({
         });
         return `/discover/${type}?${searchParams.toString()}`;
       },
+      serializeQueryArgs: ({ endpointName, queryArgs }) => {
+        const { page, ...restParams } = queryArgs.params || {};
+        return `${endpointName}-${queryArgs.type}-${JSON.stringify(restParams)}`;
+      },
+      merge: (currentCache, newItems) => {
+        if (newItems.page > 1) {
+          currentCache.results.push(...newItems.results);
+          currentCache.page = newItems.page;
+        } else {
+          return newItems;
+        }
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg?.params?.page !== previousArg?.params?.page;
+      },
     }),
     getDiscoveryContent: builder.query<
       TmdbPaginatedResponse<TmdbMedia>,
@@ -87,6 +102,20 @@ export const mediaApi = createApi({
     >({
       query: ({ query, page = 1 }) =>
         `/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&page=${page}`,
+      serializeQueryArgs: ({ endpointName, queryArgs }) => {
+        return `${endpointName}-${queryArgs.query}`;
+      },
+      merge: (currentCache, newItems) => {
+        if (newItems.page > 1) {
+          currentCache.results.push(...newItems.results);
+          currentCache.page = newItems.page;
+        } else {
+          return newItems;
+        }
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg?.page !== previousArg?.page;
+      },
     }),
     getCountries: builder.query<TmdbCountry[], void>({
       query: () => `/configuration/countries?api_key=${TMDB_API_KEY}`,
@@ -170,8 +199,28 @@ export const mediaApi = createApi({
     getPersonImages: builder.query<{ id: number, profiles: TmdbImage[] }, number>({
       query: (id) => `/person/${id}/images?api_key=${TMDB_API_KEY}`,
     }),
-    getPersonTaggedImages: builder.query<TmdbPaginatedResponse<TmdbImage & { image_type: string, media: TmdbMedia }>, number>({
-      query: (id) => `/person/${id}/tagged_images?api_key=${TMDB_API_KEY}`,
+    getPersonTaggedImages: builder.query<
+      TmdbPaginatedResponse<TmdbImage & { image_type: string, media: TmdbMedia }>, 
+      { id: number; page?: number }
+    >({
+      query: ({ id, page = 1 }) => `/person/${id}/tagged_images?api_key=${TMDB_API_KEY}&page=${page}`,
+      // Serialize query args to merge pages correctly if we use merge
+      serializeQueryArgs: ({ endpointName, queryArgs }) => {
+        return `${endpointName}-${queryArgs.id}`;
+      },
+      // Always merge incoming data to the cache entry
+      merge: (currentCache, newItems) => {
+        if (newItems.page > 1) {
+          currentCache.results.push(...newItems.results);
+          currentCache.page = newItems.page;
+        } else {
+          return newItems;
+        }
+      },
+      // Refetch when the page arg changes
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg?.page !== previousArg?.page;
+      },
     }),
   }),
 });

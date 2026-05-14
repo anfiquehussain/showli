@@ -13,7 +13,7 @@ const ProfileHero = ({ user, stats }: ProfileHeroProps) => {
   return (
     <div className="relative mb-20">
       {/* Banner */}
-      <div className="h-48 md:h-64 w-full relative rounded-3xl overflow-hidden bg-zinc-900 border border-white/5 shadow-2xl">
+      <div className="h-48 md:h-64 w-full relative rounded-3xl overflow-hidden bg-card border border-white/5 shadow-2xl">
         <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/20 via-background to-brand-secondary/20" />
         {/* Placeholder for dynamic banner if available */}
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-40 mix-blend-overlay" />

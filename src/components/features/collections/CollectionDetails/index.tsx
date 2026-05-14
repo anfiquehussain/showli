@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useCallback } from 'react';
 import { Folder } from 'lucide-react';
 import type { Collection, CollectionMedia, MediaStatus } from '@/types/collections.types';
 
@@ -18,6 +18,8 @@ interface CollectionDetailsProps {
   onRemoveMedia: (tmdbId: number) => void;
 }
 
+const ITEMS_PER_PAGE = 24;
+
 export const CollectionDetails = ({
   collection,
   mediaItems,
@@ -31,6 +33,7 @@ export const CollectionDetails = ({
   const [filterStatus, setFilterStatus] = useState<MediaStatus | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [randomMedia, setRandomMedia] = useState<CollectionMedia | null>(null);
+  const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
 
   const filteredMedia = useMemo<CollectionMedia[]>(() => {
     return mediaItems
@@ -47,6 +50,29 @@ export const CollectionDetails = ({
     setRandomMedia(filteredMedia[randomIndex] || null);
   };
 
+  const displayedMedia = filteredMedia.slice(0, visibleCount);
+  const hasMore = visibleCount < filteredMedia.length;
+
+  const handleLoadMore = useCallback(() => {
+    setVisibleCount(prev => prev + ITEMS_PER_PAGE);
+  }, []);
+
+  const observer = useRef<IntersectionObserver | null>(null);
+
+  const observerTarget = useCallback((node: HTMLDivElement | null) => {
+    if (observer.current) observer.current.disconnect();
+
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0]?.isIntersecting && hasMore) {
+        handleLoadMore();
+      }
+    }, {
+      rootMargin: '400px',
+    });
+
+    if (node) observer.current.observe(node);
+  }, [hasMore, handleLoadMore]);
+
   return (
     <div className="space-y-6">
       <CollectionDetailsHeader 
@@ -60,9 +86,15 @@ export const CollectionDetails = ({
 
       <CollectionDetailsToolbar 
         searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
+        onSearchChange={(query) => {
+          setSearchQuery(query);
+          setVisibleCount(ITEMS_PER_PAGE);
+        }}
         filterStatus={filterStatus}
-        onFilterChange={setFilterStatus}
+        onFilterChange={(status) => {
+          setFilterStatus(status);
+          setVisibleCount(ITEMS_PER_PAGE);
+        }}
         viewMode={viewMode}
         onViewModeChange={setViewMode}
         onRandomPick={handleRandomPick}
@@ -109,16 +141,24 @@ export const CollectionDetails = ({
           </div>
         </div>
       ) : (
-        <div className={viewMode === 'grid' ? 'grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4' : 'grid grid-cols-1 md:grid-cols-2 gap-3'}>
-          {filteredMedia.map((item) => (
-            <CollectionMediaCard 
-              key={item.tmdb_id} 
-              item={item} 
-              collectionId={collection.id}
-              viewMode={viewMode}
-              onRemove={() => onRemoveMedia(item.tmdb_id)}
-            />
-          ))}
+        <div className="space-y-8">
+          <div className={viewMode === 'grid' ? 'grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4' : 'grid grid-cols-1 md:grid-cols-2 gap-3'}>
+            {displayedMedia.map((item) => (
+              <CollectionMediaCard 
+                key={item.tmdb_id} 
+                item={item} 
+                collectionId={collection.id}
+                viewMode={viewMode}
+                onRemove={() => onRemoveMedia(item.tmdb_id)}
+              />
+            ))}
+          </div>
+          
+          {hasMore && (
+            <div ref={observerTarget} className="w-full h-20 flex items-center justify-center">
+              <div className="w-6 h-6 border-2 border-brand-primary border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          )}
         </div>
       )}
 

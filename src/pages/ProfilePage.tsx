@@ -119,7 +119,7 @@ const ProfilePage = () => {
                       </div>
                     </div>
                     <p className="text-xs text-muted-foreground line-clamp-2 italic">"{review.comment}"</p>
-                    <p className="text-[10px] text-zinc-500">{review.date}</p>
+                    <p className="text-[10px] text-white/40">{review.date}</p>
                   </div>
                 ))}
               </div>

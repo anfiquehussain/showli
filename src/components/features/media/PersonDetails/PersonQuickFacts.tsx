@@ -54,7 +54,7 @@ const PersonQuickFacts = ({ person, externalIds }: PersonQuickFactsProps) => {
               href={`https://www.imdb.com/name/${person.imdb_id}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-3 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-[#f5c518]/50 transition-all text-[10px] font-black uppercase tracking-widest text-[#f5c518]"
+              className="px-3 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-warning/50 transition-all text-[10px] font-black uppercase tracking-widest text-warning"
             >
               IMDb
             </a>

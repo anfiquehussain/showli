@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useDiscoverQuery, useSearchMediaQuery } from '@/api/media/mediaApi';
 import BrowseToolbar from '@/components/features/media/Browse/BrowseToolbar';
@@ -33,10 +33,7 @@ const Browse = () => {
     }
   }, [searchParams, setSearchParams]);
 
-  // Smooth scroll to top when page changes
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [page]);
+  // Removed smooth scroll to top to support infinite scroll experience
 
   // Data fetching
   const isSearching = !!query;
@@ -75,6 +72,30 @@ const Browse = () => {
   const isLoading = isSearching ? isSearchLoading : isDiscoverLoading;
   const isFetching = isSearching ? isSearchFetching : isDiscoverFetching;
   const error = isSearching ? searchError : discoverError;
+
+  const hasMore = (results?.page || 1) < Math.min(results?.total_pages || 1, 500);
+
+  const observer = useRef<IntersectionObserver | null>(null);
+  
+  const observerTarget = useCallback((node: HTMLDivElement | null) => {
+    if (observer.current) observer.current.disconnect();
+
+    observer.current = new IntersectionObserver(entries => {
+      // Trigger when visible, not already fetching, and there are more pages
+      if (entries[0]?.isIntersecting && hasMore && !isFetching) {
+        const nextPage = page + 1;
+        
+        // Update URL params which triggers the query with new page
+        const newParams = new URLSearchParams(searchParams);
+        newParams.set('page', String(nextPage));
+        setSearchParams(newParams, { replace: true, preventScrollReset: true });
+      }
+    }, {
+      rootMargin: '600px', // Pre-fetch when user is 600px from the bottom
+    });
+
+    if (node) observer.current.observe(node);
+  }, [hasMore, isFetching, page, searchParams, setSearchParams]);
 
   // Process and deduplicate results
   const processedResults = useMemo(() => {
@@ -214,8 +235,8 @@ const Browse = () => {
             isLoading={isLoading || isFetching}
             error={error}
             onRetry={isSearching ? refetchSearch : refetchDiscover}
-            currentPage={page}
-            onPageChange={(newPage) => handleUpdateParam('page', String(newPage))}
+            hasMore={hasMore}
+            observerTarget={observerTarget}
           />
         </div>
       </div>

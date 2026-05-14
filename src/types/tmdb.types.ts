@@ -302,3 +302,58 @@ export type TmdbBackdropSize = 'w300' | 'w780' | 'w1280' | 'original';
 export type TmdbProfileSize = 'w45' | 'w185' | 'h632' | 'original';
 export type TmdbStillSize = 'w92' | 'w185' | 'w300' | 'original';
 export type TmdbLogoSize = 'w45' | 'w92' | 'w154' | 'w185' | 'w300' | 'w500' | 'original';
+
+// --- Person Types ---
+
+export interface TmdbPersonDetails {
+  id: number;
+  name: string;
+  biography: string;
+  birthday: string | null;
+  deathday: string | null;
+  gender: number;
+  known_for_department: string;
+  place_of_birth: string | null;
+  profile_path: string | null;
+  adult: boolean;
+  imdb_id: string | null;
+  homepage: string | null;
+  popularity: number;
+  also_known_as: string[];
+}
+
+export type TmdbPersonCreditCast = TmdbMedia & {
+  character: string;
+  credit_id: string;
+  order?: number;
+  episode_count?: number; // for tv
+  media_type: 'movie' | 'tv';
+};
+
+export type TmdbPersonCreditCrew = TmdbMedia & {
+  credit_id: string;
+  department: string;
+  job: string;
+  episode_count?: number; // for tv
+  media_type: 'movie' | 'tv';
+};
+
+export interface TmdbPersonCombinedCredits {
+  id: number;
+  cast: TmdbPersonCreditCast[];
+  crew: TmdbPersonCreditCrew[];
+}
+
+export interface TmdbPersonExternalIds {
+  id: number;
+  freebase_mid: string | null;
+  freebase_id: string | null;
+  imdb_id: string | null;
+  tvrage_id: number | null;
+  wikidata_id: string | null;
+  facebook_id: string | null;
+  instagram_id: string | null;
+  tiktok_id: string | null;
+  twitter_id: string | null;
+  youtube_id: string | null;
+}

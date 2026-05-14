@@ -9,9 +9,11 @@ interface MediaScrollProps {
   items: TmdbMedia[];
   isLoading?: boolean;
   onAddClick?: (e: React.MouseEvent, item: TmdbMedia) => void;
+  onViewAll?: () => void;
+  viewAllLabel?: string;
 }
 
-const MediaScroll = ({ title, icon, items, isLoading, onAddClick }: MediaScrollProps) => {
+const MediaScroll = ({ title, icon, items, isLoading, onAddClick, onViewAll, viewAllLabel = 'View All' }: MediaScrollProps) => {
   if (isLoading) {
     return (
       <div className="space-y-4 py-4">
@@ -32,9 +34,20 @@ const MediaScroll = ({ title, icon, items, isLoading, onAddClick }: MediaScrollP
 
   return (
     <div className="space-y-4 py-4 group/section">
-      <div className="flex items-center gap-2 text-brand-secondary font-medium text-sm uppercase tracking-wider">
-        {icon}
-        <span>{title}</span>
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center gap-2 text-brand-secondary font-medium text-sm uppercase tracking-wider">
+          {icon}
+          <span>{title}</span>
+        </div>
+
+        {onViewAll && (
+          <button
+            onClick={onViewAll}
+            className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-white transition-colors px-3 py-1 bg-white/5 hover:bg-white/10 rounded-full border border-white/5"
+          >
+            {viewAllLabel}
+          </button>
+        )}
       </div>
       
       <ScrollContainer className="gap-4 pb-4">

@@ -120,7 +120,7 @@ const MediaDetails = ({ id, type, onAddToCollection }: MediaDetailsProps) => {
 
         {/* Right Column: Quick Facts & Stats */}
         <aside className="lg:col-span-4">
-          <div className="sticky top-24 space-y-6">
+          <div className="sticky top-24 space-y-8">
             <MediaWatchProviders id={id} type={type} />
             <MediaQuickFacts
               media={media}

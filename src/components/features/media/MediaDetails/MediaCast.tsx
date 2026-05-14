@@ -1,4 +1,5 @@
 import { User, ChevronRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useGetCreditsQuery, useGetTVCreditsQuery } from '@/api/media/mediaApi';
 import { getTmdbImageUrl } from '@/utils/image';
 import type { TmdbCastMember } from '@/types/tmdb.types';
@@ -42,9 +43,10 @@ const MediaCast = ({ id, type, onShowFullCredits }: MediaCastProps) => {
 
       <ScrollContainer className="gap-4 pb-4">
         {topCast.map((person: TmdbCastMember) => (
-          <div 
+          <Link 
             key={person.id} 
-            className="flex-shrink-0 w-24 md:w-32 group"
+            to={`/person/${person.id}`}
+            className="flex-shrink-0 w-24 md:w-32 group block"
           >
             <div className="aspect-[2/3] rounded-2xl bg-white/5 border border-white/5 overflow-hidden mb-3 group-hover:border-brand-primary/50 transition-colors">
               {person.profile_path ? (
@@ -67,7 +69,7 @@ const MediaCast = ({ id, type, onShowFullCredits }: MediaCastProps) => {
                 {type === 'movie' ? person.character : person.roles?.[0]?.character}
               </p>
             </div>
-          </div>
+          </Link>
         ))}
         
         <button 

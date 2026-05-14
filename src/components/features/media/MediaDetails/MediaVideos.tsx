@@ -59,6 +59,9 @@ const MediaVideos = ({ id, type }: MediaVideosProps) => {
               src={`https://img.youtube.com/vi/${video.key}/mqdefault.jpg`}
               alt={video.name}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-60 group-hover:opacity-80"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&q=80&w=400';
+              }}
             />
 
             {/* Play Overlay */}
@@ -159,6 +162,9 @@ const MediaVideos = ({ id, type }: MediaVideosProps) => {
                         src={`https://img.youtube.com/vi/${video.key}/mqdefault.jpg`}
                         alt={video.name}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-60"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&q=80&w=400';
+                        }}
                       />
                       <div className="absolute inset-0 flex items-center justify-center">
                         <div className="w-10 h-10 rounded-full bg-brand-primary/90 flex items-center justify-center text-white shadow-xl transform transition-transform group-hover:scale-110">

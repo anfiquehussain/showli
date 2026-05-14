@@ -1,4 +1,5 @@
 import Modal from '@/components/patterns/Modal';
+import { Link } from 'react-router-dom';
 import { useGetCreditsQuery, useGetTVCreditsQuery } from '@/api/media/mediaApi';
 import { getTmdbImageUrl } from '@/utils/image';
 import { User, Search } from 'lucide-react';
@@ -96,9 +97,11 @@ const FullCreditsModal = ({ isOpen, onClose, id, type, title }: FullCreditsModal
           ) : (
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-x-2 sm:gap-x-4 gap-y-4 sm:gap-y-6">
               {(activeTab === 'cast' ? cast : crew).map((person, idx) => (
-                <div 
+                <Link 
                   key={`${person.id}-${idx}`}
-                  className="flex flex-col group"
+                  to={`/person/${person.id}`}
+                  onClick={onClose}
+                  className="flex flex-col group block"
                 >
                   <div className="aspect-[2/3] rounded-xl sm:rounded-2xl overflow-hidden bg-white/5 border border-white/5 group-hover:border-brand-primary/50 transition-all duration-300 mb-2 sm:mb-3 shadow-lg">
                     {person.profile_path ? (
@@ -134,7 +137,7 @@ const FullCreditsModal = ({ isOpen, onClose, id, type, title }: FullCreditsModal
                       </p>
                     )}
                   </div>
-                </div>
+                </Link>
               ))}
               {((activeTab === 'cast' ? cast : crew).length === 0) && (
                 <div className="col-span-full flex flex-col items-center justify-center py-12 text-muted-foreground">

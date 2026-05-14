@@ -1,4 +1,5 @@
 import { User, ChevronRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useGetCreditsQuery, useGetTVCreditsQuery } from '@/api/media/mediaApi';
 import { getTmdbImageUrl } from '@/utils/image';
 import type { TmdbCrewMember } from '@/types/tmdb.types';
@@ -55,9 +56,10 @@ const MediaCrew = ({ id, type, onShowFullCredits }: MediaCrewProps) => {
 
       <ScrollContainer className="gap-3 pb-4">
         {displayCrew.map((person: TmdbCrewMember, idx) => (
-          <div 
+          <Link 
             key={`${person.id}-${idx}`} 
-            className="flex-shrink-0 w-36 md:w-48 group bg-white/5 border border-white/5 rounded-2xl p-2.5 flex items-center gap-3 hover:border-brand-primary/30 hover:bg-white/[0.07] transition-all"
+            to={`/person/${person.id}`}
+            className="flex-shrink-0 w-36 md:w-48 group bg-white/5 border border-white/5 rounded-2xl p-2.5 flex items-center gap-3 hover:border-brand-primary/30 hover:bg-white/[0.07] transition-all block"
           >
             <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 overflow-hidden shrink-0 group-hover:border-brand-primary/50 transition-colors">
               {person.profile_path ? (
@@ -85,7 +87,7 @@ const MediaCrew = ({ id, type, onShowFullCredits }: MediaCrewProps) => {
                 </p>
               )}
             </div>
-          </div>
+          </Link>
         ))}
         
         <button 

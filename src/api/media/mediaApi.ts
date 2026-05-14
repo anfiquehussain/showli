@@ -16,6 +16,10 @@ import type {
   TmdbImagesResponse,
   TmdbVideosResponse,
   TmdbTVSeason,
+  TmdbPersonDetails,
+  TmdbPersonCombinedCredits,
+  TmdbPersonExternalIds,
+  TmdbImage,
 } from "@/types/tmdb.types";
 
 export const mediaApi = createApi({
@@ -154,6 +158,21 @@ export const mediaApi = createApi({
     getCollectionImages: builder.query<TmdbImagesResponse, number>({
       query: (id) => `/collection/${id}/images?api_key=${TMDB_API_KEY}`,
     }),
+    getPersonDetails: builder.query<TmdbPersonDetails, number>({
+      query: (id) => `/person/${id}?api_key=${TMDB_API_KEY}`,
+    }),
+    getPersonCombinedCredits: builder.query<TmdbPersonCombinedCredits, number>({
+      query: (id) => `/person/${id}/combined_credits?api_key=${TMDB_API_KEY}`,
+    }),
+    getPersonExternalIds: builder.query<TmdbPersonExternalIds, number>({
+      query: (id) => `/person/${id}/external_ids?api_key=${TMDB_API_KEY}`,
+    }),
+    getPersonImages: builder.query<{ id: number, profiles: TmdbImage[] }, number>({
+      query: (id) => `/person/${id}/images?api_key=${TMDB_API_KEY}`,
+    }),
+    getPersonTaggedImages: builder.query<TmdbPaginatedResponse<TmdbImage & { image_type: string, media: TmdbMedia }>, number>({
+      query: (id) => `/person/${id}/tagged_images?api_key=${TMDB_API_KEY}`,
+    }),
   }),
 });
 
@@ -182,4 +201,9 @@ export const {
   useGetMediaVideosQuery,
   useGetTVSeasonDetailsQuery,
   useGetCollectionImagesQuery,
+  useGetPersonDetailsQuery,
+  useGetPersonCombinedCreditsQuery,
+  useGetPersonExternalIdsQuery,
+  useGetPersonImagesQuery,
+  useGetPersonTaggedImagesQuery,
 } = mediaApi;

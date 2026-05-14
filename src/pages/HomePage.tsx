@@ -1,22 +1,28 @@
+import { useState } from 'react';
 import HeroCarousel from '@/components/features/media/HeroCarousel';
-import QuickBrowseEntry from '@/components/features/media/QuickBrowseEntry';
-import PageHeader from '@/components/patterns/PageHeader';
-import DiscoveryGrids from '@/components/features/media/DiscoveryGrids';
+import HomeToggle from '@/components/features/media/HomeToggle';
+import HomeFeatured from '@/components/features/media/HomeFeatured';
+import HomeDiscovery from '@/components/features/media/HomeDiscovery';
 
 const HomePage = () => {
+  const [activeTab, setActiveTab] = useState<'featured' | 'discovery'>('featured');
+
   return (
-    <div className="space-y-6">
-      {/* Hero Carousel Feature */}
+    <div className="space-y-4 md:space-y-8 pb-20">
+      {/* Hero Carousel - Global */}
       <HeroCarousel />
 
-      <QuickBrowseEntry />
+      {/* Session Navigation */}
+      <HomeToggle activeTab={activeTab} onChange={setActiveTab} />
 
-      <PageHeader 
-        title="Discover" 
-        description="Explore the latest in cinema, anime, and global television."
-      >
-        <DiscoveryGrids />
-      </PageHeader>
+      {/* Conditional Content Session */}
+      <main className="container mx-auto px-0">
+        {activeTab === 'featured' ? (
+          <HomeFeatured />
+        ) : (
+          <HomeDiscovery />
+        )}
+      </main>
     </div>
   );
 };

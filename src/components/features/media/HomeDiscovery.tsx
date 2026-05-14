@@ -1,22 +1,6 @@
 import { useState, useEffect } from 'react';
 import { 
-  Calendar, 
-  Film, 
-  Tv, 
   Sparkles, 
-  Globe, 
-  Heart, 
-  TrendingUp, 
-  Zap, 
-  Star, 
-  Play, 
-  Rocket, 
-  Ghost, 
-  Clapperboard, 
-  Music, 
-  Shield, 
-  Coffee, 
-  Flame,
   RefreshCw,
   Compass
 } from 'lucide-react';
@@ -30,28 +14,7 @@ import {
 import { generateRandomDiscovery, type DiscoveryConfig } from '@/api/media/mediaDiscovery';
 import MediaScroll from '@/components/patterns/MediaScroll';
 import Button from '@/components/ui/Button';
-
-// Icon mapping to handle dynamic icon selection from presets
-const ICON_MAP = {
-  Calendar,
-  Film,
-  Tv,
-  Sparkles,
-  Globe,
-  Heart,
-  TrendingUp,
-  Zap,
-  Star,
-  Play,
-  Rocket,
-  Ghost,
-  Clapperboard,
-  Music,
-  Shield,
-  Coffee,
-  Flame,
-  Compass
-};
+import { ICON_MAP } from '@/components/features/media/DiscoveryIcons';
 
 /**
  * A single discovery row that fetches and displays content based on a config.
@@ -62,9 +25,8 @@ const DiscoveryRow = ({ config }: { config: DiscoveryConfig }) => {
     params: config.params
   });
 
-  const IconComponent = ICON_MAP[config.icon as keyof typeof ICON_MAP] || Sparkles;
+  const IconComponent = (ICON_MAP as Record<string, React.ComponentType<{ className?: string }>>)[config.icon] || Sparkles;
 
-  // We only show the row if it has items or is loading
   if (!isLoading && (!data || data.results.length === 0)) return null;
 
   return (
@@ -77,19 +39,17 @@ const DiscoveryRow = ({ config }: { config: DiscoveryConfig }) => {
   );
 };
 
-const DiscoveryGrids = () => {
+const HomeDiscovery = () => {
   const [selectedConfigs, setSelectedConfigs] = useState<DiscoveryConfig[]>([]);
   
-  // Fetch official configurations from TMDb
   const { data: countries } = useGetCountriesQuery();
   const { data: languages } = useGetLanguagesQuery();
   const { data: movieGenresData } = useGetMovieGenresQuery();
   const { data: tvGenresData } = useGetTVGenresQuery();
 
   const shuffleDiscovery = () => {
-    // Dynamically generate 10 fresh discovery rows using official TMDb data
     const freshRows = generateRandomDiscovery(
-      10,
+      12, // More rows for discovery tab
       movieGenresData?.genres || [],
       tvGenresData?.genres || [],
       languages || [],
@@ -98,7 +58,6 @@ const DiscoveryGrids = () => {
     setSelectedConfigs(freshRows);
   };
 
-  // Initialize once configurations are loaded
   useEffect(() => {
     if (movieGenresData && tvGenresData && languages && countries && selectedConfigs.length === 0) {
       shuffleDiscovery();
@@ -106,21 +65,24 @@ const DiscoveryGrids = () => {
   }, [movieGenresData, tvGenresData, languages, countries]);
 
   return (
-    <div className="space-y-8">
-      <div className="flex justify-between items-center mb-6">
+    <div className="space-y-8 animate-in slide-in-from-bottom-4 duration-700">
+      <div className="flex justify-between items-center px-4">
         <div className="flex flex-col">
-          <h2 className="text-base md:text-xl font-bold text-primary text-gradient-primary">Curated for You</h2>
-          <p className="text-[10px] md:text-sm text-muted-foreground">Fresh picks from around the globe.</p>
+          <h2 className="text-base md:text-xl font-bold text-gradient-primary flex items-center gap-2">
+            <Compass className="w-5 h-5 text-brand-primary" />
+            Curated for You
+          </h2>
+          <p className="text-[10px] md:text-sm text-muted-foreground">Fresh picks from around the globe, shuffled daily.</p>
         </div>
         <Button 
           variant="outline" 
           size="sm" 
           onClick={shuffleDiscovery}
-          className="gap-2 group border-brand-primary/20 hover:border-brand-primary/50"
+          className="gap-2 group border-brand-primary/20 hover:border-brand-primary/50 rounded-xl"
           disabled={!movieGenresData}
         >
           <RefreshCw className="w-4 h-4 group-active:rotate-180 transition-transform duration-500" />
-          Shuffle
+          <span className="hidden sm:inline">Shuffle</span>
         </Button>
       </div>
 
@@ -130,13 +92,12 @@ const DiscoveryGrids = () => {
             <DiscoveryRow key={config.id} config={config} />
           ))
         ) : (
-          // Skeleton loaders while initial configs are fetching
-          [...Array(3)].map((_, i) => (
-            <div key={i} className="animate-pulse space-y-4">
-              <div className="h-6 w-32 bg-card rounded" />
+          [...Array(4)].map((_, i) => (
+            <div key={i} className="animate-pulse space-y-4 py-4">
+              <div className="h-6 w-32 bg-card/50 rounded" />
               <div className="flex gap-4 overflow-hidden">
                 {[...Array(6)].map((_, j) => (
-                  <div key={j} className="flex-shrink-0 w-28 md:w-40 aspect-[2/3] bg-card rounded-xl" />
+                  <div key={j} className="flex-shrink-0 w-28 md:w-40 aspect-[2/3] bg-card/50 rounded-xl" />
                 ))}
               </div>
             </div>
@@ -147,4 +108,4 @@ const DiscoveryGrids = () => {
   );
 };
 
-export default DiscoveryGrids;
+export default HomeDiscovery;

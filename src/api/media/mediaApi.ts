@@ -41,6 +41,12 @@ export const mediaApi = createApi({
     getPopularMovies: builder.query<TmdbPaginatedResponse<TmdbMedia>, void>({
       query: () => `/movie/popular?api_key=${TMDB_API_KEY}`,
     }),
+    getTopRatedMovies: builder.query<TmdbPaginatedResponse<TmdbMedia>, void>({
+      query: () => `/movie/top_rated?api_key=${TMDB_API_KEY}`,
+    }),
+    getUpcomingMovies: builder.query<TmdbPaginatedResponse<TmdbMedia>, void>({
+      query: () => `/movie/upcoming?api_key=${TMDB_API_KEY}`,
+    }),
     getTopRatedTV: builder.query<TmdbPaginatedResponse<TmdbMedia>, void>({
       query: () => `/tv/top_rated?api_key=${TMDB_API_KEY}`,
     }),
@@ -222,6 +228,9 @@ export const mediaApi = createApi({
         return currentArg?.page !== previousArg?.page;
       },
     }),
+    getPopularPeople: builder.query<TmdbPaginatedResponse<TmdbPersonDetails>, { page?: number }>({
+      query: ({ page = 1 }) => `/person/popular?api_key=${TMDB_API_KEY}&page=${page}`,
+    }),
   }),
 });
 
@@ -229,6 +238,8 @@ export const {
   useGetTrendingQuery,
   useGetAiringTodayQuery,
   useGetPopularMoviesQuery,
+  useGetTopRatedMoviesQuery,
+  useGetUpcomingMoviesQuery,
   useGetTopRatedTVQuery,
   useDiscoverQuery,
   useGetDiscoveryContentQuery,
@@ -255,4 +266,5 @@ export const {
   useGetPersonExternalIdsQuery,
   useGetPersonImagesQuery,
   useGetPersonTaggedImagesQuery,
+  useGetPopularPeopleQuery,
 } = mediaApi;

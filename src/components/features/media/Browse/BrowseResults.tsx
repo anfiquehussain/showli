@@ -2,7 +2,7 @@ import MediaCard from '@/components/patterns/MediaCard';
 import type { TmdbPaginatedResponse, TmdbMedia } from '@/types/tmdb.types';
 import { AlertCircle, RotateCcw } from 'lucide-react';
 import Button from '@/components/ui/Button';
-import PaginationControls from '@/components/patterns/PaginationControls';
+
 
 interface BrowseResultsProps {
   results?: TmdbPaginatedResponse<TmdbMedia>;

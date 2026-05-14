@@ -23,7 +23,7 @@ src/
 ├── assets/             # Static assets (images, global icons)
 ├── components/         # UI Components (3-Layer Architecture)
 │   ├── ui/             # [Layer 1] Primitives (Button.tsx, IconButton.tsx, Input.tsx, Rating.tsx)
-│   ├── patterns/       # [Layer 2] Reusable Patterns (Modal, ConfirmationModal, PageHeader, MediaScroll, MediaCard, StatusBadge, SearchBar, ProtectedRoute, ScrollContainer, ScrollToTop, BackToTopButton)
+│   ├── patterns/       # [Layer 2] Reusable Patterns (Modal, ConfirmationModal, PageHeader, MediaScroll, MediaCard, PersonScroll, PersonCard, StatusBadge, SearchBar, ProtectedRoute, ScrollContainer, ScrollToTop, BackToTopButton)
 │   └── features/       # [Layer 3] Feature Components (Grouped by domain)
 │       ├── auth/       # Authentication (AuthModal.tsx)
 │       ├── layout/     # Global structure (MainLayout.tsx, Navbar.tsx)
@@ -56,8 +56,11 @@ src/
 │       │   │   ├── BrowseResults.tsx
 │       │   │   └── FilterChips.tsx
 │       │   ├── HeroCarousel.tsx
-│       │   ├── QuickBrowseEntry.tsx
-│       │   └── DiscoveryGrids.tsx
+│       │   ├── HomeToggle.tsx
+│       │   ├── QuickBrowseHub.tsx
+│       │   ├── HomeFeatured.tsx
+│       │   ├── HomeDiscovery.tsx
+│       │   └── DiscoveryIcons.tsx
 │       ├── profile/    # Profile-related components
 │       │   ├── ProfileHero.tsx
 │       │   ├── ProfileSidebar.tsx

@@ -1,0 +1,41 @@
+import { 
+  Calendar, 
+  Film, 
+  Tv, 
+  Sparkles, 
+  Globe, 
+  Heart, 
+  TrendingUp, 
+  Zap, 
+  Star, 
+  Play, 
+  Rocket, 
+  Ghost, 
+  Clapperboard, 
+  Music, 
+  Shield, 
+  Coffee, 
+  Flame,
+  Compass
+} from 'lucide-react';
+
+export const ICON_MAP = {
+  Calendar,
+  Film,
+  Tv,
+  Sparkles,
+  Globe,
+  Heart,
+  TrendingUp,
+  Zap,
+  Star,
+  Play,
+  Rocket,
+  Ghost,
+  Clapperboard,
+  Music,
+  Shield,
+  Coffee,
+  Flame,
+  Compass
+};

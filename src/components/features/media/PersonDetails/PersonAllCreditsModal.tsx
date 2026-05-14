@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
+import { useState, useMemo, useRef, useCallback } from 'react';
 import { Search, X, TrendingUp, Filter } from 'lucide-react';
 import Modal from '@/components/patterns/Modal';
 import { MediaCard } from '@/components/patterns/MediaCard';

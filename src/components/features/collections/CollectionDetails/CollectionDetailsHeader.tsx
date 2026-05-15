@@ -24,7 +24,7 @@ const CollectionDetailsHeader = ({
     <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 glass-card p-4 sm:p-6 rounded-2xl">
       <div className="flex items-start gap-3 sm:gap-4">
         <div 
-          className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg"
+          className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 shadow-lg"
           style={{ backgroundColor: collection.color || 'var(--color-brand-primary)' }}
         >
           <Folder className="w-6 h-6 sm:w-8 sm:h-8 text-white" />

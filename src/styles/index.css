@@ -48,6 +48,9 @@
   --color-palette-pink: #ec4899;
   --color-palette-slate: #94a3b8;
   --color-palette-lime: #84cc16;
+  --color-palette-orange: #f97316;
+  --color-palette-blue: #3b82f6;
+  --color-palette-yellow: #eab308;
 
   /* Status Backgrounds (Subtle) */
   --color-success-bg: rgba(16, 185, 129, 0.1);
@@ -130,6 +133,7 @@ h1, h2, h3, h4, h5, h6 {
   .text-gradient-primary {
     background: linear-gradient(to bottom right, var(--color-brand-primary), var(--color-brand-secondary));
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 

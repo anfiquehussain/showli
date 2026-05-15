@@ -49,7 +49,7 @@ const CollectionMediaCard = ({
   if (viewMode === 'grid') {
     return (
       <div 
-        className="relative group rounded-xl overflow-hidden glass-card aspect-[2/3] cursor-pointer"
+        className="relative group rounded-xl overflow-hidden glass-card aspect-2/3 cursor-pointer"
         onClick={() => navigate(`/${item.media_type}/${item.tmdb_id}`)}
       >
         {item.poster_path ? (
@@ -69,7 +69,7 @@ const CollectionMediaCard = ({
           <StatusBadge status={item.status || 'planned'} />
         </div>
 
-        <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-3 z-20">
+        <div className="absolute inset-0 bg-linear-to-t from-background/90 via-background/20 to-transparent opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-3 z-20">
           <div className="flex justify-end">
              <IconButton
                 icon={Trash2}
@@ -123,7 +123,7 @@ const CollectionMediaCard = ({
       className="flex items-center gap-4 p-3 glass-card rounded-xl group relative cursor-pointer"
       onClick={() => navigate(`/${item.media_type}/${item.tmdb_id}`)}
     >
-      <div className="w-16 h-24 rounded-lg overflow-hidden flex-shrink-0 bg-card/50">
+      <div className="w-16 h-24 rounded-lg overflow-hidden shrink-0 bg-card/50">
         {item.poster_path ? (
           <img 
             src={getTmdbImageUrl(item.poster_path, 'w185')} 

@@ -14,7 +14,7 @@ interface CollectionsHeroProps {
 
 const CollectionsHero = ({ stats }: CollectionsHeroProps) => {
   return (
-    <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-primary/10 via-background to-background border border-white/5 p-6 md:p-12">
+    <div className="relative overflow-hidden rounded-3xl bg-linear-to-br from-brand-primary/10 via-background to-background border border-white/5 p-6 md:p-12">
       <div className="relative z-10">
         <PageHeader 
           title="Your Library" 

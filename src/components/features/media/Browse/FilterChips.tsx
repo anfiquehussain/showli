@@ -1,5 +1,6 @@
 import { X } from 'lucide-react';
-import { useGetMovieGenresQuery, useGetTVGenresQuery, useGetLanguagesQuery, useGetCountriesQuery } from '@/api/media/mediaApi';
+import { useGetMovieGenresQuery, useGetTVGenresQuery, useGetLanguagesQuery, useGetCountriesQuery, useGetAvailableWatchProvidersQuery, useGetWatchProviderRegionsQuery } from '@/api/media/mediaApi';
+import type { TmdbCountry } from '@/types/tmdb.types';
 
 interface FilterChipsProps {
   query: string;
@@ -8,6 +9,8 @@ interface FilterChipsProps {
   year: string;
   language: string;
   country: string;
+  region: string;
+  provider: string;
   onRemove: (key: string, value: string) => void;
   onClearAll: () => void;
 }
@@ -19,6 +22,8 @@ const FilterChips = ({
   year,
   language,
   country,
+  region,
+  provider,
   onRemove,
   onClearAll
 }: FilterChipsProps) => {
@@ -26,6 +31,11 @@ const FilterChips = ({
   const { data: tvGenres } = useGetTVGenresQuery();
   const { data: languages } = useGetLanguagesQuery();
   const { data: countries } = useGetCountriesQuery();
+  const { data: watchRegions } = useGetWatchProviderRegionsQuery();
+  const { data: providersData } = useGetAvailableWatchProvidersQuery({ 
+    type: mediaType === 'all' ? 'movie' : mediaType as 'movie' | 'tv',
+    region: country || 'US'
+  });
 
   const getGenreName = (id: string) => {
     const genres = mediaType === 'tv' ? tvGenres?.genres : movieGenres?.genres;
@@ -39,14 +49,24 @@ const FilterChips = ({
   const getCountryName = (code: string) => {
     return countries?.find(c => c.iso_3166_1 === code)?.english_name || code;
   };
+  
+  const getProviderName = (id: string) => {
+    return providersData?.results?.find(p => String(p.provider_id) === id)?.provider_name || 'Provider';
+  };
+
+  const getRegionName = (code: string) => {
+    return watchRegions?.results?.find((r: TmdbCountry) => r.iso_3166_1 === code)?.english_name || code;
+  };
 
   const activeFilters = [
     { key: 'q', value: query, label: `Search: ${query}` },
-    { key: 'type', value: mediaType !== 'all' ? mediaType : '', label: `Type: ${mediaType}`, icon: null },
+    { key: 'type', value: mediaType !== 'all' ? mediaType : '', label: `Type: ${mediaType}` },
     { key: 'genre', value: genreId, label: getGenreName(genreId) },
     { key: 'year', value: year, label: `Year: ${year}` },
     { key: 'language', value: language, label: getLanguageName(language) },
     { key: 'country', value: country, label: getCountryName(country) },
+    { key: 'region', value: region && region !== 'US' ? `Region: ${getRegionName(region)}` : '', label: `Region: ${getRegionName(region)}` },
+    { key: 'provider', value: provider, label: getProviderName(provider) },
   ].filter(f => f.value);
 
   if (activeFilters.length === 0) return null;

@@ -20,6 +20,8 @@ const Browse = () => {
   const year = searchParams.get('year') || '';
   const language = searchParams.get('language') || '';
   const country = searchParams.get('country') || '';
+  const region = searchParams.get('region') || 'US';
+  const provider = searchParams.get('provider') || '';
   const page = Number(searchParams.get('page')) || 1;
 
   // Handle 'focus=filters' to open sidebar automatically
@@ -64,6 +66,8 @@ const Browse = () => {
       first_air_date_year: year, // for TV
       with_original_language: language,
       with_origin_country: country,
+      with_watch_providers: provider,
+      watch_region: region,
       page,
     }
   }, { skip: isSearching });
@@ -132,6 +136,9 @@ const Browse = () => {
           const originCountry = 'origin_country' in item ? item.origin_country : [];
           if (!originCountry?.includes(country)) return false;
         }
+
+        // Provider Filter (Note: This is difficult to do client-side effectively without additional API calls per item, 
+        // but for search results we might just omit it or rely on the fact that TMDb doesn't support it in multi-search anyway)
       }
       
       // 3. Deduplication
@@ -159,7 +166,7 @@ const Browse = () => {
     // This allows hybrid filtering (search text + filters)
 
     // If updating search, reset page
-    if (key === 'q' || key === 'genre' || key === 'type' || key === 'year' || key === 'language' || key === 'country') {
+    if (key === 'q' || key === 'genre' || key === 'type' || key === 'year' || key === 'language' || key === 'country' || key === 'provider') {
       newParams.delete('page');
     }
 
@@ -184,14 +191,16 @@ const Browse = () => {
 
       <div className="flex flex-col lg:flex-row gap-8 relative">
         {/* Desktop Filters Sidebar */}
-        <aside className="hidden lg:block w-64 shrink-0">
+        <aside className="hidden lg:block w-72 shrink-0 sticky top-24 self-start max-h-[calc(100vh-8rem)] overflow-y-auto px-4 custom-scrollbar">
           <BrowseFilters 
             mediaType={mediaType}
             genreId={genreId}
             year={year}
             language={language}
             country={country}
-            onUpdateParam={handleUpdateParam}
+            region={region}
+            provider={provider}
+            onFilterChange={handleUpdateParam}
             onClear={handleClearFilters}
           />
         </aside>
@@ -210,7 +219,9 @@ const Browse = () => {
                 year={year}
                 language={language}
                 country={country}
-                onUpdateParam={handleUpdateParam}
+                region={region}
+                provider={provider}
+                onFilterChange={handleUpdateParam}
                 onClear={handleClearFilters}
                 onClose={toggleSidebar}
               />
@@ -226,6 +237,8 @@ const Browse = () => {
             year={year}
             language={language}
             country={country}
+            region={region}
+            provider={provider}
             onRemove={handleUpdateParam}
             onClearAll={handleClearFilters}
           />

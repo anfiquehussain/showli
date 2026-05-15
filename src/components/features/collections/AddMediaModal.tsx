@@ -116,7 +116,7 @@ const AddMediaModal = ({ isOpen, onClose, collection }: AddMediaModalProps) => {
                         : 'bg-white/5 border-white/5 hover:border-white/20'
                     }`}
                   >
-                    <div className="w-12 h-18 rounded-lg bg-card overflow-hidden flex-shrink-0 shadow-md">
+                    <div className="w-12 h-18 rounded-lg bg-card overflow-hidden shrink-0 shadow-md">
                       {item.poster_path ? (
                         <img 
                           src={getTmdbImageUrl(item.poster_path, 'w92')} 

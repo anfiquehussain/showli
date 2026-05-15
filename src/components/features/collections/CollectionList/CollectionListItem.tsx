@@ -35,7 +35,7 @@ const CollectionListItem = ({
         ${selectedId === collection.id 
           ? 'bg-brand-primary/20 border-brand-primary/50 shadow-xl shadow-brand-primary/10' 
           : 'glass-card border-white/5 hover:border-white/20 hover:bg-white/10 shadow-lg'}
-        rounded-[1.5rem]
+        rounded-3xl
         ${openMenuId === collection.id ? 'z-50' : 'z-0'}
       `}
       onClick={() => onSelect(collection)}
@@ -43,7 +43,7 @@ const CollectionListItem = ({
       {/* Background Glow for Grid Mode */}
       {viewMode === 'grid' && (
         <div 
-          className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 blur-2xl rounded-[1.5rem]"
+          className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 blur-2xl rounded-3xl"
           style={{ backgroundColor: collection.color || 'var(--brand-primary)' }}
         />
       )}
@@ -51,7 +51,7 @@ const CollectionListItem = ({
       <div className={`flex items-center gap-3 ${viewMode === 'grid' ? 'flex-col' : ''}`}>
         <div 
           className={`
-            rounded-xl flex items-center justify-center flex-shrink-0 relative shadow-xl
+            rounded-xl flex items-center justify-center shrink-0 relative shadow-xl
             ${viewMode === 'grid' ? 'w-14 h-14 mb-3' : 'w-12 h-12'}
           `}
           style={{ 

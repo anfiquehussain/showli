@@ -84,7 +84,7 @@ const AddFavoriteModal = ({ isOpen, onClose }: AddFavoriteModalProps) => {
                     key={item.id}
                     className="flex items-center gap-4 p-3 rounded-2xl bg-white/5 border border-white/5 hover:border-brand-primary/30 transition-standard"
                   >
-                    <div className="w-12 h-18 rounded-lg bg-card overflow-hidden flex-shrink-0">
+                    <div className="w-12 h-18 rounded-lg bg-card overflow-hidden shrink-0">
                       {item.poster_path ? (
                         <img 
                           src={getTmdbImageUrl(item.poster_path, 'w92')} 

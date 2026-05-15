@@ -14,12 +14,12 @@ import {
 import { motion } from 'framer-motion';
 
 const CATEGORIES = [
-  { id: 'action', name: 'Action', icon: Zap, color: 'bg-orange-500/10 text-orange-500', genreId: 28 },
-  { id: 'comedy', name: 'Comedy', icon: Smile, color: 'bg-yellow-500/10 text-yellow-500', genreId: 35 },
-  { id: 'horror', name: 'Horror', icon: Ghost, color: 'bg-purple-500/10 text-purple-500', genreId: 27 },
-  { id: 'romance', name: 'Romance', icon: Heart, color: 'bg-pink-500/10 text-pink-500', genreId: 10749 },
-  { id: 'scifi', name: 'Sci-Fi', icon: Rocket, color: 'bg-blue-500/10 text-blue-500', genreId: 878 },
-  { id: 'crime', name: 'Crime', icon: Shield, color: 'bg-red-500/10 text-red-500', genreId: 80 },
+  { id: 'action', name: 'Action', icon: Zap, color: 'bg-palette-orange/10 text-palette-orange', genreId: 28 },
+  { id: 'comedy', name: 'Comedy', icon: Smile, color: 'bg-palette-yellow/10 text-palette-yellow', genreId: 35 },
+  { id: 'horror', name: 'Horror', icon: Ghost, color: 'bg-palette-violet/10 text-palette-violet', genreId: 27 },
+  { id: 'romance', name: 'Romance', icon: Heart, color: 'bg-palette-pink/10 text-palette-pink', genreId: 10749 },
+  { id: 'scifi', name: 'Sci-Fi', icon: Rocket, color: 'bg-palette-blue/10 text-palette-blue', genreId: 878 },
+  { id: 'crime', name: 'Crime', icon: Shield, color: 'bg-palette-rose/10 text-palette-rose', genreId: 80 },
 ];
 
 const METADATA_LINKS = [

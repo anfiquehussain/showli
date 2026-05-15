@@ -60,7 +60,14 @@ src/
 │       │   ├── QuickBrowseHub.tsx
 │       │   ├── HomeFeatured.tsx
 │       │   ├── HomeDiscovery.tsx
-│       │   └── DiscoveryIcons.tsx
+│       │   ├── DiscoveryIcons.tsx
+│       │   └── PersonDetails/ # Decomposed person profile
+│       │       ├── index.tsx
+│       │       ├── PersonHero.tsx
+│       │       ├── PersonQuickFacts.tsx
+│       │       ├── PersonCredits.tsx
+│       │       ├── PersonGallery.tsx
+│       │       └── PersonAllCreditsModal.tsx
 │       ├── profile/    # Profile-related components
 │       │   ├── ProfileHero.tsx
 │       │   ├── ProfileSidebar.tsx
@@ -100,7 +107,8 @@ src/
 │   ├── ProfilePage.tsx   # User profile and favorites
 │   ├── MediaDetailsPage.tsx   # Media (Movie/TV) detail view
 │   ├── CollectionsPage.tsx # Library dashboard and collections list
-│   └── CollectionDetailsPage.tsx # Individual collection view
+│   ├── CollectionDetailsPage.tsx # Individual collection view
+│   └── PersonPage.tsx      # Person biography and credits
 │── routes/             # Route definitions
 ├── store/              # Redux store configuration
 │   ├── index.ts        # Store setup, exports RootState & AppDispatch

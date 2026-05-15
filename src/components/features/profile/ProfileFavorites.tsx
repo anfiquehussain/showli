@@ -41,7 +41,7 @@ const ProfileFavorites = ({ favorites, onAdd, onRemove }: ProfileFavoritesProps)
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
                 transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-                className="group relative aspect-[2/3] rounded-2xl overflow-hidden glass-card transition-standard hover:border-brand-primary/50 shadow-xl"
+                className="group relative aspect-2/3 rounded-2xl overflow-hidden glass-card transition-standard hover:border-brand-primary/50 shadow-xl"
               >
                 <img 
                   src={getTmdbImageUrl(movie.poster_path, 'w342')} 
@@ -63,7 +63,7 @@ const ProfileFavorites = ({ favorites, onAdd, onRemove }: ProfileFavoritesProps)
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>
 
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-3 pointer-events-none">
+                <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-3 pointer-events-none">
                   <p className="text-xs font-bold text-white truncate">{title}</p>
                 </div>
               </motion.div>
@@ -75,7 +75,7 @@ const ProfileFavorites = ({ favorites, onAdd, onRemove }: ProfileFavoritesProps)
         {Array.from({ length: 5 - favorites.length }).map((_, i) => (
           <div 
             key={`empty-${i}`}
-            className="aspect-[2/3] rounded-2xl border-2 border-dashed border-white/5 flex flex-col items-center justify-center gap-2 text-muted-foreground hover:bg-white/5 hover:border-white/10 transition-standard cursor-pointer"
+            className="aspect-2/3 rounded-2xl border-2 border-dashed border-white/5 flex flex-col items-center justify-center gap-2 text-muted-foreground hover:bg-white/5 hover:border-white/10 transition-standard cursor-pointer"
             onClick={onAdd}
           >
             <Plus className="w-6 h-6 opacity-20" />

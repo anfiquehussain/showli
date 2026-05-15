@@ -22,7 +22,7 @@ const HeroCarousel = () => {
   if (isLoading) {
     return (
       <div className="relative w-full h-[70vh] md:h-[75vh] bg-card/50 animate-pulse rounded-3xl overflow-hidden mb-12">
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-background via-transparent to-transparent" />
       </div>
     );
   }
@@ -55,8 +55,8 @@ const HeroCarousel = () => {
             alt={'title' in activeMedia ? activeMedia.title : activeMedia.name}
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/40 md:via-background/20 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-t from-background via-background/20 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-r from-background/90 via-background/40 md:via-background/20 to-transparent" />
         </motion.div>
       </AnimatePresence>
 
@@ -129,7 +129,7 @@ const HeroCarousel = () => {
               whileTap={{ scale: 0.95 }}
               onClick={() => setCurrentIndex(index)}
               className={`
-                relative flex-shrink-0 w-24 md:w-32 aspect-video rounded-lg overflow-hidden border-2 transition-all duration-300
+                relative shrink-0 w-24 md:w-32 aspect-video rounded-lg overflow-hidden border-2 transition-all duration-300
                 ${currentIndex === index ? 'border-brand-primary scale-105 shadow-lg shadow-brand-primary/20' : 'border-transparent opacity-60 hover:opacity-100'}
               `}
             >

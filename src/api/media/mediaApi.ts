@@ -21,6 +21,7 @@ import type {
   TmdbPersonExternalIds,
   TmdbImage,
   TmdbTaggedImage,
+  TmdbWatchProvider,
 } from "@/types/tmdb.types";
 
 export const mediaApi = createApi({
@@ -232,6 +233,12 @@ export const mediaApi = createApi({
     getPopularPeople: builder.query<TmdbPaginatedResponse<TmdbPersonDetails>, { page?: number }>({
       query: ({ page = 1 }) => `/person/popular?api_key=${TMDB_API_KEY}&page=${page}`,
     }),
+    getAvailableWatchProviders: builder.query<{ results: TmdbWatchProvider[] }, { type: "movie" | "tv"; region?: string }>({
+      query: ({ type, region = "US" }) => `/watch/providers/${type}?api_key=${TMDB_API_KEY}&watch_region=${region}`,
+    }),
+    getWatchProviderRegions: builder.query<{ results: { iso_3166_1: string; english_name: string; native_name: string }[] }, void>({
+      query: () => `/watch/providers/regions?api_key=${TMDB_API_KEY}`,
+    }),
   }),
 });
 
@@ -268,4 +275,6 @@ export const {
   useGetPersonImagesQuery,
   useGetPersonTaggedImagesQuery,
   useGetPopularPeopleQuery,
+  useGetAvailableWatchProvidersQuery,
+  useGetWatchProviderRegionsQuery,
 } = mediaApi;

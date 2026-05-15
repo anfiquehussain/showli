@@ -124,6 +124,14 @@ Destructive actions (Delete) MUST:
 -   **Help Text**: Place clearly below the label or as separate caption text.
 -   **Consistency**: Use `space-y-1.5` for grouping labels with inputs.
 
+### 7.4 Tailwind v4 Standards
+- **Refactoring Requirement**: When modifying components, proactively refactor legacy utility classes to their Tailwind v4 equivalents.
+- **Shrink/Grow**: Use `shrink-0` instead of `flex-shrink-0`, `grow` instead of `flex-grow`, etc.
+- **Gradients**: Use `bg-linear-to-*` instead of `bg-gradient-to-*`.
+- **Aspect Ratios**: Use standard fraction notation `aspect-2/3` instead of bracket notation `aspect-[2/3]`.
+- **Rounded Corners**: Use standard presets (e.g., `rounded-3xl`) instead of pixel/rem values in brackets (e.g., `rounded-[1.5rem]`).
+- **Text Wrapping**: Use `wrap-break-word` instead of `break-words`.
+
 ---
 
 ## 8. Naming Conventions

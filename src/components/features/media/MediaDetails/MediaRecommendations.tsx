@@ -1,7 +1,7 @@
-import { useState, useRef, useEffect } from 'react';
 import { useGetRecommendationsQuery } from '@/api/media/mediaApi';
 import MediaScroll from '@/components/patterns/MediaScroll';
 import { Sparkles } from 'lucide-react';
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 
 interface MediaRecommendationsProps {
   id: number;
@@ -9,30 +9,12 @@ interface MediaRecommendationsProps {
 }
 
 const MediaRecommendations = ({ id, type }: MediaRecommendationsProps) => {
-  const [isInView, setIsInView] = useState(false);
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      const [entry] = entries;
-      if (entry?.isIntersecting) {
-        setIsInView(true);
-        observer.disconnect();
-      }
-    }, { rootMargin: '600px' });
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
-  const { data, isLoading } = useGetRecommendationsQuery({ type, id }, { skip: !isInView });
+  const [sectionRef, isVisible] = useIntersectionObserver({ rootMargin: '600px' });
+  const { data, isLoading } = useGetRecommendationsQuery({ type, id }, { skip: !isVisible });
   const results = data?.results || [];
 
   return (
-    <div ref={sectionRef} className="container mx-auto px-4 md:px-8">
+    <div ref={sectionRef}>
       <div className="border-t border-white/5 pt-8">
         <MediaScroll 
           title="Recommended For You"

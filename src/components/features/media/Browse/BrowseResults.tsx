@@ -26,7 +26,7 @@ const BrowseResults = ({
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-6">
         {Array.from({ length: 15 }).map((_, i) => (
           <div key={i} className="space-y-3 animate-pulse">
-            <div className="aspect-[2/3] bg-white/5 rounded-xl border border-white/5" />
+            <div className="aspect-2/3 bg-white/5 rounded-xl border border-white/5" />
             <div className="h-4 bg-white/5 rounded w-3/4" />
           </div>
         ))}

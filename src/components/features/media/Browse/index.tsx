@@ -184,7 +184,7 @@ const Browse = () => {
 
       <div className="flex flex-col lg:flex-row gap-8 relative">
         {/* Desktop Filters Sidebar */}
-        <aside className="hidden lg:block w-64 flex-shrink-0">
+        <aside className="hidden lg:block w-64 shrink-0">
           <BrowseFilters 
             mediaType={mediaType}
             genreId={genreId}

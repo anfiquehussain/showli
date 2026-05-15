@@ -22,7 +22,7 @@ src/
 │       └── mediaDiscovery.ts # Discovery row presets
 ├── assets/             # Static assets (images, global icons)
 ├── components/         # UI Components (3-Layer Architecture)
-│   ├── ui/             # [Layer 1] Primitives (Button.tsx, IconButton.tsx, Input.tsx, Rating.tsx)
+│   ├── ui/             # [Layer 1] Primitives (Button.tsx, IconButton.tsx, Input.tsx, Rating.tsx, Skeleton.tsx)
 │   ├── patterns/       # [Layer 2] Reusable Patterns (Modal, ConfirmationModal, PageHeader, MediaScroll, MediaCard, PersonScroll, PersonCard, StatusBadge, SearchBar, ProtectedRoute, ScrollContainer, ScrollToTop, BackToTopButton)
 │   └── features/       # [Layer 3] Feature Components (Grouped by domain)
 │       ├── auth/       # Authentication (AuthModal.tsx)
@@ -90,7 +90,8 @@ src/
 ├── hooks/              # Reusable global hooks
 │   ├── useAuth.ts      # Firebase auth logic and state sync
 │   ├── useRedux.ts     # Pre-typed useAppDispatch & useAppSelector
-│   └── useToast.ts     # Typed toast notification hook
+│   ├── useToast.ts     # Typed toast notification hook
+│   └── useIntersectionObserver.ts # Intersection observer for lazy loading
 ├── lib/                # Third-party library configs
 │   └── firebase.ts     # Firebase initialization (typed with FirebaseOptions)
 ├── pages/              # Routed page components

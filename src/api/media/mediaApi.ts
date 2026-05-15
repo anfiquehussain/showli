@@ -20,6 +20,7 @@ import type {
   TmdbPersonCombinedCredits,
   TmdbPersonExternalIds,
   TmdbImage,
+  TmdbTaggedImage,
 } from "@/types/tmdb.types";
 
 export const mediaApi = createApi({
@@ -206,7 +207,7 @@ export const mediaApi = createApi({
       query: (id) => `/person/${id}/images?api_key=${TMDB_API_KEY}`,
     }),
     getPersonTaggedImages: builder.query<
-      TmdbPaginatedResponse<TmdbImage & { image_type: string, media: TmdbMedia }>, 
+      TmdbPaginatedResponse<TmdbTaggedImage>, 
       { id: number; page?: number }
     >({
       query: ({ id, page = 1 }) => `/person/${id}/tagged_images?api_key=${TMDB_API_KEY}&page=${page}`,

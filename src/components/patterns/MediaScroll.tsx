@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import type { TmdbMedia } from '@/types/tmdb.types';
 import { MediaCard } from './MediaCard';
 import ScrollContainer from './ScrollContainer';
+import Skeleton from '../ui/Skeleton';
 
 interface MediaScrollProps {
   title: string;
@@ -17,12 +18,11 @@ const MediaScroll = ({ title, icon, items, isLoading, onAddClick, onViewAll, vie
   if (isLoading) {
     return (
       <div className="space-y-4 py-4">
-        <div className="flex items-center gap-2 h-6 w-32 bg-card/50 animate-pulse rounded" />
         <div className="flex gap-4 overflow-hidden">
           {[...Array(6)].map((_, i) => (
-            <div 
+            <Skeleton 
               key={i} 
-              className="flex-shrink-0 w-28 md:w-40 aspect-[2/3] bg-card/50 animate-pulse rounded-xl"
+              className="shrink-0 w-28 md:w-40 aspect-2/3"
             />
           ))}
         </div>
@@ -52,7 +52,7 @@ const MediaScroll = ({ title, icon, items, isLoading, onAddClick, onViewAll, vie
       
       <ScrollContainer className="gap-4 pb-4">
         {items.map((item) => (
-          <div key={item.id} className="flex-shrink-0">
+          <div key={item.id} className="shrink-0">
             <MediaCard item={item} onAddClick={onAddClick} />
           </div>
         ))}

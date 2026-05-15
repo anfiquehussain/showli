@@ -3,6 +3,7 @@ import { Star, Clock, Globe, Plus, Share2, ChevronLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getTmdbImageUrl } from '@/utils/image';
 import Button from '@/components/ui/Button';
+import { useToast } from '@/hooks/useToast';
 import type { TmdbMovieDetails, TmdbTVDetails } from '@/types/tmdb.types';
 
 interface MediaHeroProps {
@@ -25,6 +26,7 @@ const MediaHero = ({
   onAddToCollection 
 }: MediaHeroProps) => {
   const navigate = useNavigate();
+  const { success } = useToast();
 
   return (
     <section className="relative w-full min-h-[300px] md:min-h-[400px] flex flex-col justify-end">
@@ -37,8 +39,8 @@ const MediaHero = ({
           aria-hidden="true"
         />
         {/* Complex Fading Gradients */}
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-background/20 hidden md:block" />
+        <div className="absolute inset-0 bg-linear-to-t from-background via-background/20 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-r from-background via-transparent to-background/20 hidden md:block" />
         <div className="absolute inset-0 bg-background/20 backdrop-blur-[1px]" />
       </div>
 
@@ -48,25 +50,25 @@ const MediaHero = ({
         className="absolute top-4 left-4 p-2 rounded-full bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/20 transition-all text-white z-30 shadow-lg active:scale-95"
         aria-label="Go back"
       >
-        <ChevronLeft className="w-4 h-4" />
+        <ChevronLeft className="w-4 h-4" aria-hidden="true" />
       </button>
 
       {/* Identity & Poster Container */}
-      <div className="container mx-auto px-4 md:px-8 relative z-20 pb-4">
+      <div className="relative z-20 pb-4">
         <div className="flex flex-col md:flex-row items-center md:items-end gap-5 md:gap-8">
           {/* Poster Card */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="relative shrink-0 w-28 sm:w-36 md:w-44 aspect-[2/3] rounded-lg overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-white/10 group/poster"
+            className="relative shrink-0 w-28 sm:w-36 md:w-44 aspect-2/3 rounded-lg overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-white/10 group/poster"
           >
             <img
               src={getTmdbImageUrl(media.poster_path || media.backdrop_path, 'w500')}
               alt={title}
               className="w-full h-full object-cover transition-transform duration-500 group-hover/poster:scale-110"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover/poster:opacity-100 transition-opacity duration-300" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent opacity-0 group-hover/poster:opacity-100 transition-opacity duration-300" />
           </motion.div>
 
           {/* Identity Block */}
@@ -79,7 +81,7 @@ const MediaHero = ({
             <div className="space-y-1.5">
               <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
                 <div className="flex items-center gap-1 px-2 py-0.5 bg-brand-primary rounded-full text-[9px] font-bold uppercase tracking-wider text-white shadow-lg shadow-brand-primary/20">
-                  <Star className="w-2.5 h-2.5 fill-current" />
+                  <Star className="w-2.5 h-2.5 fill-current" aria-hidden="true" />
                   <span>{media.vote_average.toFixed(1)}</span>
                 </div>
                 <div className="flex items-center gap-1 text-white/80 text-[10px] font-semibold backdrop-blur-md bg-white/5 px-2 py-0.5 rounded-md border border-white/10">
@@ -87,7 +89,7 @@ const MediaHero = ({
                 </div>
                 {runtime && (
                   <div className="flex items-center gap-1 text-white/80 text-[10px] font-semibold backdrop-blur-md bg-white/5 px-2 py-0.5 rounded-md border border-white/10">
-                    <Clock className="w-2.5 h-2.5" />
+                    <Clock className="w-2.5 h-2.5" aria-hidden="true" />
                     <span>{runtime} min</span>
                   </div>
                 )}
@@ -145,9 +147,12 @@ const MediaHero = ({
                       title: title,
                       text: media.overview,
                       url: window.location.href,
+                    }).catch(() => {
+                      // Fallback if sharing is cancelled or fails
                     });
                   } else {
                     navigator.clipboard.writeText(window.location.href);
+                    success('Link copied to clipboard!');
                   }
                 }}
               >

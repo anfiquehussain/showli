@@ -18,13 +18,13 @@ export const MediaCard = ({ item, onAddClick }: MediaCardProps) => {
   return (
     <Link 
       to={`/${type}/${item.id}`}
-      className="block flex-shrink-0"
+      className="block shrink-0"
     >
       <motion.div
         whileHover={{ y: -5, scale: 1.02 }}
         className="w-28 md:w-40 space-y-2 group/card snap-start"
       >
-        <div className="relative aspect-[2/3] rounded-xl overflow-hidden glass-card transition-standard border-white/5 hover:border-brand-secondary/50 shadow-lg">
+        <div className="relative aspect-2/3 rounded-xl overflow-hidden glass-card transition-standard border-white/5 hover:border-brand-secondary/50 shadow-lg">
           <img
             src={getTmdbImageUrl(item.poster_path, 'w342')}
             alt={title}
@@ -38,7 +38,7 @@ export const MediaCard = ({ item, onAddClick }: MediaCardProps) => {
             <span>{item.vote_average?.toFixed(1) || '0.0'}</span>
           </div>
 
-          <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-3">
+          <div className="absolute inset-0 bg-linear-to-t from-background/90 via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-3">
             <div className="flex justify-start">
               {onAddClick && (
                 <button

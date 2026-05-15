@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { User, Star, ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
 import { useGetReviewsQuery } from '@/api/media/mediaApi';
 import { getTmdbImageUrl } from '@/utils/image';
+import Skeleton from '@/components/ui/Skeleton';
 
 interface TmdbReviewsProps {
   mediaId: number;
@@ -12,11 +13,11 @@ const TmdbReviews = ({ mediaId, mediaType }: TmdbReviewsProps) => {
   const [page, setPage] = useState(1);
   const { data, isLoading, isError } = useGetReviewsQuery({ id: mediaId, type: mediaType, page });
 
-  if (isLoading) return <div className="h-48 glass-card rounded-3xl animate-pulse" />;
+  if (isLoading) return <Skeleton className="h-48 rounded-3xl" />;
   
   if (isError || !data?.results.length) {
     return (
-      <div className="py-20 flex flex-col items-center justify-center gap-3 rounded-3xl bg-white/[0.02] border border-dashed border-white/5">
+      <div className="py-20 flex flex-col items-center justify-center gap-3 rounded-3xl bg-white/2 border border-dashed border-white/5">
         <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center">
           <User className="w-5 h-5 text-white/20" />
         </div>

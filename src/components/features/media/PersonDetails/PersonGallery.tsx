@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ChevronLeft, X, Maximize2 } from 'lucide-react';
 import { getTmdbImageUrl } from '@/utils/image';
 import ScrollContainer from '@/components/patterns/ScrollContainer';
-import type { TmdbImage, TmdbMedia } from '@/types/tmdb.types';
+import type { TmdbImage, TmdbTaggedImage } from '@/types/tmdb.types';
 import { useGetPersonTaggedImagesQuery } from '@/api/media/mediaApi';
 
 interface PersonGalleryProps {
@@ -118,8 +118,8 @@ const PersonGallery = ({ personId, profileImages = [] }: PersonGalleryProps) => 
           <div 
             key={`${image.file_path}-${index}`}
             onClick={() => setSelectedIndex(index)}
-            className={`flex-shrink-0 group/image relative overflow-hidden rounded-xl border border-white/10 bg-white/5 cursor-pointer ${
-              activeTab === 'tagged' ? 'aspect-video w-64 md:w-80' : 'aspect-[2/3] w-32 md:w-44'
+            className={`shrink-0 group/image relative overflow-hidden rounded-xl border border-white/10 bg-white/5 cursor-pointer ${
+              activeTab === 'tagged' ? 'aspect-video w-64 md:w-80' : 'aspect-2/3 w-32 md:w-44'
             }`}
           >
             <img
@@ -136,9 +136,9 @@ const PersonGallery = ({ personId, profileImages = [] }: PersonGalleryProps) => 
             </div>
 
             {activeTab === 'tagged' && 'media' in image && (
-              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover/image:opacity-100 transition-opacity">
+              <div className="absolute bottom-0 left-0 right-0 p-4 bg-linear-to-t from-black/80 to-transparent opacity-0 group-hover/image:opacity-100 transition-opacity">
                 {(() => {
-                  const media = (image as any).media as TmdbMedia;
+                  const media = (image as TmdbTaggedImage).media;
                   return (
                     <>
                       <p className="text-[10px] font-bold uppercase tracking-widest text-brand-primary mb-0.5">
@@ -163,7 +163,7 @@ const PersonGallery = ({ personId, profileImages = [] }: PersonGalleryProps) => 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-xl p-4"
+            className="fixed inset-0 z-100 flex items-center justify-center bg-black/95 backdrop-blur-xl p-4"
             onClick={() => setSelectedIndex(null)}
           >
             <button
@@ -191,7 +191,7 @@ const PersonGallery = ({ personId, profileImages = [] }: PersonGalleryProps) => 
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className={`relative max-w-7xl max-h-[85vh] w-full ${activeTab === 'tagged' ? 'aspect-video' : 'aspect-[2/3]'}`}
+              className={`relative max-w-7xl max-h-[85vh] w-full ${activeTab === 'tagged' ? 'aspect-video' : 'aspect-2/3'}`}
               onClick={e => e.stopPropagation()}
             >
               <img
@@ -203,7 +203,7 @@ const PersonGallery = ({ personId, profileImages = [] }: PersonGalleryProps) => 
                 {activeTab === 'tagged' && 'media' in selectedImage && (
                   <>
                     {(() => {
-                      const media = (selectedImage as any).media as TmdbMedia;
+                      const media = (selectedImage as TmdbTaggedImage).media;
                       return (
                         <p className="text-white">
                           {'title' in media ? media.title : media.name}
@@ -230,9 +230,9 @@ const PersonGallery = ({ personId, profileImages = [] }: PersonGalleryProps) => 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-xl"
+            className="fixed inset-0 z-100 flex items-center justify-center bg-black/95 backdrop-blur-xl"
           >
-            <div className="container mx-auto px-4 md:px-8 h-full flex flex-col py-8">
+            <div className="h-full flex flex-col py-8">
               <div className="flex items-center justify-between mb-8">
                 <div className="space-y-1">
                   <h2 className="text-2xl font-heading font-black text-white">{activeTab === 'profiles' ? 'Profile Images' : 'Tagged Images'}</h2>
@@ -254,7 +254,7 @@ const PersonGallery = ({ personId, profileImages = [] }: PersonGalleryProps) => 
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.02 }}
-                      className={`relative rounded-xl overflow-hidden border border-white/5 group cursor-pointer ${activeTab === 'tagged' ? 'aspect-video' : 'aspect-[2/3]'}`}
+                      className={`relative rounded-xl overflow-hidden border border-white/5 group cursor-pointer ${activeTab === 'tagged' ? 'aspect-video' : 'aspect-2/3'}`}
                       onClick={() => {
                         setSelectedIndex(index);
                         setIsViewAllOpen(false);

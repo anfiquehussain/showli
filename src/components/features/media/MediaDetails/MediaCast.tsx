@@ -4,6 +4,8 @@ import { useGetCreditsQuery, useGetTVCreditsQuery } from '@/api/media/mediaApi';
 import { getTmdbImageUrl } from '@/utils/image';
 import type { TmdbCastMember } from '@/types/tmdb.types';
 import ScrollContainer from '@/components/patterns/ScrollContainer';
+import Skeleton from '../../../ui/Skeleton';
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 
 interface MediaCastProps {
   id: number;
@@ -12,13 +14,19 @@ interface MediaCastProps {
 }
 
 const MediaCast = ({ id, type, onShowFullCredits }: MediaCastProps) => {
-  const movieCredits = useGetCreditsQuery(id, { skip: type !== 'movie' });
-  const tvCredits = useGetTVCreditsQuery(id, { skip: type !== 'tv' });
+  const [containerRef, isVisible] = useIntersectionObserver({ rootMargin: '200px' });
+  
+  const movieCredits = useGetCreditsQuery(id, { skip: type !== 'movie' || !isVisible });
+  const tvCredits = useGetTVCreditsQuery(id, { skip: type !== 'tv' || !isVisible });
 
   const credits = type === 'movie' ? movieCredits.data : tvCredits.data;
-  const isLoading = movieCredits.isLoading || tvCredits.isLoading;
+  const isLoading = (movieCredits.isLoading || tvCredits.isLoading) && isVisible;
 
-  if (isLoading) return <div className="h-48 glass-card rounded-3xl animate-pulse" />;
+  if (!isVisible || isLoading) return (
+    <section ref={containerRef} className="space-y-4">
+      <Skeleton className="h-48 rounded-3xl" />
+    </section>
+  );
   if (!credits?.cast.length) return null;
 
   // Take top 10 cast members
@@ -46,9 +54,9 @@ const MediaCast = ({ id, type, onShowFullCredits }: MediaCastProps) => {
           <Link 
             key={person.id} 
             to={`/person/${person.id}`}
-            className="flex-shrink-0 w-24 md:w-32 group block"
+            className="shrink-0 w-24 md:w-32 group block"
           >
-            <div className="aspect-[2/3] rounded-2xl bg-white/5 border border-white/5 overflow-hidden mb-3 group-hover:border-brand-primary/50 transition-colors">
+            <div className="aspect-2/3 rounded-2xl bg-white/5 border border-white/5 overflow-hidden mb-3 group-hover:border-brand-primary/50 transition-colors">
               {person.profile_path ? (
                 <img 
                   src={getTmdbImageUrl(person.profile_path, 'w185')} 
@@ -74,9 +82,9 @@ const MediaCast = ({ id, type, onShowFullCredits }: MediaCastProps) => {
         
         <button 
           onClick={onShowFullCredits}
-          className="flex-shrink-0 w-24 md:w-32 group text-left"
+          className="shrink-0 w-24 md:w-32 group text-left"
         >
-          <div className="aspect-[2/3] rounded-2xl bg-white/5 border border-dashed border-white/20 flex flex-col items-center justify-center mb-3 group-hover:border-brand-primary/50 group-hover:bg-brand-primary/5 transition-all">
+          <div className="aspect-2/3 rounded-2xl bg-white/5 border border-dashed border-white/20 flex flex-col items-center justify-center mb-3 group-hover:border-brand-primary/50 group-hover:bg-brand-primary/5 transition-all">
             <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform">
               <ChevronRight className="w-6 h-6 text-white/40 group-hover:text-brand-primary" />
             </div>

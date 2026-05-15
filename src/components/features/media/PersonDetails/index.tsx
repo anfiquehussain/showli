@@ -4,6 +4,7 @@ import PersonHero from './PersonHero';
 import PersonCredits from './PersonCredits';
 import PersonGallery from './PersonGallery';
 import PersonQuickFacts from './PersonQuickFacts';
+import Skeleton from '@/components/ui/Skeleton';
 
 const PersonDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -17,9 +18,7 @@ const PersonDetails = () => {
 
   if (isPersonLoading || isCreditsLoading || isTaggedImagesLoading || isProfileImagesLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="w-12 h-12 border-4 border-brand-primary/20 border-t-brand-primary rounded-full animate-spin" />
-      </div>
+      <Skeleton className="w-full h-[60vh] rounded-3xl" />
     );
   }
 
@@ -59,7 +58,7 @@ const PersonDetails = () => {
     <div className="min-h-screen bg-background">
       <PersonHero person={person} bannerPath={bannerPath} />
       
-      <div className="container mx-auto px-4 md:px-8 py-8 md:py-12">
+      <div className="py-8 md:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 md:gap-16">
           {/* Main Content (Left, Wider) */}
           <main className="lg:col-span-8 space-y-12">

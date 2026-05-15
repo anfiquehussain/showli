@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { ChevronLeft, Calendar, MapPin, Star, Share2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getTmdbImageUrl } from '@/utils/image';
+import { useToast } from '@/hooks/useToast';
 import type { TmdbPersonDetails } from '@/types/tmdb.types';
 
 interface PersonHeroProps {
@@ -11,6 +12,7 @@ interface PersonHeroProps {
 
 const PersonHero = ({ person, bannerPath }: PersonHeroProps) => {
   const navigate = useNavigate();
+  const { success } = useToast();
 
   return (
     <section className="relative w-full min-h-[300px] md:min-h-[400px] flex flex-col justify-end">
@@ -34,7 +36,7 @@ const PersonHero = ({ person, bannerPath }: PersonHeroProps) => {
             <div className="absolute inset-0 bg-black/20" />
           </div>
         ) : null}
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-background via-background/40 to-transparent" />
       </div>
 
       {/* Back Button */}
@@ -46,14 +48,14 @@ const PersonHero = ({ person, bannerPath }: PersonHeroProps) => {
         <ChevronLeft className="w-4 h-4" />
       </button>
 
-      <div className="container mx-auto px-4 md:px-8 relative z-20 pb-4">
+      <div className="relative z-20 pb-4">
         <div className="flex flex-col md:flex-row items-center md:items-end gap-5 md:gap-8">
           {/* Profile Picture */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="relative shrink-0 w-32 sm:w-40 md:w-48 aspect-[2/3] rounded-lg overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-white/10 group/poster bg-white/5"
+            className="relative shrink-0 w-32 sm:w-40 md:w-48 aspect-2/3 rounded-lg overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-white/10 group/poster bg-white/5"
           >
             {person.profile_path ? (
               <img
@@ -67,7 +69,7 @@ const PersonHero = ({ person, bannerPath }: PersonHeroProps) => {
                 <span className="text-xs uppercase font-bold tracking-widest">No Image</span>
               </div>
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover/poster:opacity-100 transition-opacity duration-300" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent opacity-0 group-hover/poster:opacity-100 transition-opacity duration-300" />
           </motion.div>
 
           {/* Identity Block */}
@@ -112,6 +114,7 @@ const PersonHero = ({ person, bannerPath }: PersonHeroProps) => {
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 pt-3">
               <button 
                 className="p-2.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-colors text-white flex items-center justify-center"
+                aria-label="Share profile"
                 onClick={() => {
                   if (navigator.share) {
                     navigator.share({
@@ -121,6 +124,7 @@ const PersonHero = ({ person, bannerPath }: PersonHeroProps) => {
                     });
                   } else {
                     navigator.clipboard.writeText(window.location.href);
+                    success('Profile link copied to clipboard!');
                   }
                 }}
               >

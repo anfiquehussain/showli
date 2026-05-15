@@ -6,6 +6,7 @@ import { clsx } from 'clsx';
 import { motion } from 'framer-motion';
 import ScrollContainer from '@/components/patterns/ScrollContainer';
 import EpisodeCard from './EpisodeCard';
+import Skeleton from '../../../ui/Skeleton';
 
 interface TVSeasonsProps {
   tvId: number;
@@ -70,7 +71,7 @@ const TVSeasons = ({ tvId, seasons }: TVSeasonsProps) => {
             key={season.id}
             onClick={() => handleSeasonChange(season.season_number)}
             className={clsx(
-              "px-4 py-1.5 rounded-full text-[13px] font-bold transition-all duration-300 whitespace-nowrap border flex-shrink-0 flex items-center gap-2",
+              "px-4 py-1.5 rounded-full text-[13px] font-bold transition-all duration-300 whitespace-nowrap border shrink-0 flex items-center gap-2",
               selectedSeason === season.season_number
                 ? "bg-brand-primary text-white border-brand-primary shadow-[0_0_15px_rgba(99,102,241,0.4)]"
                 : "bg-white/5 text-muted-foreground border-white/5 hover:bg-white/10 hover:text-white"
@@ -93,7 +94,7 @@ const TVSeasons = ({ tvId, seasons }: TVSeasonsProps) => {
         {isLoading ? (
           <div className="space-y-4">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-32 bg-white/5 animate-pulse rounded-2xl border border-white/10" />
+              <Skeleton key={i} className="h-32 rounded-2xl" />
             ))}
           </div>
         ) : isError ? (

@@ -9,6 +9,8 @@ import {
 import { useGetMediaImagesQuery, useGetCollectionImagesQuery } from '@/api/media/mediaApi';
 import { getTmdbImageUrl } from '@/utils/image';
 import ScrollContainer from '@/components/patterns/ScrollContainer';
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import Skeleton from '../../../ui/Skeleton';
 
 interface MediaImagesProps {
   id: number;
@@ -20,8 +22,10 @@ const ITEMS_PER_PAGE = 24;
 
 const MediaImages = ({ id, type, collectionId }: MediaImagesProps) => {
   const [activeTab, setActiveTab] = useState<'backdrops' | 'posters'>('backdrops');
-  const { data: images, isLoading } = useGetMediaImagesQuery({ id, type });
-  const { data: collectionImages } = useGetCollectionImagesQuery(collectionId!, { skip: !collectionId });
+  const [containerRef, isVisible] = useIntersectionObserver({ rootMargin: '200px' });
+
+  const { data: images, isLoading } = useGetMediaImagesQuery({ id, type }, { skip: !isVisible });
+  const { data: collectionImages } = useGetCollectionImagesQuery(collectionId!, { skip: !collectionId || !isVisible });
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [isViewAllOpen, setIsViewAllOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
@@ -73,7 +77,13 @@ const MediaImages = ({ id, type, collectionId }: MediaImagesProps) => {
     if (node) observer.current.observe(node);
   }, [hasMore, handleLoadMore]);
 
-  if (isLoading || !images) return null;
+  if (!isVisible || isLoading) return (
+    <section ref={containerRef} className="space-y-4">
+       <Skeleton className="h-48 rounded-3xl" />
+    </section>
+  );
+
+  if (!images) return null;
 
   const previewImages = currentImages.slice(0, 10);
   const displayedImages = currentImages.slice(0, visibleCount);
@@ -146,7 +156,7 @@ const MediaImages = ({ id, type, collectionId }: MediaImagesProps) => {
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.4, delay: index * 0.05 }}
             viewport={{ once: true }}
-            className={`relative shrink-0 rounded-xl overflow-hidden border border-white/5 group/image cursor-pointer ${activeTab === 'backdrops' ? 'w-[240px] md:w-[400px] aspect-video' : 'w-[140px] md:w-[200px] aspect-[2/3]'
+            className={`relative shrink-0 rounded-xl overflow-hidden border border-white/5 group/image cursor-pointer ${activeTab === 'backdrops' ? 'w-[240px] md:w-[400px] aspect-video' : 'w-[140px] md:w-[200px] aspect-2/3'
               }`}
             onClick={() => setSelectedIndex(index)}
           >
@@ -179,7 +189,7 @@ const MediaImages = ({ id, type, collectionId }: MediaImagesProps) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-xl p-4"
+            className="fixed inset-0 z-100 flex items-center justify-center bg-black/95 backdrop-blur-xl p-4"
             onClick={() => setSelectedIndex(null)}
           >
             {/* Close Button */}
@@ -210,7 +220,7 @@ const MediaImages = ({ id, type, collectionId }: MediaImagesProps) => {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className={`relative max-w-7xl max-h-[85vh] w-full ${activeTab === 'backdrops' ? 'aspect-video' : 'aspect-[2/3]'
+              className={`relative max-w-7xl max-h-[85vh] w-full ${activeTab === 'backdrops' ? 'aspect-video' : 'aspect-2/3'
                 }`}
               onClick={e => e.stopPropagation()}
             >
@@ -238,7 +248,7 @@ const MediaImages = ({ id, type, collectionId }: MediaImagesProps) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-xl"
+            className="fixed inset-0 z-100 flex items-center justify-center bg-black/95 backdrop-blur-xl"
           >
             <div className="container mx-auto px-4 md:px-8 h-full flex flex-col py-8">
               <div className="flex items-center justify-between mb-8">
@@ -263,7 +273,7 @@ const MediaImages = ({ id, type, collectionId }: MediaImagesProps) => {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.02 }}
-                      className={`relative rounded-xl overflow-hidden border border-white/5 group cursor-pointer ${activeTab === 'backdrops' ? 'aspect-video' : 'aspect-[2/3]'
+                      className={`relative rounded-xl overflow-hidden border border-white/5 group cursor-pointer ${activeTab === 'backdrops' ? 'aspect-video' : 'aspect-2/3'
                         }`}
                       onClick={() => {
                         setSelectedIndex(index);

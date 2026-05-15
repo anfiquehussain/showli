@@ -23,10 +23,10 @@ const EpisodeCard = ({ episode }: EpisodeCardProps) => {
   }, [episode.overview]);
 
   return (
-    <div className="group bg-white/[0.03] hover:bg-white/[0.06] border border-white/10 rounded-2xl overflow-hidden transition-all duration-300">
+    <div className="group bg-white/3 hover:bg-white/6 border border-white/10 rounded-2xl overflow-hidden transition-all duration-300">
       <div className="p-3 flex flex-col md:flex-row gap-4">
         {/* Still Image */}
-        <div className="relative flex-shrink-0 w-full md:w-40 aspect-video rounded-xl overflow-hidden bg-white/5">
+        <div className="relative shrink-0 w-full md:w-40 aspect-video rounded-xl overflow-hidden bg-white/5">
           {episode.still_path ? (
             <img
               src={getTmdbImageUrl(episode.still_path, 'w300')}
@@ -52,7 +52,7 @@ const EpisodeCard = ({ episode }: EpisodeCardProps) => {
             <h3 className="text-sm md:text-base font-bold text-white group-hover:text-brand-primary transition-colors truncate">
               {episode.name}
             </h3>
-            <div className="flex items-center gap-1.5 px-1.5 py-0.5 bg-brand-primary/10 rounded-md border border-brand-primary/20 flex-shrink-0">
+            <div className="flex items-center gap-1.5 px-1.5 py-0.5 bg-brand-primary/10 rounded-md border border-brand-primary/20 shrink-0">
               <Star className="w-2.5 h-2.5 text-brand-primary fill-brand-primary" />
               <span className="text-[10px] font-black text-brand-primary">
                 {episode.vote_average?.toFixed(1) || '0.0'}
@@ -125,7 +125,7 @@ const EpisodeCard = ({ episode }: EpisodeCardProps) => {
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="overflow-hidden bg-white/[0.02] border-t border-white/5"
+            className="overflow-hidden bg-white/2 border-t border-white/5"
           >
             <div className="p-5 space-y-5">
               {/* Cast/Guests */}

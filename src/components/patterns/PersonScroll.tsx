@@ -19,7 +19,7 @@ const PersonScroll = ({ title, icon, items, isLoading }: PersonScrollProps) => {
           {[...Array(6)].map((_, i) => (
             <div 
               key={i} 
-              className="flex-shrink-0 w-28 md:w-36 aspect-square rounded-full bg-card/50 animate-pulse"
+              className="shrink-0 w-28 md:w-36 aspect-square rounded-full bg-card/50 animate-pulse"
             />
           ))}
         </div>
@@ -38,7 +38,7 @@ const PersonScroll = ({ title, icon, items, isLoading }: PersonScrollProps) => {
       
       <ScrollContainer className="gap-6 pb-4">
         {items.map((person) => (
-          <div key={person.id} className="flex-shrink-0">
+          <div key={person.id} className="shrink-0">
             <PersonCard person={person} />
           </div>
         ))}

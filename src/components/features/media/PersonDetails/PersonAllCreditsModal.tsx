@@ -111,7 +111,7 @@ const PersonAllCreditsModal = ({ isOpen, onClose, credits, personName }: PersonA
                 setSearchQuery(e.target.value);
                 setVisibleCount(ITEMS_PER_PAGE);
               }}
-              className="w-full bg-white/5 border border-white/10 rounded-xl py-2.5 pl-11 pr-4 text-sm text-white placeholder:text-muted-foreground focus:outline-none focus:border-brand-primary/50 focus:bg-white/[0.08] transition-all"
+              className="w-full bg-white/5 border border-white/10 rounded-xl py-2.5 pl-11 pr-4 text-sm text-white placeholder:text-muted-foreground focus:outline-none focus:border-brand-primary/50 focus:bg-white/8 transition-all"
             />
             {searchQuery && (
               <button

@@ -255,6 +255,11 @@ export interface TmdbImage {
   width: number;
 }
 
+export interface TmdbTaggedImage extends TmdbImage {
+  image_type: string;
+  media: TmdbMedia;
+}
+
 export interface TmdbImagesResponse {
   id: number;
   backdrops: TmdbImage[];

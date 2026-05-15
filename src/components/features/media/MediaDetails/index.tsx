@@ -15,6 +15,7 @@ import MediaRecommendations from './MediaRecommendations';
 import MediaSimilar from './MediaSimilar';
 import TVSeasons from './TVSeasons';
 import FullCreditsModal from './FullCreditsModal';
+import Skeleton from '@/components/ui/Skeleton';
 
 interface MediaDetailsProps {
   id: number;
@@ -32,7 +33,7 @@ const MediaDetails = ({ id, type, onAddToCollection }: MediaDetailsProps) => {
 
   if (isLoading) {
     return (
-      <div className="w-full h-[60vh] bg-card/50 animate-pulse rounded-3xl" />
+      <Skeleton className="w-full h-[60vh] rounded-3xl" />
     );
   }
 
@@ -68,7 +69,7 @@ const MediaDetails = ({ id, type, onAddToCollection }: MediaDetailsProps) => {
       />
 
       {/* 2. Content Sections */}
-      <div className="container mx-auto px-4 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Left Column: Story & Info */}
         <div className="lg:col-span-8 space-y-8">
           {/* Overview */}

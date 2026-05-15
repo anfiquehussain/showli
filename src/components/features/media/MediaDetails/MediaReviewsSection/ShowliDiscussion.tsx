@@ -10,6 +10,7 @@ import CommentItem from './CommentItem';
 import CommentForm from './CommentForm';
 
 import { useToast } from '@/hooks/useToast';
+import Skeleton from '@/components/ui/Skeleton';
 
 interface ShowliDiscussionProps {
   mediaId: number;
@@ -165,10 +166,12 @@ const ShowliDiscussion = ({ mediaId, mediaType }: ShowliDiscussionProps) => {
   };
 
   if (isLoading) {
-    return <div className="space-y-4 animate-pulse">
-      <div className="h-40 bg-white/5 rounded-3xl" />
-      <div className="h-20 bg-white/5 rounded-3xl" />
-    </div>;
+    return (
+      <div className="space-y-4">
+        <Skeleton className="h-40 rounded-3xl" />
+        <Skeleton className="h-20 rounded-3xl" />
+      </div>
+    );
   }
 
   const reviewCount = comments.filter(c => c.rating !== null).length;
@@ -227,7 +230,7 @@ const ShowliDiscussion = ({ mediaId, mediaType }: ShowliDiscussionProps) => {
       {/* Review Modal */}
       <AnimatePresence>
         {isReviewModalOpen && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6">
+          <div className="fixed inset-0 z-100 flex items-center justify-center p-4 md:p-6">
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -294,7 +297,7 @@ const ShowliDiscussion = ({ mediaId, mediaType }: ShowliDiscussionProps) => {
             )}
           </>
         ) : (
-          <div className="py-20 flex flex-col items-center justify-center gap-4 rounded-3xl bg-white/[0.01] border border-dashed border-white/5">
+          <div className="py-20 flex flex-col items-center justify-center gap-4 rounded-3xl bg-white/1 border border-dashed border-white/5">
             <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center">
               <MessageCircle className="w-6 h-6 text-white/10" />
             </div>

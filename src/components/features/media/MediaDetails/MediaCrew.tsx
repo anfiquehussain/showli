@@ -4,6 +4,8 @@ import { useGetCreditsQuery, useGetTVCreditsQuery } from '@/api/media/mediaApi';
 import { getTmdbImageUrl } from '@/utils/image';
 import type { TmdbCrewMember } from '@/types/tmdb.types';
 import ScrollContainer from '@/components/patterns/ScrollContainer';
+import Skeleton from '../../../ui/Skeleton';
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 
 interface MediaCrewProps {
   id: number;
@@ -12,13 +14,19 @@ interface MediaCrewProps {
 }
 
 const MediaCrew = ({ id, type, onShowFullCredits }: MediaCrewProps) => {
-  const movieCredits = useGetCreditsQuery(id, { skip: type !== 'movie' });
-  const tvCredits = useGetTVCreditsQuery(id, { skip: type !== 'tv' });
+  const [containerRef, isVisible] = useIntersectionObserver({ rootMargin: '200px' });
+  
+  const movieCredits = useGetCreditsQuery(id, { skip: type !== 'movie' || !isVisible });
+  const tvCredits = useGetTVCreditsQuery(id, { skip: type !== 'tv' || !isVisible });
 
   const credits = type === 'movie' ? movieCredits.data : tvCredits.data;
-  const isLoading = movieCredits.isLoading || tvCredits.isLoading;
+  const isLoading = (movieCredits.isLoading || tvCredits.isLoading) && isVisible;
 
-  if (isLoading) return <div className="h-48 glass-card rounded-3xl animate-pulse" />;
+  if (!isVisible || isLoading) return (
+    <section ref={containerRef} className="space-y-4">
+      <Skeleton className="h-48 rounded-3xl" />
+    </section>
+  );
   if (!credits?.crew.length) return null;
 
   // Filter for prominent crew members
@@ -59,7 +67,7 @@ const MediaCrew = ({ id, type, onShowFullCredits }: MediaCrewProps) => {
           <Link 
             key={`${person.id}-${idx}`} 
             to={`/person/${person.id}`}
-            className="flex-shrink-0 w-36 md:w-48 group bg-white/5 border border-white/5 rounded-2xl p-2.5 flex items-center gap-3 hover:border-brand-primary/30 hover:bg-white/[0.07] transition-all block"
+            className="shrink-0 w-36 md:w-48 group bg-white/5 border border-white/5 rounded-2xl p-2.5 flex items-center gap-3 hover:border-brand-primary/30 hover:bg-white/7 transition-all"
           >
             <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 overflow-hidden shrink-0 group-hover:border-brand-primary/50 transition-colors">
               {person.profile_path ? (
@@ -92,7 +100,7 @@ const MediaCrew = ({ id, type, onShowFullCredits }: MediaCrewProps) => {
         
         <button 
           onClick={onShowFullCredits}
-          className="flex-shrink-0 w-24 md:w-32 flex flex-col items-center justify-center rounded-2xl bg-white/5 border border-dashed border-white/10 hover:border-brand-primary/50 hover:bg-brand-primary/5 transition-all group p-2"
+          className="shrink-0 w-24 md:w-32 flex flex-col items-center justify-center rounded-2xl bg-white/5 border border-dashed border-white/10 hover:border-brand-primary/50 hover:bg-brand-primary/5 transition-all group p-2"
         >
           <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center mb-1 group-hover:scale-110 transition-transform">
             <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-brand-primary" />

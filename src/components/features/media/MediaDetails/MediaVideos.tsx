@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Play, X, ChevronRight } from 'lucide-react';
 import { useGetMediaVideosQuery } from '@/api/media/mediaApi';
 import ScrollContainer from '@/components/patterns/ScrollContainer';
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import Skeleton from '../../../ui/Skeleton';
 
 const ITEMS_PER_PAGE = 24;
 
@@ -12,7 +14,8 @@ interface MediaVideosProps {
 }
 
 const MediaVideos = ({ id, type }: MediaVideosProps) => {
-  const { data: videoData, isLoading } = useGetMediaVideosQuery({ id, type });
+  const [containerRef, isVisible] = useIntersectionObserver({ rootMargin: '200px' });
+  const { data: videoData, isLoading } = useGetMediaVideosQuery({ id, type }, { skip: !isVisible });
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
   const [isViewAllOpen, setIsViewAllOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
@@ -49,7 +52,13 @@ const MediaVideos = ({ id, type }: MediaVideosProps) => {
     if (node) observer.current.observe(node);
   }, [hasMore, handleLoadMore]);
 
-  if (isLoading || !videoData || allVideos.length === 0) return null;
+  if (!isVisible || isLoading) return (
+    <section ref={containerRef} className="space-y-4">
+       <Skeleton className="h-48 rounded-3xl" />
+    </section>
+  );
+
+  if (!videoData || allVideos.length === 0) return null;
 
   return (
     <section className="space-y-4">
@@ -99,7 +108,7 @@ const MediaVideos = ({ id, type }: MediaVideosProps) => {
             </div>
 
             {/* Title & Info */}
-            <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/90 to-transparent">
+            <div className="absolute inset-x-0 bottom-0 p-3 bg-linear-to-t from-black/90 to-transparent">
               <p className="text-[11px] font-bold text-white line-clamp-1 group-hover:text-brand-secondary transition-colors">
                 {video.name}
               </p>
@@ -118,7 +127,7 @@ const MediaVideos = ({ id, type }: MediaVideosProps) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm p-4 md:p-8"
+            className="fixed inset-0 z-100 flex items-center justify-center bg-black/95 backdrop-blur-sm p-4 md:p-8"
             onClick={() => setActiveVideo(null)}
           >
             <motion.div
@@ -153,7 +162,7 @@ const MediaVideos = ({ id, type }: MediaVideosProps) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-xl"
+            className="fixed inset-0 z-100 flex items-center justify-center bg-black/95 backdrop-blur-xl"
           >
             <div className="container mx-auto px-4 md:px-8 h-full flex flex-col py-8">
               <div className="flex items-center justify-between mb-8">
@@ -198,7 +207,7 @@ const MediaVideos = ({ id, type }: MediaVideosProps) => {
                           <Play className="w-5 h-5 fill-current ml-0.5" />
                         </div>
                       </div>
-                      <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/90 to-transparent">
+                      <div className="absolute inset-x-0 bottom-0 p-3 bg-linear-to-t from-black/90 to-transparent">
                         <p className="text-[10px] font-bold text-white line-clamp-1">{video.name}</p>
                         <p className="text-[8px] font-black uppercase tracking-widest text-white/50 mt-0.5">{video.type}</p>
                       </div>

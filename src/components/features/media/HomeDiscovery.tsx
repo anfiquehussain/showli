@@ -97,7 +97,7 @@ const HomeDiscovery = () => {
               <div className="h-6 w-32 bg-card/50 rounded" />
               <div className="flex gap-4 overflow-hidden">
                 {[...Array(6)].map((_, j) => (
-                  <div key={j} className="flex-shrink-0 w-28 md:w-40 aspect-[2/3] bg-card/50 rounded-xl" />
+                  <div key={j} className="shrink-0 w-28 md:w-40 aspect-2/3 bg-card/50 rounded-xl" />
                 ))}
               </div>
             </div>

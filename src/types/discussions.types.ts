@@ -12,6 +12,8 @@ export interface Comment {
   createdAt: number;
   updatedAt: number;
   isDeleted?: boolean;
+  mediaTitle?: string;
+  posterPath?: string | null;
 }
 
 export interface CommentWithReplies extends Comment {
@@ -27,4 +29,6 @@ export interface AddCommentData {
   content: string;
   rating: number | null;
   parentId: string | null;
+  mediaTitle?: string;
+  posterPath?: string | null;
 }

@@ -54,6 +54,34 @@ export const discussionsService = {
   },
 
   /**
+   * Subscribe to real-time updates for comments/reviews written by a specific user
+   */
+  subscribeToUserReviews: (
+    userId: string,
+    callback: (comments: Comment[]) => void
+  ) => {
+    const commentsRef = collection(db, COMMENTS_COLLECTION);
+    const q = query(
+      commentsRef,
+      where('userId', '==', userId)
+    );
+
+    return onSnapshot(
+      q,
+      (snapshot) => {
+        const comments = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as Comment[];
+        callback(comments);
+      },
+      (error) => {
+        console.error('Firestore snapshot error for user reviews:', error);
+      }
+    );
+  },
+
+  /**
    * Add a new comment or review
    */
   addComment: async (data: AddCommentData): Promise<string> => {

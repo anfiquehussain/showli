@@ -116,7 +116,12 @@ const MediaDetails = ({ id, type, onAddToCollection }: MediaDetailsProps) => {
           <MediaVideos id={id} type={type} />
 
           {/* User Reviews (Showli & TMDb) */}
-          <MediaReviewsSection id={id} type={type} />
+          <MediaReviewsSection 
+            id={id} 
+            type={type} 
+            mediaTitle={title}
+            posterPath={media.poster_path}
+          />
         </div>
 
         {/* Right Column: Quick Facts & Stats */}

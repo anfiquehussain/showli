@@ -7,17 +7,19 @@ import TmdbReviews from './TmdbReviews';
 interface MediaReviewsSectionProps {
   id: number;
   type: 'movie' | 'tv';
+  mediaTitle: string;
+  posterPath: string | null;
 }
 
 type TabType = 'showli' | 'tmdb';
 
-const MediaReviewsSection = ({ id, type }: MediaReviewsSectionProps) => {
+const MediaReviewsSection = ({ id, type, mediaTitle, posterPath }: MediaReviewsSectionProps) => {
   const [activeTab, setActiveTab] = useState<TabType>('showli');
 
   return (
     <section className="space-y-10 pt-16 border-t border-white/5">
       {/* Header & Tabs */}
-      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 text-center lg:text-left items-center lg:items-start">
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 text-center lg:text-left items-center">
         <div className="space-y-2 flex flex-col items-center lg:items-start">
           <div className="flex items-center gap-3 text-brand-primary">
             <Users className="w-5 h-5" />
@@ -32,7 +34,7 @@ const MediaReviewsSection = ({ id, type }: MediaReviewsSectionProps) => {
         </div>
 
         {/* Premium Tab Switcher */}
-        <div className="flex p-1 bg-white/[0.02] border border-white/5 rounded-xl md:rounded-2xl w-fit shadow-2xl mx-auto lg:mx-0">
+        <div className="flex p-1 bg-white/5 border border-white/5 rounded-xl md:rounded-2xl w-fit shadow-2xl mx-auto lg:mx-0">
           <button
             onClick={() => setActiveTab('showli')}
             className={`
@@ -81,7 +83,12 @@ const MediaReviewsSection = ({ id, type }: MediaReviewsSectionProps) => {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
             >
-              <ShowliDiscussion mediaId={id} mediaType={type} />
+              <ShowliDiscussion 
+                mediaId={id} 
+                mediaType={type} 
+                mediaTitle={mediaTitle}
+                posterPath={posterPath}
+              />
             </motion.div>
           ) : (
             <motion.div

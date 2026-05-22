@@ -15,9 +15,11 @@ import Skeleton from '@/components/ui/Skeleton';
 interface ShowliDiscussionProps {
   mediaId: number;
   mediaType: 'movie' | 'tv';
+  mediaTitle: string;
+  posterPath: string | null;
 }
 
-const ShowliDiscussion = ({ mediaId, mediaType }: ShowliDiscussionProps) => {
+const ShowliDiscussion = ({ mediaId, mediaType, mediaTitle, posterPath }: ShowliDiscussionProps) => {
   const { user } = useAuth();
   const { success, error: toastError } = useToast();
   const [comments, setComments] = useState<Comment[]>([]);
@@ -114,6 +116,8 @@ const ShowliDiscussion = ({ mediaId, mediaType }: ShowliDiscussionProps) => {
         content,
         rating,
         parentId: null,
+        mediaTitle,
+        posterPath,
       });
       success(rating !== null ? 'Review shared!' : 'Comment posted!');
       setIsReviewModalOpen(false);

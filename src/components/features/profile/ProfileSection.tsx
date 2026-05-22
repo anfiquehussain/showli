@@ -12,22 +12,22 @@ interface ProfileSectionProps {
 
 const ProfileSection = ({ title, icon, children, onSeeAll, action, className }: ProfileSectionProps) => {
   return (
-    <section className={`space-y-4 ${className}`}>
+    <section className={`space-y-3.5 ${className}`}>
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-xl bg-brand-primary/10 text-brand-primary">
+        <div className="flex items-center gap-2.5">
+          <div className="p-1.5 rounded-lg bg-brand-primary/10 text-brand-primary shrink-0">
             {icon}
           </div>
-          <h2 className="text-xl font-bold tracking-tight text-white">{title}</h2>
+          <h2 className="text-base sm:text-lg font-bold tracking-tight text-white">{title}</h2>
         </div>
         
         {onSeeAll && !action && (
           <button 
             onClick={onSeeAll}
-            className="flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-brand-secondary transition-standard group"
+            className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-brand-secondary transition-standard group"
           >
             See All
-            <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-standard" />
+            <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-standard" />
           </button>
         )}
         {action && (

@@ -70,10 +70,10 @@ src/
 │       │       └── PersonAllCreditsModal.tsx
 │       ├── profile/    # Profile-related components
 │       │   ├── ProfileHero.tsx
-│       │   ├── ProfileSidebar.tsx
 │       │   ├── ProfileSection.tsx
 │       │   ├── ProfileFavorites.tsx
 │       │   ├── AddFavoriteModal.tsx
+│       │   ├── EditProfileModal.tsx
 │       │   └── profile.types.ts
 │       └── collections/# Collection-related components
 │           ├── CollectionDetails/ # Decomposed

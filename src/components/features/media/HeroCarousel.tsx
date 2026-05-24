@@ -21,7 +21,7 @@ const HeroCarousel = () => {
 
   if (isLoading) {
     return (
-      <div className="relative w-full h-[25vh] md:h-[40vh] lg:h-[45vh] bg-card/50 animate-pulse rounded-3xl overflow-hidden mb-8">
+      <div className="relative w-full h-[50vh] sm:h-[55vh] md:h-[65vh] lg:h-[75vh] bg-card/50 animate-pulse rounded-3xl overflow-hidden mb-8">
         <div className="absolute inset-0 bg-linear-to-t from-background via-transparent to-transparent" />
       </div>
     );
@@ -39,7 +39,7 @@ const HeroCarousel = () => {
 
 
   return (
-    <section className="relative w-full h-[35vh] md:h-[50vh] lg:h-[55vh] overflow-hidden rounded-2xl md:rounded-3xl mb-6 md:mb-10 group">
+    <section className="relative w-full h-[50vh] sm:h-[55vh] md:h-[65vh] lg:h-[75vh] overflow-hidden rounded-2xl md:rounded-3xl mb-6 md:mb-10 group">
       {/* Background Backdrop */}
       <AnimatePresence mode="wait">
         <motion.div

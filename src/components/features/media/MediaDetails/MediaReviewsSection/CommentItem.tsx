@@ -1,11 +1,11 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  User as UserIcon, 
-  Heart, 
-  Trash2, 
-  Reply, 
-  ChevronRight, 
+import {
+  User as UserIcon,
+  Heart,
+  Trash2,
+  Reply,
+  ChevronRight,
   ChevronDown
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
@@ -35,7 +35,7 @@ const CommentItem = ({
   // Automatically collapse deep threads (Level 2+) to keep the UI clean
   const [isCollapsed, setIsCollapsed] = useState(level >= 2);
   const [isReplying, setIsReplying] = useState(false);
-  
+
   const isLiked = user ? comment.likes.includes(user.uid) : false;
   const isAuthor = user?.uid === comment.userId;
   const isDeleted = comment.isDeleted;
@@ -68,7 +68,7 @@ const CommentItem = ({
     <div className={`relative ${getIndentationClass()} group/item`}>
       {/* Visual Thread Rail (Solid line connecting to parent) */}
       {!isTopLevel && (
-        <div 
+        <div
           className="absolute -left-2.5 md:-left-5 top-0 bottom-0 w-[2px] bg-white/[0.08] group-hover/item:bg-brand-primary/40 transition-colors"
           onClick={() => setIsCollapsed(!isCollapsed)}
         >
@@ -86,7 +86,7 @@ const CommentItem = ({
           ${isDeleted ? 'opacity-40 grayscale-[0.5]' : ''}
           hover:border-white/20
         `}>
-          
+
           {/* Header */}
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
@@ -109,7 +109,7 @@ const CommentItem = ({
                   <span className={`font-bold text-white ${isTopLevel ? 'text-base' : 'text-sm'} ${isDeleted ? 'text-white/40 italic' : ''}`}>
                     {isDeleted ? '[deleted]' : comment.userName}
                   </span>
-                  
+
                   {isTopLevel && comment.rating !== null && !isCollapsed && (
                     <Rating value={comment.rating} size="sm" />
                   )}
@@ -132,7 +132,7 @@ const CommentItem = ({
             {/* Collapse / Info */}
             <div className="flex items-center gap-2">
               {isCollapsed && (
-                <button 
+                <button
                   onClick={() => setIsCollapsed(false)}
                   className="flex items-center gap-2 px-3 py-1 bg-brand-primary/10 hover:bg-brand-primary/20 border border-brand-primary/20 rounded-full transition-all group/expand"
                 >
@@ -143,7 +143,7 @@ const CommentItem = ({
                 </button>
               )}
               {!isCollapsed && !isTopLevel && (
-                <button 
+                <button
                   onClick={() => setIsCollapsed(true)}
                   className="p-1.5 rounded-lg hover:bg-white/5 text-white/20 hover:text-white transition-all"
                   title="Collapse thread"
@@ -173,12 +173,12 @@ const CommentItem = ({
 
                 {!isDeleted && (
                   <div className="mt-4 md:mt-6 flex items-center gap-4">
-                    <button 
+                    <button
                       onClick={() => onLike(comment.id, isLiked)}
                       className={`
                         flex items-center gap-1.5 md:gap-2 text-[9px] md:text-[10px] font-black uppercase tracking-tighter md:tracking-widest transition-all px-2 md:px-3 py-1 md:py-1.5 rounded-full border
-                        ${isLiked 
-                          ? 'bg-brand-primary/20 text-brand-primary border-brand-primary/30' 
+                        ${isLiked
+                          ? 'bg-brand-primary/20 text-brand-primary border-brand-primary/30'
                           : 'text-white/20 hover:text-white hover:bg-white/5 border-transparent'
                         }
                       `}
@@ -186,13 +186,13 @@ const CommentItem = ({
                       <Heart className={`w-2.5 md:w-3 h-2.5 md:h-3 ${isLiked ? 'fill-current' : ''}`} />
                       <span>{comment.likes.length || 'Like'}</span>
                     </button>
-                    
-                    <button 
+
+                    <button
                       onClick={() => setIsReplying(!isReplying)}
                       className={`
                         flex items-center gap-1.5 md:gap-2 text-[9px] md:text-[10px] font-black uppercase tracking-tighter md:tracking-widest transition-all px-2 md:px-3 py-1 md:py-1.5 rounded-full border
-                        ${isReplying 
-                          ? 'bg-white/10 text-white border-white/20' 
+                        ${isReplying
+                          ? 'bg-white/10 text-white border-white/20'
                           : 'text-white/20 hover:text-white hover:bg-white/5 border-transparent'
                         }
                       `}
@@ -202,7 +202,7 @@ const CommentItem = ({
                     </button>
 
                     {isAuthor && onDelete && (
-                      <button 
+                      <button
                         onClick={() => onDelete(comment.id)}
                         className="ml-auto p-2 rounded-lg hover:bg-error/10 text-white/10 hover:text-error transition-all"
                       >
@@ -221,7 +221,7 @@ const CommentItem = ({
           <div className="space-y-4">
             {isReplying && (
               <div className="ml-5 md:ml-10 animate-in slide-in-from-top-2 duration-300">
-                <CommentForm 
+                <CommentForm
                   onSubmit={handleReply}
                   placeholder={`Reply to ${comment.userName}...`}
                   autoFocus

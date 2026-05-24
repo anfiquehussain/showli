@@ -88,7 +88,7 @@ const ShowliDiscussion = ({ mediaId, mediaType, mediaTitle, posterPath }: Showli
 
   const observer = useRef<IntersectionObserver | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  
+
   const observerTarget = useCallback((node: HTMLDivElement | null) => {
     if (observer.current) observer.current.disconnect();
 
@@ -156,7 +156,7 @@ const ShowliDiscussion = ({ mediaId, mediaType, mediaTitle, posterPath }: Showli
 
   const confirmDelete = async () => {
     if (!commentToDelete) return;
-    
+
     setIsDeleting(true);
     try {
       await discussionsService.deleteComment(commentToDelete);
@@ -179,8 +179,8 @@ const ShowliDiscussion = ({ mediaId, mediaType, mediaTitle, posterPath }: Showli
   }
 
   const reviewCount = comments.filter(c => c.rating !== null).length;
-  const avgRating = reviewCount > 0 
-    ? comments.reduce((acc, curr) => acc + (curr.rating || 0), 0) / reviewCount 
+  const avgRating = reviewCount > 0
+    ? comments.reduce((acc, curr) => acc + (curr.rating || 0), 0) / reviewCount
     : 0;
 
   return (
@@ -208,7 +208,7 @@ const ShowliDiscussion = ({ mediaId, mediaType, mediaTitle, posterPath }: Showli
         </div>
 
         <div className="flex items-center gap-3 w-full sm:w-auto">
-          <select 
+          <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
             className="flex-1 sm:flex-initial bg-card border border-white/10 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest text-white/60 hover:text-white hover:border-white/20 transition-all outline-none cursor-pointer appearance-none"
@@ -218,9 +218,9 @@ const ShowliDiscussion = ({ mediaId, mediaType, mediaTitle, posterPath }: Showli
             <option value="rating" className="bg-card text-white">Sort by: Highest Rating</option>
           </select>
 
-          <Button 
-            variant="primary" 
-            size="sm" 
+          <Button
+            variant="primary"
+            size="sm"
             onClick={() => setIsReviewModalOpen(true)}
             className="gap-1.5 md:gap-2 shadow-lg shadow-brand-primary/20 text-[10px] md:text-xs px-3 md:px-5"
           >
@@ -235,14 +235,14 @@ const ShowliDiscussion = ({ mediaId, mediaType, mediaTitle, posterPath }: Showli
       <AnimatePresence>
         {isReviewModalOpen && (
           <div className="fixed inset-0 z-100 flex items-center justify-center p-4 md:p-6">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsReviewModalOpen(false)}
               className="absolute inset-0 bg-black/90 backdrop-blur-md"
             />
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -254,7 +254,7 @@ const ShowliDiscussion = ({ mediaId, mediaType, mediaTitle, posterPath }: Showli
                   <h3 className="text-lg md:text-xl font-heading font-black text-white tracking-tight">Share review</h3>
                   <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold opacity-60">How was it?</p>
                 </div>
-                <button 
+                <button
                   onClick={() => setIsReviewModalOpen(false)}
                   className="p-2 hover:bg-white/5 rounded-full text-white/20 hover:text-white transition-colors"
                 >
@@ -264,9 +264,9 @@ const ShowliDiscussion = ({ mediaId, mediaType, mediaTitle, posterPath }: Showli
 
               {/* Scrollable Content */}
               <div className="p-4 md:p-8 overflow-y-auto custom-scrollbar">
-                <CommentForm 
-                  onSubmit={handleAddComment} 
-                  showRating 
+                <CommentForm
+                  onSubmit={handleAddComment}
+                  showRating
                   placeholder="Share your thoughts..."
                   autoFocus
                   isNaked
@@ -278,7 +278,7 @@ const ShowliDiscussion = ({ mediaId, mediaType, mediaTitle, posterPath }: Showli
       </AnimatePresence>
 
       {/* Threaded Comments List - Contained in a scrollbox for better UX */}
-      <div 
+      <div
         ref={scrollContainerRef}
         className="space-y-6 max-h-[800px] overflow-y-auto pr-2 custom-scrollbar"
       >

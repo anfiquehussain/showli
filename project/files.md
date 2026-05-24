@@ -75,6 +75,7 @@ src/
 │       │   ├── AddFavoriteModal.tsx
 │       │   ├── EditProfileModal.tsx
 │       │   ├── AllReviewsModal.tsx
+│       │   ├── ProfileReviewCard.tsx
 │       │   └── profile.types.ts
 │       └── collections/# Collection-related components
 │           ├── CollectionDetails/ # Decomposed

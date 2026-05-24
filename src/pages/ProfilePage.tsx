@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Layers, MessageSquare, ChevronRight, Star, Film, Tv, User, Mail, MapPin, Calendar, Settings } from 'lucide-react';
+import { Layers, MessageSquare, ChevronRight, Film, User, Mail, MapPin, Calendar, Settings } from 'lucide-react';
 import { format } from 'date-fns';
 
 import { useAuth } from '@/hooks/useAuth';
@@ -10,7 +10,6 @@ import { fetchFavorites, removeUserFavorite } from '@/store/slices/profileSlice'
 import { collectionsService } from '@/api/collections/collectionsService';
 import { discussionsService } from '@/api/discussions/discussionsService';
 import { profileService } from '@/api/profile/profileService';
-import { getTmdbImageUrl } from '@/utils/image';
 import { useToast } from '@/hooks/useToast';
 
 // Components
@@ -20,6 +19,7 @@ import AddFavoriteModal from '@/components/features/profile/AddFavoriteModal';
 import EditProfileModal from '@/components/features/profile/EditProfileModal';
 import ProfileSection from '@/components/features/profile/ProfileSection';
 import AllReviewsModal from '@/components/features/profile/AllReviewsModal';
+import ProfileReviewCard from '@/components/features/profile/ProfileReviewCard';
 import Button from '@/components/ui/Button';
 import Skeleton from '@/components/ui/Skeleton';
 
@@ -382,66 +382,13 @@ const ProfilePage = () => {
               ) : (
                 <div className="space-y-3">
                   <div className="space-y-3">
-                    {reviews.slice(0, 3).map((review) => {
-                      const mediaTitle = review.mediaTitle || `${review.mediaType === 'movie' ? 'Movie' : 'TV Show'} #${review.mediaId}`;
-                      return (
-                        <div
-                          key={review.id}
-                          className="group flex gap-3.5 p-3 rounded-xl bg-white/3 border border-white/5 hover:border-brand-accent/30 transition-standard"
-                        >
-                          {/* Poster image / Fallback */}
-                          <div
-                            onClick={() => navigate(`/${review.mediaType}/${review.mediaId}`)}
-                            className="w-12 h-18 sm:w-14 sm:h-20 rounded-lg overflow-hidden bg-card border border-white/10 shrink-0 cursor-pointer shadow-md group-hover:scale-[1.02] transition-standard"
-                          >
-                            {review.posterPath ? (
-                              <img
-                                src={getTmdbImageUrl(review.posterPath, 'w92')}
-                                alt={mediaTitle}
-                                className="w-full h-full object-cover"
-                              />
-                            ) : (
-                              <div className="w-full h-full flex flex-col items-center justify-center bg-white/5 text-muted-foreground/40 gap-0.5">
-                                {review.mediaType === 'movie' ? <Film className="w-4 h-4" /> : <Tv className="w-4 h-4" />}
-                                <span className="text-[6px] font-bold uppercase">No Poster</span>
-                              </div>
-                            )}
-                          </div>
-
-                          {/* Content details */}
-                          <div className="flex-1 flex flex-col justify-between min-w-0">
-                            <div className="space-y-1">
-                              <div className="flex items-start justify-between gap-1.5">
-                                <h4
-                                  onClick={() => navigate(`/${review.mediaType}/${review.mediaId}`)}
-                                  className="font-bold text-xs sm:text-sm text-white hover:text-brand-accent transition-standard truncate cursor-pointer"
-                                >
-                                  {mediaTitle}
-                                </h4>
-                                
-                                {/* Star Rating */}
-                                <div className="flex items-center gap-0.5 px-1.5 py-0.5 rounded-md bg-warning-bg text-warning shrink-0">
-                                  <Star className="w-2.5 h-2.5 fill-current" />
-                                  <span className="text-[10px] font-black">{review.rating}</span>
-                                </div>
-                              </div>
-                              
-                              <p className="text-[10px] sm:text-xs text-muted-foreground line-clamp-3 italic wrap-break-word font-medium leading-normal">
-                                "{review.content}"
-                              </p>
-                            </div>
-                            
-                            <p className="text-[9px] text-white/30 font-bold uppercase tracking-wider mt-1.5">
-                              {new Date(review.createdAt).toLocaleDateString(undefined, {
-                                year: 'numeric',
-                                month: 'short',
-                                day: 'numeric',
-                              })}
-                            </p>
-                          </div>
-                        </div>
-                      );
-                    })}
+                    {reviews.slice(0, 3).map((review) => (
+                      <ProfileReviewCard
+                        key={review.id}
+                        review={review}
+                        size="sm"
+                      />
+                    ))}
                   </div>
 
                   {reviews.length > 3 && (

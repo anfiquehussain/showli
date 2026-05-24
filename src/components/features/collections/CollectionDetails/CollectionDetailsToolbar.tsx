@@ -1,4 +1,4 @@
-import { LayoutGrid, Columns2, Dices } from 'lucide-react';
+import { LayoutGrid, Columns2, Dices, ArrowUpDown } from 'lucide-react';
 import type { MediaStatus } from '@/types/collections.types';
 import SearchBar from '@/components/patterns/SearchBar';
 import Button from '@/components/ui/Button';
@@ -9,6 +9,8 @@ interface CollectionDetailsToolbarProps {
   onSearchChange: (query: string) => void;
   filterStatus: MediaStatus | 'all';
   onFilterChange: (status: MediaStatus | 'all') => void;
+  sortBy: 'recent' | 'oldest' | 'random';
+  onSortChange: (sort: 'recent' | 'oldest' | 'random') => void;
   viewMode: 'grid' | 'list';
   onViewModeChange: (mode: 'grid' | 'list') => void;
   onRandomPick: () => void;
@@ -20,6 +22,8 @@ const CollectionDetailsToolbar = ({
   onSearchChange,
   filterStatus,
   onFilterChange,
+  sortBy,
+  onSortChange,
   viewMode,
   onViewModeChange,
   onRandomPick,
@@ -41,8 +45,22 @@ const CollectionDetailsToolbar = ({
           value={searchQuery}
           onChange={onSearchChange}
           placeholder="Search in collection..."
-          containerClassName="w-full sm:max-w-[280px]"
+          containerClassName="w-full sm:max-w-[240px]"
         />
+
+        <div className="relative flex items-center shrink-0">
+          <ArrowUpDown className="absolute left-3 w-3.5 h-3.5 text-text-secondary pointer-events-none" />
+          <select
+            value={sortBy}
+            onChange={(e) => onSortChange(e.target.value as 'recent' | 'oldest' | 'random')}
+            className="pl-8 pr-7 py-1.5 rounded-xl text-xs font-semibold bg-white/5 border border-white/10 text-white focus:outline-none focus:border-brand-primary appearance-none cursor-pointer hover:bg-white/10 transition-colors h-9 shrink-0"
+          >
+            <option value="recent" className="bg-[#121218] text-white">Recently Added</option>
+            <option value="oldest" className="bg-[#121218] text-white">Oldest Added</option>
+            <option value="random" className="bg-[#121218] text-white">Random</option>
+          </select>
+        </div>
+
         <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 no-scrollbar">
           {statusFilters.map((filter) => (
             <button

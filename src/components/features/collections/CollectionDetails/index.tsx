@@ -34,17 +34,33 @@ export const CollectionDetails = ({
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [filterStatus, setFilterStatus] = useState<MediaStatus | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [sortBy, setSortBy] = useState<'recent' | 'oldest' | 'random'>('recent');
+  const [shuffleKey, setShuffleKey] = useState(0);
   const [randomMedia, setRandomMedia] = useState<CollectionMedia | null>(null);
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
 
   const filteredMedia = useMemo<CollectionMedia[]>(() => {
-    return mediaItems
+    const filtered = mediaItems
       .filter(m => {
         const matchesStatus = filterStatus === 'all' || m.status === filterStatus;
         const matchesSearch = m.title?.toLowerCase().includes(searchQuery.toLowerCase());
         return matchesStatus && matchesSearch;
       });
-  }, [mediaItems, filterStatus, searchQuery]);
+
+    if (sortBy === 'random') {
+      const hash = (id: number) => {
+        const x = Math.sin(id + shuffleKey) * 10000;
+        return x - Math.floor(x);
+      };
+      return [...filtered].sort((a, b) => hash(a.tmdb_id) - hash(b.tmdb_id));
+    }
+
+    return [...filtered].sort((a, b) => {
+      const timeA = a.added_at || 0;
+      const timeB = b.added_at || 0;
+      return sortBy === 'recent' ? timeB - timeA : timeA - timeB;
+    });
+  }, [mediaItems, filterStatus, searchQuery, sortBy, shuffleKey]);
 
   const handleRandomPick = () => {
     if (filteredMedia.length === 0) return;
@@ -96,6 +112,14 @@ export const CollectionDetails = ({
         filterStatus={filterStatus}
         onFilterChange={(status) => {
           setFilterStatus(status);
+          setVisibleCount(ITEMS_PER_PAGE);
+        }}
+        sortBy={sortBy}
+        onSortChange={(sort) => {
+          if (sort === 'random') {
+            setShuffleKey(prev => prev + 1);
+          }
+          setSortBy(sort);
           setVisibleCount(ITEMS_PER_PAGE);
         }}
         viewMode={viewMode}

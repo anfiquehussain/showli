@@ -7,6 +7,7 @@ import CollectionDetailsHeader from './CollectionDetailsHeader';
 import CollectionDetailsToolbar from './CollectionDetailsToolbar';
 import CollectionMediaCard from './CollectionMediaCard';
 import RandomPickModal from './RandomPickModal';
+import ExportModal from '@/components/features/collections/ExportModal';
 
 interface CollectionDetailsProps {
   collection: Collection;
@@ -16,7 +17,6 @@ interface CollectionDetailsProps {
   onDelete: () => void;
   onAddMedia?: () => void;
   onRemoveMedia: (tmdbId: number) => void;
-  onExport?: () => void;
 }
 
 const ITEMS_PER_PAGE = 24;
@@ -28,14 +28,14 @@ export const CollectionDetails = ({
   onEdit,
   onDelete,
   onAddMedia,
-  onRemoveMedia,
-  onExport
+  onRemoveMedia
 }: CollectionDetailsProps) => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [filterStatus, setFilterStatus] = useState<MediaStatus | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<'recent' | 'oldest' | 'random'>('recent');
   const [shuffleKey, setShuffleKey] = useState(0);
+  const [isExportOpen, setIsExportOpen] = useState(false);
   const [randomMedia, setRandomMedia] = useState<CollectionMedia | null>(null);
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
 
@@ -100,7 +100,7 @@ export const CollectionDetails = ({
         onEdit={onEdit}
         onDelete={onDelete}
         onAddMedia={onAddMedia}
-        onExport={onExport}
+        onExport={() => setIsExportOpen(true)}
       />
 
       <CollectionDetailsToolbar 
@@ -193,6 +193,13 @@ export const CollectionDetails = ({
         media={randomMedia}
         onClose={() => setRandomMedia(null)}
         onPickAgain={handleRandomPick}
+      />
+
+      <ExportModal
+        isOpen={isExportOpen}
+        onClose={() => setIsExportOpen(false)}
+        collection={collection}
+        mediaItems={filteredMedia}
       />
     </div>
   );

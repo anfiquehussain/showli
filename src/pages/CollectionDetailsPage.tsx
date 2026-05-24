@@ -1,10 +1,8 @@
-import { useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 import CollectionDetails from '@/components/features/collections/CollectionDetails/index';
 import CollectionModal from '@/components/features/collections/CollectionModal';
 import AddMediaModal from '@/components/features/collections/AddMediaModal';
-import ExportModal from '@/components/features/collections/ExportModal';
 import ConfirmationModal from '@/components/patterns/ConfirmationModal';
 import { useCollectionDetails } from '@/components/features/collections/hooks/useCollectionDetails';
 
@@ -29,8 +27,6 @@ export const CollectionDetailsPage = () => {
     executeRemove,
     navigate
   } = useCollectionDetails();
-
-  const [isExportOpen, setIsExportOpen] = useState(false);
 
   if (isLoading && !collection) {
     return (
@@ -82,14 +78,6 @@ export const CollectionDetailsPage = () => {
         onDelete={() => setIsDeleteConfirmOpen(true)}
         onAddMedia={() => setIsAddMediaOpen(true)}
         onRemoveMedia={handleRemoveMedia}
-        onExport={() => setIsExportOpen(true)}
-      />
-
-      <ExportModal
-        isOpen={isExportOpen}
-        onClose={() => setIsExportOpen(false)}
-        collection={collection}
-        mediaItems={displayMedia}
       />
 
       <CollectionModal

@@ -55,7 +55,7 @@ const RandomPickModal = ({ media, onClose, onPickAgain }: RandomPickModalProps) 
               variant="primary"
               className="w-full py-3 rounded-2xl flex items-center justify-center gap-2"
               onClick={() => {
-                navigate(`/details/${media.media_type}/${media.tmdb_id}`);
+                navigate(`/${media.media_type}/${media.tmdb_id}`);
                 onClose();
               }}
             >

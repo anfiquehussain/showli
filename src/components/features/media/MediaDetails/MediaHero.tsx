@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Star, Clock, Globe, Plus, Share2, ChevronLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -5,6 +6,7 @@ import { getTmdbImageUrl } from '@/utils/image';
 import Button from '@/components/ui/Button';
 import { useToast } from '@/hooks/useToast';
 import type { TmdbMovieDetails, TmdbTVDetails } from '@/types/tmdb.types';
+import { discussionsService } from '@/api/discussions/discussionsService';
 
 interface MediaHeroProps {
   media: TmdbMovieDetails | TmdbTVDetails;
@@ -27,6 +29,28 @@ const MediaHero = ({
 }: MediaHeroProps) => {
   const navigate = useNavigate();
   const { success } = useToast();
+
+  const [showliRating, setShowliRating] = useState<number | null>(null);
+  const [showliReviewCount, setShowliReviewCount] = useState<number>(0);
+
+  useEffect(() => {
+    const unsubscribe = discussionsService.subscribeToComments(
+      media.id,
+      type,
+      (comments) => {
+        const reviews = comments.filter((c) => c.rating !== null);
+        if (reviews.length > 0) {
+          const totalRating = reviews.reduce((sum, c) => sum + (c.rating || 0), 0);
+          setShowliRating(totalRating / reviews.length);
+          setShowliReviewCount(reviews.length);
+        } else {
+          setShowliRating(null);
+          setShowliReviewCount(0);
+        }
+      }
+    );
+    return () => unsubscribe();
+  }, [media.id, type]);
 
   return (
     <section className="relative w-full min-h-[300px] md:min-h-[400px] flex flex-col justify-end">
@@ -80,9 +104,27 @@ const MediaHero = ({
           >
             <div className="space-y-1.5">
               <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
-                <div className="flex items-center gap-1 px-2 py-0.5 bg-brand-primary rounded-full text-[9px] font-bold uppercase tracking-wider text-white shadow-lg shadow-brand-primary/20">
-                  <Star className="w-2.5 h-2.5 fill-current" aria-hidden="true" />
+                {/* TMDb Rating Badge */}
+                <div 
+                  className="flex items-center gap-1 px-2.5 py-0.5 bg-zinc-800/80 backdrop-blur-md rounded-md text-[9px] font-black uppercase tracking-wider text-white/90 border border-white/5 shadow-lg select-none"
+                  title={`TMDb rating: ${media.vote_average.toFixed(1)}/10`}
+                >
+                  <span className="text-warning font-black tracking-widest text-[8px] mr-0.5">TMDb</span>
+                  <Star className="w-2.5 h-2.5 fill-warning text-warning" aria-hidden="true" />
                   <span>{media.vote_average.toFixed(1)}</span>
+                </div>
+
+                {/* ShowLi Rating Badge */}
+                <div 
+                  className="flex items-center gap-1 px-2.5 py-0.5 bg-brand-primary/80 backdrop-blur-md rounded-md text-[9px] font-black uppercase tracking-wider text-white shadow-lg shadow-brand-primary/20 border border-brand-primary/30 select-none"
+                  title={showliRating !== null ? `Showli community rating: ${showliRating.toFixed(1)}/10 (${showliReviewCount} reviews)` : 'No Showli reviews yet'}
+                >
+                  <span className="text-brand-secondary font-black tracking-widest text-[8px] mr-0.5">ShowLi</span>
+                  <Star className="w-2.5 h-2.5 fill-current text-white" aria-hidden="true" />
+                  <span>{showliRating !== null ? showliRating.toFixed(1) : 'N/A'}</span>
+                  {showliReviewCount > 0 && (
+                    <span className="text-[7px] text-white/60 font-bold ml-0.5">({showliReviewCount})</span>
+                  )}
                 </div>
                 <div className="flex items-center gap-1 text-white/80 text-[10px] font-semibold backdrop-blur-md bg-white/5 px-2 py-0.5 rounded-md border border-white/10">
                   {type === 'movie' ? year : 'TV Series'}

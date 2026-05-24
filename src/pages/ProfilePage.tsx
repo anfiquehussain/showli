@@ -19,6 +19,7 @@ import ProfileFavorites from '@/components/features/profile/ProfileFavorites';
 import AddFavoriteModal from '@/components/features/profile/AddFavoriteModal';
 import EditProfileModal from '@/components/features/profile/EditProfileModal';
 import ProfileSection from '@/components/features/profile/ProfileSection';
+import AllReviewsModal from '@/components/features/profile/AllReviewsModal';
 import Button from '@/components/ui/Button';
 import Skeleton from '@/components/ui/Skeleton';
 
@@ -44,6 +45,7 @@ const ProfilePage = () => {
   const [isLoadingCollections, setIsLoadingCollections] = useState(true);
   const [reviews, setReviews] = useState<Comment[]>([]);
   const [isLoadingReviews, setIsLoadingReviews] = useState(true);
+  const [isAllReviewsOpen, setIsAllReviewsOpen] = useState(false);
 
   // Profile Details State
   const [bio, setBio] = useState('');
@@ -441,6 +443,17 @@ const ProfilePage = () => {
                       );
                     })}
                   </div>
+
+                  {reviews.length > 3 && (
+                    <Button
+                      variant="secondary"
+                      className="w-full h-9 text-[10px] font-bold uppercase tracking-widest gap-1.5 bg-white/3 border-white/5 hover:bg-white/5 mt-1.5 rounded-lg"
+                      onClick={() => setIsAllReviewsOpen(true)}
+                    >
+                      View All Reviews
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </Button>
+                  )}
                 </div>
               )}
             </ProfileSection>
@@ -450,6 +463,13 @@ const ProfilePage = () => {
 
       {/* Add Favorite Modal */}
       <AddFavoriteModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} />
+
+      {/* All Reviews Modal */}
+      <AllReviewsModal 
+        isOpen={isAllReviewsOpen} 
+        onClose={() => setIsAllReviewsOpen(false)} 
+        reviews={reviews} 
+      />
 
       {/* Edit Profile Modal */}
       <EditProfileModal

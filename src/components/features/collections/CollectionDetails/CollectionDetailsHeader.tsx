@@ -1,4 +1,4 @@
-import { Folder, Edit2, Trash2, Plus } from 'lucide-react';
+import { Folder, Edit2, Trash2, Plus, Download } from 'lucide-react';
 import type { Collection, CollectionMedia } from '@/types/collections.types';
 import IconButton from '@/components/ui/IconButton';
 import Button from '@/components/ui/Button';
@@ -10,6 +10,7 @@ interface CollectionDetailsHeaderProps {
   onEdit: () => void;
   onDelete: () => void;
   onAddMedia?: () => void;
+  onExport?: () => void;
 }
 
 const CollectionDetailsHeader = ({
@@ -18,7 +19,8 @@ const CollectionDetailsHeader = ({
   filteredMediaCount,
   onEdit,
   onDelete,
-  onAddMedia
+  onAddMedia,
+  onExport
 }: CollectionDetailsHeaderProps) => {
   return (
     <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 glass-card p-4 sm:p-6 rounded-2xl">
@@ -48,6 +50,17 @@ const CollectionDetailsHeader = ({
       </div>
 
       <div className="flex items-center gap-2 self-end sm:self-start">
+        {onExport && (
+          <Button
+            onClick={onExport}
+            size="sm"
+            variant="secondary"
+            className="rounded-xl h-9 sm:h-10 px-3 sm:px-4 flex items-center gap-2"
+          >
+            <Download className="w-4 h-4 text-text-secondary" />
+            <span className="text-xs sm:text-sm">Export List</span>
+          </Button>
+        )}
         {onAddMedia && (
           <Button
             onClick={onAddMedia}

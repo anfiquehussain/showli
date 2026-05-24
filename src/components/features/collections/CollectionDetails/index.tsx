@@ -16,6 +16,7 @@ interface CollectionDetailsProps {
   onDelete: () => void;
   onAddMedia?: () => void;
   onRemoveMedia: (tmdbId: number) => void;
+  onExport?: () => void;
 }
 
 const ITEMS_PER_PAGE = 24;
@@ -27,7 +28,8 @@ export const CollectionDetails = ({
   onEdit,
   onDelete,
   onAddMedia,
-  onRemoveMedia
+  onRemoveMedia,
+  onExport
 }: CollectionDetailsProps) => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [filterStatus, setFilterStatus] = useState<MediaStatus | 'all'>('all');
@@ -82,6 +84,7 @@ export const CollectionDetails = ({
         onEdit={onEdit}
         onDelete={onDelete}
         onAddMedia={onAddMedia}
+        onExport={onExport}
       />
 
       <CollectionDetailsToolbar 

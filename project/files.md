@@ -93,7 +93,9 @@ src/
 │           │   └── useCollectionDetails.ts
 │           ├── CollectionsHero.tsx
 │           ├── CollectionModal.tsx
-│           └── AddMediaModal.tsx
+│           ├── AddMediaModal.tsx
+│           └── ExportModal/ # Folder-per-component for exporting collections
+│               └── index.tsx
 ├── hooks/              # Reusable global hooks
 │   ├── useAuth.ts      # Firebase auth logic and state sync
 │   ├── useRedux.ts     # Pre-typed useAppDispatch & useAppSelector

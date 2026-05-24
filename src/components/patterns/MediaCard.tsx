@@ -3,6 +3,7 @@ import { Star, Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { getTmdbImageUrl } from '@/utils/image';
 import type { TmdbMedia } from '@/types/tmdb.types';
+import { useAddToCollection } from '@/hooks/useAddToCollection';
 
 interface MediaCardProps {
   item: TmdbMedia;
@@ -10,10 +11,21 @@ interface MediaCardProps {
 }
 
 export const MediaCard = ({ item, onAddClick }: MediaCardProps) => {
+  const { openAddToCollection } = useAddToCollection();
   const title = 'title' in item ? item.title : item.name;
   const date = 'release_date' in item ? item.release_date : item.first_air_date;
   const year = date?.split('-')[0] || 'N/A';
   const type = 'title' in item ? 'movie' : 'tv';
+
+  const handleAddClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onAddClick) {
+      onAddClick(e, item);
+    } else {
+      openAddToCollection(item);
+    }
+  };
 
   return (
     <Link 
@@ -38,22 +50,16 @@ export const MediaCard = ({ item, onAddClick }: MediaCardProps) => {
             <span>{item.vote_average?.toFixed(1) || '0.0'}</span>
           </div>
 
-          <div className="absolute inset-0 bg-linear-to-t from-background/90 via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-3">
-            <div className="flex justify-start">
-              {onAddClick && (
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    onAddClick(e, item);
-                  }}
-                  className="p-1.5 rounded-full bg-brand-primary/80 hover:bg-brand-primary text-white backdrop-blur-md transition-colors"
-                  aria-label="Add to collection"
-                >
-                  <Plus className="w-4 h-4" />
-                </button>
-              )}
-            </div>
+          {/* Add to Collection Button (Responsive: always visible on mobile, hover-only on desktop) */}
+          <button
+            onClick={handleAddClick}
+            className="absolute top-2 left-2 p-1.5 rounded-lg bg-background/60 hover:bg-brand-primary hover:text-white text-brand-primary backdrop-blur-md border border-white/10 transition-all duration-300 shadow-lg z-10 scale-100 active:scale-90 opacity-100 md:opacity-0 md:group-hover/card:opacity-100"
+            aria-label="Add to collection"
+          >
+            <Plus className="w-3.5 h-3.5" />
+          </button>
+
+          <div className="absolute inset-0 bg-linear-to-t from-background/90 via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3">
             <span className="text-[10px] font-bold text-brand-secondary uppercase tracking-tighter">
               {year}
             </span>

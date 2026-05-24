@@ -23,7 +23,7 @@ src/
 ├── assets/             # Static assets (images, global icons)
 ├── components/         # UI Components (3-Layer Architecture)
 │   ├── ui/             # [Layer 1] Primitives (Button.tsx, IconButton.tsx, Input.tsx, Rating.tsx, Skeleton.tsx)
-│   ├── patterns/       # [Layer 2] Reusable Patterns (Modal, ConfirmationModal, PageHeader, MediaScroll, MediaCard, PersonScroll, PersonCard, StatusBadge, SearchBar, ProtectedRoute, ScrollContainer, ScrollToTop, BackToTopButton)
+│   ├── patterns/       # [Layer 2] Reusable Patterns (Modal, ConfirmationModal, PageHeader, MediaScroll, MediaCard, PersonScroll, PersonCard, StatusBadge, SearchBar, ProtectedRoute, ScrollContainer, ScrollToTop, BackToTopButton, AddToCollectionProvider)
 │   └── features/       # [Layer 3] Feature Components (Grouped by domain)
 │       ├── auth/       # Authentication (AuthModal.tsx)
 │       ├── layout/     # Global structure (MainLayout.tsx, Navbar.tsx)
@@ -100,7 +100,8 @@ src/
 │   ├── useAuth.ts      # Firebase auth logic and state sync
 │   ├── useRedux.ts     # Pre-typed useAppDispatch & useAppSelector
 │   ├── useToast.ts     # Typed toast notification hook
-│   └── useIntersectionObserver.ts # Intersection observer for lazy loading
+│   ├── useIntersectionObserver.ts # Intersection observer for lazy loading
+│   └── useAddToCollection.ts # Global hook to add media to collections
 ├── lib/                # Third-party library configs
 │   └── firebase.ts     # Firebase initialization (typed with FirebaseOptions)
 ├── pages/              # Routed page components

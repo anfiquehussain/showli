@@ -1,10 +1,12 @@
-# ShowLi 🎬 — Your Ultimate Movie & TV Planner
+<link href="https://fonts.googleapis.com/css2?family=Plaster&display=swap" rel="stylesheet">
+
+# <span>ShowLi</span> 🎬 — Your Ultimate Movie & TV Planner
 
 <p align="center">
-  <img src="public/favicon.svg" alt="ShowLi Logo" width="80" height="80" />
+  <img src="public/name_without_bg(tw).png" alt="ShowLi Logo" width="400" style="max-width: 100%; height: auto;" />
 </p>
 
-<h3 align="center">ShowLi</h3>
+<!-- <h3 align="center" style="font-family: 'Plaster', cursive; color: #6366f1; font-size: clamp(2.5rem, 8vw, 6rem); letter-spacing: 0.05em;">ShowLi</h3> -->
 
 <p align="center">
   A premium, high-fidelity, and feature-rich movie planner and community discussion platform. ShowLi allows users to discover trending media, manage highly customizable collections, engage in real-time community discussions, and customize their cinematic profiles.

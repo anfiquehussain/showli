@@ -267,7 +267,7 @@ const ShowliDiscussion = ({ mediaId, mediaType, mediaTitle, posterPath }: Showli
                 <CommentForm
                   onSubmit={handleAddComment}
                   showRating
-                  placeholder="Share your thoughts..."
+                  placeholder="Share your thoughts…"
                   autoFocus
                   isNaked
                 />

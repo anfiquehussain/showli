@@ -44,7 +44,7 @@ const CollectionDetailsToolbar = ({
         <SearchBar
           value={searchQuery}
           onChange={onSearchChange}
-          placeholder="Search in collection..."
+          placeholder="Search in collection…"
           containerClassName="w-full sm:max-w-[240px]"
         />
 
@@ -55,9 +55,9 @@ const CollectionDetailsToolbar = ({
             onChange={(e) => onSortChange(e.target.value as 'recent' | 'oldest' | 'random')}
             className="pl-8 pr-7 py-1.5 rounded-xl text-xs font-semibold bg-white/5 border border-white/10 text-white focus:outline-none focus:border-brand-primary appearance-none cursor-pointer hover:bg-white/10 transition-colors h-9 shrink-0"
           >
-            <option value="recent" className="bg-[#121218] text-white">Recently Added</option>
-            <option value="oldest" className="bg-[#121218] text-white">Oldest Added</option>
-            <option value="random" className="bg-[#121218] text-white">Random</option>
+            <option value="recent" className="bg-card text-white">Recently Added</option>
+            <option value="oldest" className="bg-card text-white">Oldest Added</option>
+            <option value="random" className="bg-card text-white">Random</option>
           </select>
         </div>
 

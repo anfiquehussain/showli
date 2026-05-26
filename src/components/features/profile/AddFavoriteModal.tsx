@@ -58,7 +58,7 @@ const AddFavoriteModal = ({ isOpen, onClose }: AddFavoriteModalProps) => {
         </p>
         <div className="relative">
           <Input
-            placeholder="Search movies or shows..."
+            placeholder="Search movies or shows…"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="pl-12"
@@ -70,7 +70,7 @@ const AddFavoriteModal = ({ isOpen, onClose }: AddFavoriteModalProps) => {
           {isLoading ? (
             <div className="flex flex-col items-center justify-center py-12 text-muted-foreground space-y-4">
               <Loader2 className="w-8 h-8 animate-spin text-brand-primary" />
-              <p>Searching TMDb...</p>
+              <p>Searching TMDb…</p>
             </div>
           ) : data?.results && data.results.length > 0 ? (
             data.results
@@ -117,7 +117,7 @@ const AddFavoriteModal = ({ isOpen, onClose }: AddFavoriteModalProps) => {
                       disabled={isAdded || favorites.length >= 5 || isAdding}
                       onClick={() => handleAdd(item)}
                     >
-                      {isAdded ? 'Added' : favorites.length >= 5 ? 'Full' : (isAdding ? 'Adding...' : 'Add')}
+                      {isAdded ? 'Added' : favorites.length >= 5 ? 'Full' : (isAdding ? 'Adding…' : 'Add')}
                     </Button>
                   </div>
                 );

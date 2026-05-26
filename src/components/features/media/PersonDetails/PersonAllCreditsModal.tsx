@@ -105,7 +105,7 @@ const PersonAllCreditsModal = ({ isOpen, onClose, credits, personName }: PersonA
             </div>
             <input
               type="text"
-              placeholder="Search credits..."
+              placeholder="Search credits…"
               value={searchQuery}
               onChange={(e) => {
                 setSearchQuery(e.target.value);

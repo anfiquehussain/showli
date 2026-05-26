@@ -14,7 +14,7 @@ interface CommentFormProps {
 
 const CommentForm = ({
   onSubmit,
-  placeholder = "Write your thoughts...",
+  placeholder = "Write your thoughts…",
   autoFocus = false,
   showRating = false,
   isNaked = false,

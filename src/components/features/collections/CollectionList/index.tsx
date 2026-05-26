@@ -55,7 +55,7 @@ export const CollectionList = ({
           <SearchBar
             value={searchQuery}
             onChange={setSearchQuery}
-            placeholder="Search collections..."
+            placeholder="Search collections…"
             containerClassName="w-full sm:max-w-[240px]"
           />
           <div className="flex items-center justify-between sm:justify-start w-full sm:w-auto gap-2">

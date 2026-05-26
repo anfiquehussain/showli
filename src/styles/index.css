@@ -61,6 +61,7 @@
   /* Layout Constants */
   --font-heading: 'Outfit', sans-serif;
   --font-body: 'Inter', sans-serif;
+  --font-logo: 'Plaster', cursive;
   --radius-standard: 0.75rem;
   --radius-large: 1rem;
 }

@@ -34,7 +34,7 @@ export const CollectionDetailsPage = () => {
         <div className="h-40 bg-card/50 animate-pulse rounded-2xl" />
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[...Array(8)].map((_, i) => (
-            <div key={i} className="aspect-[2/3] bg-card/50 animate-pulse rounded-xl" />
+            <div key={i} className="aspect-2/3 bg-card/50 animate-pulse rounded-xl" />
           ))}
         </div>
       </div>

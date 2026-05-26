@@ -190,7 +190,7 @@ const BrowseFilters = ({
                 <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground group-focus-within/search:text-brand-primary transition-colors" />
                 <input
                   type="text"
-                  placeholder="Search..."
+                  placeholder="Search…"
                   value={providerSearch}
                   onChange={(e) => setProviderSearch(e.target.value)}
                   className="bg-white/5 border border-white/10 rounded-lg pl-8 pr-2 py-1 text-xs w-32 focus:w-40 focus:ring-1 focus:ring-brand-primary/50 focus:outline-none transition-all placeholder:text-muted-foreground/30"

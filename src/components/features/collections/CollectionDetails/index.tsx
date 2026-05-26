@@ -132,7 +132,7 @@ export const CollectionDetails = ({
       {isLoading ? (
         <div className={viewMode === 'grid' ? 'grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4' : 'grid grid-cols-1 md:grid-cols-2 gap-4'}>
           {[...Array(10)].map((_, i) => (
-            <div key={i} className={`bg-card/50 animate-pulse rounded-xl ${viewMode === 'grid' ? 'aspect-[2/3]' : 'h-24'}`} />
+            <div key={i} className={`bg-card/50 animate-pulse rounded-xl ${viewMode === 'grid' ? 'aspect-2/3' : 'h-24'}`} />
           ))}
         </div>
       ) : mediaItems.length === 0 ? (

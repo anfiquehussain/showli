@@ -81,7 +81,7 @@ const FullCreditsModal = ({ isOpen, onClose, id, type, title }: FullCreditsModal
             </div>
             <input 
               type="text"
-              placeholder={`Search in ${activeTab}...`}
+              placeholder={`Search in ${activeTab}…`}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full bg-white/5 border border-white/10 rounded-xl py-2.5 pl-11 pr-4 text-sm text-white placeholder:text-muted-foreground focus:outline-none focus:border-brand-primary/50 focus:bg-white/[0.08] transition-all"
@@ -124,7 +124,7 @@ const FullCreditsModal = ({ isOpen, onClose, id, type, title }: FullCreditsModal
           {isLoading ? (
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2 sm:gap-4">
               {[...Array(18)].map((_, i) => (
-                <div key={i} className="aspect-[2/3] bg-white/5 rounded-xl animate-pulse" />
+                <div key={i} className="aspect-2/3 bg-white/5 rounded-xl animate-pulse" />
               ))}
             </div>
           ) : (
@@ -137,7 +137,7 @@ const FullCreditsModal = ({ isOpen, onClose, id, type, title }: FullCreditsModal
                     onClick={onClose}
                     className="flex flex-col group block"
                   >
-                  <div className="aspect-[2/3] rounded-xl sm:rounded-2xl overflow-hidden bg-white/5 border border-white/5 group-hover:border-brand-primary/50 transition-all duration-300 mb-2 sm:mb-3 shadow-lg">
+                  <div className="aspect-2/3 rounded-xl sm:rounded-2xl overflow-hidden bg-white/5 border border-white/5 group-hover:border-brand-primary/50 transition-all duration-300 mb-2 sm:mb-3 shadow-lg">
                     {person.profile_path ? (
                       <img 
                         src={getTmdbImageUrl(person.profile_path, 'w185')} 

@@ -85,7 +85,7 @@ const AddMediaModal = ({ isOpen, onClose, collection }: AddMediaModalProps) => {
       <div className="space-y-6">
         <div className="relative">
           <Input
-            placeholder="Search movies or shows..."
+            placeholder="Search movies or shows…"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="pl-12 h-12 rounded-2xl"
@@ -98,7 +98,7 @@ const AddMediaModal = ({ isOpen, onClose, collection }: AddMediaModalProps) => {
           {isLoading ? (
             <div className="flex flex-col items-center justify-center py-12 text-muted-foreground space-y-4">
               <Loader2 className="w-8 h-8 animate-spin text-brand-primary" />
-              <p>Searching TMDb...</p>
+              <p>Searching TMDb…</p>
             </div>
           ) : data?.results && data.results.length > 0 ? (
             data.results

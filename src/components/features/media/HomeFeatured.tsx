@@ -102,7 +102,7 @@ const HomeFeatured = () => {
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-brand-primary transition-colors" />
             <input 
               type="text"
-              placeholder="Search movies, TV shows, actors..."
+              placeholder="Search movies, TV shows, actors…"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => setIsFocused(true)}

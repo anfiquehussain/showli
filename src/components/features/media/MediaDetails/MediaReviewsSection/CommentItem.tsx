@@ -223,7 +223,7 @@ const CommentItem = ({
               <div className="ml-5 md:ml-10 animate-in slide-in-from-top-2 duration-300">
                 <CommentForm
                   onSubmit={handleReply}
-                  placeholder={`Reply to ${comment.userName}...`}
+                  placeholder={`Reply to ${comment.userName}…`}
                   autoFocus
                 />
               </div>

@@ -113,7 +113,7 @@ const ReviewContent = ({ content }: { content: string }) => {
     <div className="space-y-2">
       <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap opacity-80">
         {displayContent}
-        {!isExpanded && isLong && "..."}
+        {!isExpanded && isLong && "…"}
       </p>
       {isLong && (
         <button 

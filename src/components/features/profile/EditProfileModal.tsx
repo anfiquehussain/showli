@@ -334,7 +334,7 @@ const EditProfileModal = ({
                       value={photoURL}
                       onChange={(e) => setPhotoURL(e.target.value)}
                       disabled={isSaving}
-                      placeholder="Paste direct avatar image URL (https://...)"
+                      placeholder="Paste direct avatar image URL (https://…)"
                       className="w-full h-10 px-3.5 rounded-xl border border-white/5 bg-white/5 text-xs text-white focus:outline-hidden focus:border-brand-primary/50 focus:bg-brand-primary/5 transition-standard"
                     />
                   </motion.div>
@@ -403,7 +403,7 @@ const EditProfileModal = ({
                       value={bannerURL}
                       onChange={(e) => setBannerURL(e.target.value)}
                       disabled={isSaving}
-                      placeholder="Paste direct banner image URL (https://...)"
+                      placeholder="Paste direct banner image URL (https://…)"
                       className="w-full h-10 px-3.5 rounded-xl border border-white/5 bg-white/5 text-xs text-white focus:outline-hidden focus:border-brand-primary/50 focus:bg-brand-primary/5 transition-standard"
                     />
                   </motion.div>
@@ -429,7 +429,7 @@ const EditProfileModal = ({
                   value={bio}
                   onChange={(e) => setBio(e.target.value)}
                   disabled={isSaving}
-                  placeholder="Tell us about yourself..."
+                  placeholder="Tell us about yourself…"
                   maxLength={200}
                   rows={3}
                   className="w-full p-3 rounded-xl border border-white/5 bg-white/5 text-xs text-white placeholder-muted-foreground focus:outline-hidden focus:border-brand-primary/50 focus:bg-brand-primary/5 transition-standard resize-none"
@@ -455,7 +455,7 @@ const EditProfileModal = ({
                 disabled={isSaving}
                 className="h-9 px-5 rounded-xl text-xs font-bold uppercase tracking-wider shadow-md bg-linear-to-r from-brand-primary to-brand-secondary text-white border-0"
               >
-                {isSaving ? 'Saving...' : 'Save Changes'}
+                {isSaving ? 'Saving…' : 'Save Changes'}
               </Button>
             </div>
           </motion.div>

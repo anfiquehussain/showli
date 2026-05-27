@@ -373,3 +373,9 @@ export interface TmdbKeywordsResponse {
   keywords?: TmdbKeyword[]; // Movies return this
   results?: TmdbKeyword[];  // TV shows return this
 }
+
+export interface TmdbCompany {
+  id: number;
+  name: string;
+  logo_path: string | null;
+}

@@ -126,9 +126,18 @@ const MediaHero = ({
                     <span className="text-[7px] text-white/60 font-bold ml-0.5">({showliReviewCount})</span>
                   )}
                 </div>
-                <div className="flex items-center gap-1 text-white/80 text-[10px] font-semibold backdrop-blur-md bg-white/5 px-2 py-0.5 rounded-md border border-white/10">
-                  {type === 'movie' ? year : 'TV Series'}
-                </div>
+                {type === 'movie' && year ? (
+                  <button 
+                    onClick={() => navigate(`/browse?year=${year}`)}
+                    className="flex items-center gap-1 text-brand-primary text-[10px] font-bold backdrop-blur-md bg-brand-primary/10 hover:bg-brand-primary/20 border border-brand-primary/20 hover:border-brand-primary/40 px-2 py-0.5 rounded-md cursor-pointer transition-all duration-300 transform active:scale-95 shadow-md shadow-brand-primary/5 font-heading"
+                  >
+                    {year}
+                  </button>
+                ) : (
+                  <div className="flex items-center gap-1 text-white/80 text-[10px] font-semibold backdrop-blur-md bg-white/5 px-2 py-0.5 rounded-md border border-white/10 select-none">
+                    TV Series
+                  </div>
+                )}
                 {runtime && (
                   <div className="flex items-center gap-1 text-white/80 text-[10px] font-semibold backdrop-blur-md bg-white/5 px-2 py-0.5 rounded-md border border-white/10">
                     <Clock className="w-2.5 h-2.5" aria-hidden="true" />
@@ -153,9 +162,13 @@ const MediaHero = ({
 
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-1.5">
               {media.genres.map(genre => (
-                <span key={genre.id} className="px-2 py-0.5 bg-white/5 border border-white/10 rounded-full text-[9px] font-bold text-white/70 hover:bg-white/10 hover:text-white transition-colors cursor-default">
+                <button 
+                  key={genre.id}
+                  onClick={() => navigate(`/browse?genre=${genre.id}`)}
+                  className="px-2.5 py-0.5 bg-white/5 border border-white/10 hover:border-brand-primary/40 hover:bg-brand-primary/10 hover:text-brand-primary rounded-full text-[9px] font-bold text-white/70 transition-all duration-300 cursor-pointer transform active:scale-95 font-heading"
+                >
                   {genre.name}
-                </span>
+                </button>
               ))}
             </div>
 

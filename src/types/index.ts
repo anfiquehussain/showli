@@ -22,6 +22,7 @@ export type {
   TmdbProfileSize,
   TmdbKeyword,
   TmdbKeywordsResponse,
+  TmdbCompany,
 } from './tmdb.types';
 
 export type {

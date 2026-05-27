@@ -36,6 +36,10 @@ const Browse = () => {
   const provider = searchParams.get('provider') || '';
   const keywordId = searchParams.get('keyword') || '';
   const keywordName = searchParams.get('keywordName') || '';
+  const network = searchParams.get('network') || '';
+  const networkName = searchParams.get('networkName') || '';
+  const company = searchParams.get('company') || '';
+  const companyName = searchParams.get('companyName') || '';
   const page = Number(searchParams.get('page')) || 1;
 
   // Handle 'focus=filters' to open sidebar automatically
@@ -83,6 +87,8 @@ const Browse = () => {
       with_watch_providers: provider,
       watch_region: region,
       with_keywords: keywordId,
+      with_networks: network,
+      with_companies: company,
       page,
     }
   }, { skip: isSearching });
@@ -195,7 +201,9 @@ const Browse = () => {
       key === 'language' || 
       key === 'country' || 
       key === 'provider' ||
-      key === 'keyword'
+      key === 'keyword' ||
+      key === 'network' ||
+      key === 'company'
     ) {
       newParams.delete('page');
     }
@@ -232,6 +240,8 @@ const Browse = () => {
             provider={provider}
             keywordId={keywordId}
             keywordName={keywordName}
+            companyId={company}
+            companyName={companyName}
             onFilterChange={handleUpdateParam}
             onClear={handleClearFilters}
           />
@@ -255,6 +265,8 @@ const Browse = () => {
                 provider={provider}
                 keywordId={keywordId}
                 keywordName={keywordName}
+                companyId={company}
+                companyName={companyName}
                 onFilterChange={handleUpdateParam}
                 onClear={handleClearFilters}
                 onClose={toggleSidebar}
@@ -275,6 +287,10 @@ const Browse = () => {
             provider={provider}
             keywordId={keywordId}
             keywordName={keywordName}
+            networkId={network}
+            networkName={networkName}
+            companyId={company}
+            companyName={companyName}
             onRemove={handleUpdateParam}
             onClearAll={handleClearFilters}
           />

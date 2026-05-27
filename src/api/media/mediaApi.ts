@@ -24,6 +24,7 @@ import type {
   TmdbWatchProvider,
   TmdbKeywordsResponse,
   TmdbKeyword,
+  TmdbCompany,
 } from "@/types/tmdb.types";
 
 export const mediaApi = createApi({
@@ -255,6 +256,13 @@ export const mediaApi = createApi({
       query: ({ query, page = 1 }) =>
         `/search/keyword?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&page=${page}`,
     }),
+    searchCompanies: builder.query<
+      TmdbPaginatedResponse<TmdbCompany>,
+      { query: string; page?: number }
+    >({
+      query: ({ query, page = 1 }) =>
+        `/search/company?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&page=${page}`,
+    }),
   }),
 });
 
@@ -295,4 +303,5 @@ export const {
   useGetWatchProviderRegionsQuery,
   useGetMediaKeywordsQuery,
   useSearchKeywordsQuery,
+  useSearchCompaniesQuery,
 } = mediaApi;

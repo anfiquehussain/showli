@@ -13,6 +13,10 @@ interface FilterChipsProps {
   provider: string;
   keywordId: string;
   keywordName: string;
+  networkId: string;
+  networkName: string;
+  companyId: string;
+  companyName: string;
   onRemove: (key: string, value: string, extra?: { name: string; val: string }) => void;
   onClearAll: () => void;
 }
@@ -28,6 +32,10 @@ const FilterChips = ({
   provider,
   keywordId,
   keywordName,
+  networkId,
+  networkName,
+  companyId,
+  companyName,
   onRemove,
   onClearAll
 }: FilterChipsProps) => {
@@ -72,6 +80,8 @@ const FilterChips = ({
     { key: 'region', value: region && region !== 'US' ? `Region: ${getRegionName(region)}` : '', label: `Region: ${getRegionName(region)}` },
     { key: 'provider', value: provider, label: getProviderName(provider) },
     { key: 'keyword', value: keywordId, label: `Keyword: ${keywordName}`, extra: { name: 'keywordName', val: '' } },
+    { key: 'network', value: networkId, label: `Network: ${networkName}`, extra: { name: 'networkName', val: '' } },
+    { key: 'company', value: companyId, label: `Company: ${companyName}`, extra: { name: 'companyName', val: '' } },
   ].filter(f => f.value);
 
   if (activeFilters.length === 0) return null;

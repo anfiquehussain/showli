@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { 
   Building2,
   Calendar,
@@ -29,6 +30,7 @@ interface MediaQuickFactsProps {
 
 
 const MediaQuickFacts = ({ media, type }: MediaQuickFactsProps) => {
+  const navigate = useNavigate();
   const languageNames = new Intl.DisplayNames(['en'], { type: 'language' });
   const regionNames = new Intl.DisplayNames(['en'], { type: 'region' });
 
@@ -102,12 +104,18 @@ const MediaQuickFacts = ({ media, type }: MediaQuickFactsProps) => {
             {showOriginalTitle && (
               <FactItem icon={Type} label="Original Title" value={originalTitle} />
             )}
-            <FactItem icon={Globe} label="Original Language" value={getFullLanguage(media.original_language)} />
+            <FactItem 
+              icon={Globe} 
+              label="Original Language" 
+              value={getFullLanguage(media.original_language)} 
+              onClick={() => navigate(`/browse?language=${media.original_language}&languageName=${encodeURIComponent(getFullLanguage(media.original_language))}`)}
+            />
             {originCountry && (
               <FactItem 
                 icon={Globe} 
                 label="Origin Country" 
                 value={getFullCountry(originCountry)} 
+                onClick={() => navigate(`/browse?country=${originCountry}&countryName=${encodeURIComponent(getFullCountry(originCountry))}`)}
               />
             )}
             <FactItem icon={Clock} label="Runtime" value={formatRuntime(runtime)} />
@@ -115,6 +123,10 @@ const MediaQuickFacts = ({ media, type }: MediaQuickFactsProps) => {
               icon={Calendar} 
               label={type === 'movie' ? "Release Date" : "First Air Date"} 
               value={formatDate(releaseDate)} 
+              onClick={releaseDate ? () => {
+                const releaseYear = releaseDate.split('-')[0];
+                if (releaseYear) navigate(`/browse?year=${releaseYear}`);
+              } : undefined}
             />
             <FactItem icon={Clock} label="Status" value={media.status} />
             {type === 'tv' && (media as TmdbTVDetails).type && (
@@ -148,9 +160,13 @@ const MediaQuickFacts = ({ media, type }: MediaQuickFactsProps) => {
                   </div>
                   <div className="flex flex-wrap gap-1.5 pl-[26px]">
                     {(media as TmdbTVDetails).created_by.map((creator: TmdbCreator) => (
-                      <span key={creator.id} className="text-[10px] font-bold text-white/60 bg-white/5 px-2 py-0.5 rounded border border-white/5">
+                      <button 
+                        key={creator.id} 
+                        onClick={() => navigate(`/browse?q=${encodeURIComponent(creator.name)}`)}
+                        className="text-[10px] font-bold text-brand-primary bg-brand-primary/10 hover:bg-brand-primary/20 px-2 py-0.5 rounded border border-brand-primary/20 hover:border-brand-primary/40 cursor-pointer transition-colors active:scale-95 duration-200 font-heading"
+                      >
                         {creator.name}
-                      </span>
+                      </button>
                     ))}
                   </div>
                 </div>
@@ -164,9 +180,13 @@ const MediaQuickFacts = ({ media, type }: MediaQuickFactsProps) => {
                   </div>
                   <div className="flex flex-wrap gap-1.5 pl-[26px]">
                     {media.networks.map((network: TmdbNetwork) => (
-                      <span key={network.id} className="text-[10px] font-bold text-white/60 bg-white/5 px-2 py-0.5 rounded border border-white/5">
+                      <button 
+                        key={network.id} 
+                        onClick={() => navigate(`/browse?network=${network.id}&networkName=${encodeURIComponent(network.name)}`)}
+                        className="text-[10px] font-bold text-brand-primary bg-brand-primary/10 hover:bg-brand-primary/20 px-2 py-0.5 rounded border border-brand-primary/20 hover:border-brand-primary/40 cursor-pointer transition-colors active:scale-95 duration-200 font-heading"
+                      >
                         {network.name}
-                      </span>
+                      </button>
                     ))}
                   </div>
                 </div>
@@ -234,9 +254,13 @@ const MediaQuickFacts = ({ media, type }: MediaQuickFactsProps) => {
                 </div>
                 <div className="flex flex-wrap gap-1.5 pl-[26px]">
                   {media.production_companies.map((company: TmdbProductionCompany) => (
-                    <span key={company.id} className="text-[10px] font-bold text-white/60 bg-white/5 px-2 py-0.5 rounded border border-white/5 hover:text-white transition-colors">
+                    <button 
+                      key={company.id} 
+                      onClick={() => navigate(`/browse?company=${company.id}&companyName=${encodeURIComponent(company.name)}`)}
+                      className="text-[10px] font-bold text-brand-primary bg-brand-primary/10 hover:bg-brand-primary/20 px-2 py-0.5 rounded border border-brand-primary/20 hover:border-brand-primary/40 cursor-pointer transition-colors active:scale-95 duration-200 font-heading"
+                    >
                       {company.name}
-                    </span>
+                    </button>
                   ))}
                 </div>
               </div>
@@ -251,9 +275,13 @@ const MediaQuickFacts = ({ media, type }: MediaQuickFactsProps) => {
                 </div>
                 <div className="flex flex-wrap gap-1.5 pl-[26px]">
                   {productionCountries.map((country) => (
-                    <span key={country.iso_3166_1} className="text-[10px] font-bold text-white/60 bg-white/5 px-2 py-0.5 rounded border border-white/5">
+                    <button 
+                      key={country.iso_3166_1} 
+                      onClick={() => navigate(`/browse?country=${country.iso_3166_1}&countryName=${encodeURIComponent(country.name)}`)}
+                      className="text-[10px] font-bold text-brand-primary bg-brand-primary/10 hover:bg-brand-primary/20 px-2 py-0.5 rounded border border-brand-primary/20 hover:border-brand-primary/40 cursor-pointer transition-colors active:scale-95 duration-200 font-heading"
+                    >
                       {country.name}
-                    </span>
+                    </button>
                   ))}
                 </div>
               </div>
@@ -276,17 +304,28 @@ interface FactItemProps {
   icon: LucideIcon;
   label: string;
   value: string | number;
+  onClick?: () => void;
 }
 
-const FactItem = ({ icon: Icon, label, value }: FactItemProps) => (
+const FactItem = ({ icon: Icon, label, value, onClick }: FactItemProps) => (
   <div className="flex justify-between items-center group">
     <div className="flex items-center gap-2.5 text-muted-foreground group-hover:text-white transition-colors">
       <Icon className="w-3.5 h-3.5 opacity-60" />
       <span className="text-[12px] font-bold uppercase tracking-tight opacity-70">{label}</span>
     </div>
-    <span className="text-white text-[12px] font-black bg-white/5 px-2 py-0.5 rounded border border-white/5">
-      {value}
-    </span>
+    {onClick ? (
+      <button 
+        type="button"
+        onClick={onClick}
+        className="text-brand-primary text-[12px] font-bold bg-brand-primary/10 hover:bg-brand-primary/20 hover:text-brand-accent px-2 py-0.5 rounded border border-brand-primary/20 hover:border-brand-primary/40 cursor-pointer transition-all duration-300 transform active:scale-95 font-heading"
+      >
+        {value}
+      </button>
+    ) : (
+      <span className="text-white text-[12px] font-black bg-white/5 px-2 py-0.5 rounded border border-white/5">
+        {value}
+      </span>
+    )}
   </div>
 );
 

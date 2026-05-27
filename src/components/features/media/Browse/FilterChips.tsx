@@ -11,7 +11,9 @@ interface FilterChipsProps {
   country: string;
   region: string;
   provider: string;
-  onRemove: (key: string, value: string) => void;
+  keywordId: string;
+  keywordName: string;
+  onRemove: (key: string, value: string, extra?: { name: string; val: string }) => void;
   onClearAll: () => void;
 }
 
@@ -24,6 +26,8 @@ const FilterChips = ({
   country,
   region,
   provider,
+  keywordId,
+  keywordName,
   onRemove,
   onClearAll
 }: FilterChipsProps) => {
@@ -67,6 +71,7 @@ const FilterChips = ({
     { key: 'country', value: country, label: getCountryName(country) },
     { key: 'region', value: region && region !== 'US' ? `Region: ${getRegionName(region)}` : '', label: `Region: ${getRegionName(region)}` },
     { key: 'provider', value: provider, label: getProviderName(provider) },
+    { key: 'keyword', value: keywordId, label: `Keyword: ${keywordName}`, extra: { name: 'keywordName', val: '' } },
   ].filter(f => f.value);
 
   if (activeFilters.length === 0) return null;
@@ -81,7 +86,7 @@ const FilterChips = ({
         >
           <span className="capitalize">{filter.label}</span>
           <button 
-            onClick={() => onRemove(filter.key, '')}
+            onClick={() => onRemove(filter.key, '', filter.extra)}
             className="hover:text-brand-accent transition-colors"
             aria-label={`Remove ${filter.label} filter`}
           >

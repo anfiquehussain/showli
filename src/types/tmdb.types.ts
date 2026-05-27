@@ -362,3 +362,14 @@ export interface TmdbPersonExternalIds {
   twitter_id: string | null;
   youtube_id: string | null;
 }
+
+export interface TmdbKeyword {
+  id: number;
+  name: string;
+}
+
+export interface TmdbKeywordsResponse {
+  id: number;
+  keywords?: TmdbKeyword[]; // Movies return this
+  results?: TmdbKeyword[];  // TV shows return this
+}

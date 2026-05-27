@@ -20,6 +20,8 @@ export type {
   TmdbPosterSize,
   TmdbBackdropSize,
   TmdbProfileSize,
+  TmdbKeyword,
+  TmdbKeywordsResponse,
 } from './tmdb.types';
 
 export type {

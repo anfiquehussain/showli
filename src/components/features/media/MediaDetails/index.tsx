@@ -15,6 +15,7 @@ import MediaRecommendations from './MediaRecommendations';
 import MediaSimilar from './MediaSimilar';
 import TVSeasons from './TVSeasons';
 import FullCreditsModal from './FullCreditsModal';
+import MediaKeywords from './MediaKeywords';
 import Skeleton from '@/components/ui/Skeleton';
 
 interface MediaDetailsProps {
@@ -132,6 +133,7 @@ const MediaDetails = ({ id, type, onAddToCollection }: MediaDetailsProps) => {
               media={media}
               type={type}
             />
+            <MediaKeywords id={id} type={type} />
           </div>
         </aside>
       </div>

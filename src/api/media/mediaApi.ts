@@ -22,6 +22,8 @@ import type {
   TmdbImage,
   TmdbTaggedImage,
   TmdbWatchProvider,
+  TmdbKeywordsResponse,
+  TmdbKeyword,
 } from "@/types/tmdb.types";
 
 export const mediaApi = createApi({
@@ -239,6 +241,20 @@ export const mediaApi = createApi({
     getWatchProviderRegions: builder.query<{ results: { iso_3166_1: string; english_name: string; native_name: string }[] }, void>({
       query: () => `/watch/providers/regions?api_key=${TMDB_API_KEY}`,
     }),
+    getMediaKeywords: builder.query<
+      TmdbKeywordsResponse,
+      { type: "movie" | "tv"; id: number }
+    >({
+      query: ({ type, id }) =>
+        `/${type}/${id}/keywords?api_key=${TMDB_API_KEY}`,
+    }),
+    searchKeywords: builder.query<
+      TmdbPaginatedResponse<TmdbKeyword>,
+      { query: string; page?: number }
+    >({
+      query: ({ query, page = 1 }) =>
+        `/search/keyword?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&page=${page}`,
+    }),
   }),
 });
 
@@ -277,4 +293,6 @@ export const {
   useGetPopularPeopleQuery,
   useGetAvailableWatchProvidersQuery,
   useGetWatchProviderRegionsQuery,
+  useGetMediaKeywordsQuery,
+  useSearchKeywordsQuery,
 } = mediaApi;

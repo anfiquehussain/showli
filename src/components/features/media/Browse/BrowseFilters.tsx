@@ -1,12 +1,13 @@
 import React from 'react';
-import { X, RotateCcw, Search } from 'lucide-react';
+import { X, RotateCcw, Search, Tag } from 'lucide-react';
 import {
   useGetMovieGenresQuery,
   useGetTVGenresQuery,
   useGetLanguagesQuery,
   useGetCountriesQuery,
   useGetAvailableWatchProvidersQuery,
-  useGetWatchProviderRegionsQuery
+  useGetWatchProviderRegionsQuery,
+  useSearchKeywordsQuery
 } from '@/api/media/mediaApi';
 import Button from '@/components/ui/Button';
 
@@ -18,7 +19,9 @@ interface BrowseFiltersProps {
   country: string;
   region: string;
   provider: string;
-  onFilterChange: (key: string, value: string) => void;
+  keywordId: string;
+  keywordName: string;
+  onFilterChange: (key: string, value: string, extra?: { name: string; val: string }) => void;
   onClear: () => void;
   onClose?: () => void;
 }
@@ -31,6 +34,7 @@ const BrowseFilters = ({
   country,
   region,
   provider,
+  keywordName,
   onFilterChange,
   onClear,
   onClose
@@ -48,6 +52,12 @@ const BrowseFilters = ({
 
   const [showAllProviders, setShowAllProviders] = React.useState(false);
   const [providerSearch, setProviderSearch] = React.useState('');
+  const [keywordInput, setKeywordInput] = React.useState('');
+
+  const { data: keywordSuggestions, isLoading: isKeywordSearching } = useSearchKeywordsQuery(
+    { query: keywordInput },
+    { skip: keywordInput.length < 2 }
+  );
 
   const genres = mediaType === 'tv' ? tvGenres?.genres : movieGenres?.genres;
   const allProviders = providersData?.results || [];
@@ -93,6 +103,62 @@ const BrowseFilters = ({
               </button>
             ))}
           </div>
+        </div>
+
+        {/* Keywords */}
+        <div className="space-y-3 relative">
+          <label className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+            Keywords
+          </label>
+          {keywordName ? (
+            <div className="flex items-center justify-between bg-brand-primary/10 border border-brand-primary/30 rounded-xl px-4 py-2.5">
+              <div className="flex items-center gap-2 text-brand-primary">
+                <Tag className="w-4 h-4" />
+                <span className="text-sm font-semibold truncate max-w-[180px]">{keywordName}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => onFilterChange('keyword', '', { name: 'keywordName', val: '' })}
+                className="text-brand-primary hover:text-brand-accent transition-colors cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          ) : (
+            <div className="relative group">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-brand-primary transition-colors" />
+              <input
+                type="text"
+                placeholder="Search keywords…"
+                value={keywordInput}
+                onChange={(e) => setKeywordInput(e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-primary/50 focus:outline-none transition-standard placeholder:text-muted-foreground/30"
+              />
+              {keywordInput.length >= 2 && keywordSuggestions?.results && (
+                <div className="absolute z-50 w-full bg-card border border-white/10 rounded-xl shadow-2xl mt-1 max-h-48 overflow-y-auto custom-scrollbar p-1.5 space-y-1">
+                  {isKeywordSearching && (
+                    <div className="text-xs text-muted-foreground italic px-3 py-2">Searching…</div>
+                  )}
+                  {!isKeywordSearching && keywordSuggestions.results.length === 0 && (
+                    <div className="text-xs text-muted-foreground italic px-3 py-2">No keywords found</div>
+                  )}
+                  {keywordSuggestions.results.map((kw) => (
+                    <button
+                      key={kw.id}
+                      type="button"
+                      onClick={() => {
+                        onFilterChange('keyword', String(kw.id), { name: 'keywordName', val: kw.name });
+                        setKeywordInput('');
+                      }}
+                      className="w-full text-left px-3 py-2 text-xs font-semibold text-white/70 hover:text-brand-primary hover:bg-brand-primary/10 rounded-lg transition-colors cursor-pointer"
+                    >
+                      {kw.name}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Release Year */}

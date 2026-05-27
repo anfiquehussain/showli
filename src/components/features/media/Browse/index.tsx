@@ -34,6 +34,8 @@ const Browse = () => {
   const country = searchParams.get('country') || '';
   const region = searchParams.get('region') || 'US';
   const provider = searchParams.get('provider') || '';
+  const keywordId = searchParams.get('keyword') || '';
+  const keywordName = searchParams.get('keywordName') || '';
   const page = Number(searchParams.get('page')) || 1;
 
   // Handle 'focus=filters' to open sidebar automatically
@@ -80,6 +82,7 @@ const Browse = () => {
       with_origin_country: country,
       with_watch_providers: provider,
       watch_region: region,
+      with_keywords: keywordId,
       page,
     }
   }, { skip: isSearching });
@@ -166,19 +169,34 @@ const Browse = () => {
     };
   }, [results, isSearching, mediaType, genreId, year, language, country]);
 
-  const handleUpdateParam = (key: string, value: string) => {
+  const handleUpdateParam = (key: string, value: string, extra?: { name: string; val: string }) => {
     const newParams = new URLSearchParams(searchParams);
     if (value) {
       newParams.set(key, value);
+      if (extra) {
+        newParams.set(extra.name, extra.val);
+      }
     } else {
       newParams.delete(key);
+      if (extra) {
+        newParams.delete(extra.name);
+      }
     }
     
     // If updating filters, we no longer clear the search query
     // This allows hybrid filtering (search text + filters)
 
     // If updating search, reset page
-    if (key === 'q' || key === 'genre' || key === 'type' || key === 'year' || key === 'language' || key === 'country' || key === 'provider') {
+    if (
+      key === 'q' || 
+      key === 'genre' || 
+      key === 'type' || 
+      key === 'year' || 
+      key === 'language' || 
+      key === 'country' || 
+      key === 'provider' ||
+      key === 'keyword'
+    ) {
       newParams.delete('page');
     }
 
@@ -212,12 +230,14 @@ const Browse = () => {
             country={country}
             region={region}
             provider={provider}
+            keywordId={keywordId}
+            keywordName={keywordName}
             onFilterChange={handleUpdateParam}
             onClear={handleClearFilters}
           />
         </aside>
 
-        {/* Mobile Filters Drawer - to be implemented as a Modal or Slide-over */}
+        {/* Mobile Filters Drawer - to be implemented as a Slide-over */}
         {isFilterSidebarOpen && (
           <div className="lg:hidden fixed inset-0 z-50 overflow-hidden">
              <div 
@@ -233,6 +253,8 @@ const Browse = () => {
                 country={country}
                 region={region}
                 provider={provider}
+                keywordId={keywordId}
+                keywordName={keywordName}
                 onFilterChange={handleUpdateParam}
                 onClear={handleClearFilters}
                 onClose={toggleSidebar}
@@ -251,6 +273,8 @@ const Browse = () => {
             country={country}
             region={region}
             provider={provider}
+            keywordId={keywordId}
+            keywordName={keywordName}
             onRemove={handleUpdateParam}
             onClearAll={handleClearFilters}
           />

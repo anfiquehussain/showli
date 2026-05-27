@@ -103,7 +103,8 @@ src/
 │   ├── useRedux.ts     # Pre-typed useAppDispatch & useAppSelector
 │   ├── useToast.ts     # Typed toast notification hook
 │   ├── useIntersectionObserver.ts # Intersection observer for lazy loading
-│   └── useAddToCollection.ts # Global hook to add media to collections
+│   ├── useAddToCollection.ts # Global hook to add media to collections
+│   └── useInstallPrompt.ts # Hook for PWA installation state and events
 ├── lib/                # Third-party library configs
 │   └── firebase.ts     # Firebase initialization (typed with FirebaseOptions)
 ├── pages/              # Routed page components
@@ -133,6 +134,23 @@ src/
 ├── App.tsx             # App entry with Router
 ├── main.tsx            # React DOM mounting point
 └── netlify.toml        # Netlify deployment configuration
+
+public/
+├── icons/              # PWA icon assets (generated from icon_without_bg(v).png)
+│   ├── icon-192x192.png           # Regular 192px icon
+│   ├── icon-512x512.png           # Regular 512px icon
+│   ├── icon-maskable-192x192.png  # Maskable 192px icon (dark bg, safe-zone padded)
+│   └── icon-maskable-512x512.png  # Maskable 512px icon (dark bg, safe-zone padded)
+├── icon_without_bg(v).png         # Source icon (favicon)
+├── icon_with_bg(b).png            # Icon with black background
+├── icon_with_bg(w).png            # Icon with white background
+├── icon_without_bg.png            # Icon without background
+├── name_with_bg(w).png            # Logo name with white background
+├── name_without_bg(tb).png        # Logo name transparent (dark text)
+└── name_without_bg(tw).png        # Logo name transparent (white text)
+
+scripts/
+└── generate-pwa-icons.mjs  # Utility to regenerate PWA icons from source
 ```
 
 ## 1. UI Layering (Strict)

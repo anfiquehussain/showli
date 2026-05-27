@@ -1,10 +1,11 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { User, Film, Calendar, Folder, Loader2, Search } from 'lucide-react';
+import { User, Film, Calendar, Folder, Loader2, Search, Download } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 import { useAppDispatch } from '@/hooks/useRedux';
 import { useAuth } from '@/hooks/useAuth';
+import { useInstallPrompt } from '@/hooks/useInstallPrompt';
 import { openModal } from '@/store/slices/authSlice';
 import Button from '../../ui/Button';
 import IconButton from '../../ui/IconButton';
@@ -51,6 +52,7 @@ const Navbar = () => {
   const dispatch = useAppDispatch();
   const { user, isAuthenticated, isLoading } = useAuth();
   const navigate = useNavigate();
+  const { isInstallable, install } = useInstallPrompt();
 
   const handleUserClick = () => {
     if (isAuthenticated) {
@@ -107,6 +109,24 @@ const Navbar = () => {
               <div className="h-6 w-px bg-white/10" />
 
               <div className="flex items-center gap-4">
+                {isInstallable && (
+                  <motion.div
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className="relative flex items-center justify-center shrink-0"
+                  >
+                    <span className="absolute inline-flex h-full w-full rounded-full animate-ping bg-brand-primary/20 opacity-75 pointer-events-none" />
+                    <IconButton
+                      icon={Download}
+                      variant="ghost"
+                      aria-label="Install ShowLi App"
+                      title="Install ShowLi"
+                      onClick={install}
+                      className="text-brand-primary hover:text-white hover:bg-brand-primary/10 relative z-10"
+                    />
+                  </motion.div>
+                )}
+
                 <a
                   href="https://github.com/anfiquehussain/showli"
                   target="_blank"
@@ -150,6 +170,23 @@ const Navbar = () => {
 
             {/* Mobile Minimal Actions (Top Right) */}
             <div className="md:hidden flex items-center gap-2">
+              {isInstallable && (
+                <motion.div
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  className="relative flex items-center justify-center shrink-0"
+                >
+                  <span className="absolute inline-flex h-full w-full rounded-full animate-ping bg-brand-primary/20 opacity-75 pointer-events-none" />
+                  <IconButton
+                    icon={Download}
+                    variant="ghost"
+                    aria-label="Install ShowLi App"
+                    onClick={install}
+                    className="text-brand-primary hover:text-white"
+                  />
+                </motion.div>
+              )}
+
               <a
                 href="https://github.com/anfiquehussain/showli"
                 target="_blank"

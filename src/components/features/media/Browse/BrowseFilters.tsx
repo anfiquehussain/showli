@@ -71,7 +71,7 @@ const BrowseFilters = ({
         )}
       </div>
 
-      <div className="space-y-6 flex-1 pr-2">
+      <div className="space-y-6 flex-1 pr-2 overflow-y-auto custom-scrollbar">
         {/* Genres */}
         <div className="space-y-3">
           <label className="text-sm font-medium text-muted-foreground uppercase tracking-wider">

@@ -12,6 +12,18 @@ const Browse = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [isFilterSidebarOpen, setIsFilterSidebarOpen] = useState(false);
 
+  // Lock body scroll when mobile filter sidebar is open
+  useEffect(() => {
+    if (isFilterSidebarOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isFilterSidebarOpen]);
+
   // Sync state with URL params
   const query = searchParams.get('q') || '';
   const mediaType = (searchParams.get('type') as 'movie' | 'tv' | 'all') || 'all';
@@ -212,7 +224,7 @@ const Browse = () => {
               className="absolute inset-0 bg-background/80 backdrop-blur-sm" 
               onClick={toggleSidebar}
             />
-            <div className="absolute right-0 top-0 bottom-0 w-80 bg-card border-l border-white/5 p-6 shadow-2xl animate-in slide-in-from-right duration-300">
+            <div className="absolute right-0 top-0 bottom-0 w-80 bg-card border-l border-white/5 p-6 shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-right duration-300">
               <BrowseFilters 
                 mediaType={mediaType}
                 genreId={genreId}

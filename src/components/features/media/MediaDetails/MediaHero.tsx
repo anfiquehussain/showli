@@ -7,6 +7,7 @@ import Button from '@/components/ui/Button';
 import { useToast } from '@/hooks/useToast';
 import type { TmdbMovieDetails, TmdbTVDetails } from '@/types/tmdb.types';
 import { discussionsService } from '@/api/discussions/discussionsService';
+import { useGetTVExternalIdsQuery } from '@/api/media/mediaApi';
 
 interface MediaHeroProps {
   media: TmdbMovieDetails | TmdbTVDetails;
@@ -29,6 +30,11 @@ const MediaHero = ({
 }: MediaHeroProps) => {
   const navigate = useNavigate();
   const { success } = useToast();
+
+  const { data: tvExternalIds } = useGetTVExternalIdsQuery(media.id, { skip: type !== 'tv' });
+  const imdbId = type === 'movie' 
+    ? (media as TmdbMovieDetails).imdb_id 
+    : tvExternalIds?.imdb_id;
 
   const [showliRating, setShowliRating] = useState<number | null>(null);
   const [showliReviewCount, setShowliReviewCount] = useState<number>(0);
@@ -192,6 +198,17 @@ const MediaHero = ({
                   title="Official Website"
                 >
                   <Globe className="w-3.5 h-3.5" />
+                </a>
+              )}
+              {imdbId && (
+                <a 
+                  href={`https://www.imdb.com/title/${imdbId}`}
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="px-3 sm:px-3.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-warning/50 transition-all text-[10px] sm:text-xs font-black uppercase tracking-widest text-warning flex items-center justify-center h-8 sm:h-9 active:scale-95 transition-transform"
+                  title="View on IMDb"
+                >
+                  IMDb
                 </a>
               )}
               <button 

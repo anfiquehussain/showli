@@ -207,6 +207,9 @@ export const mediaApi = createApi({
     getPersonExternalIds: builder.query<TmdbPersonExternalIds, number>({
       query: (id) => `/person/${id}/external_ids?api_key=${TMDB_API_KEY}`,
     }),
+    getTVExternalIds: builder.query<{ imdb_id: string | null }, number>({
+      query: (id) => `/tv/${id}/external_ids?api_key=${TMDB_API_KEY}`,
+    }),
     getPersonImages: builder.query<{ id: number, profiles: TmdbImage[] }, number>({
       query: (id) => `/person/${id}/images?api_key=${TMDB_API_KEY}`,
     }),
@@ -296,6 +299,7 @@ export const {
   useGetPersonDetailsQuery,
   useGetPersonCombinedCreditsQuery,
   useGetPersonExternalIdsQuery,
+  useGetTVExternalIdsQuery,
   useGetPersonImagesQuery,
   useGetPersonTaggedImagesQuery,
   useGetPopularPeopleQuery,

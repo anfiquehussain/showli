@@ -52,6 +52,15 @@
   --color-palette-blue: #3b82f6;
   --color-palette-yellow: #eab308;
 
+  /* Episode Ratings Palette */
+  --color-rating-masterpiece: #06b6d4;
+  --color-rating-awesome: #15803d;
+  --color-rating-great: #22c55e;
+  --color-rating-good: #eab308;
+  --color-rating-regular: #f97316;
+  --color-rating-bad: #ef4444;
+  --color-rating-garbage: #6b21a8;
+
   /* Status Backgrounds (Subtle) */
   --color-success-bg: rgba(16, 185, 129, 0.1);
   --color-warning-bg: rgba(245, 158, 11, 0.1);

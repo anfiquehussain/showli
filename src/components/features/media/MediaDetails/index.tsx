@@ -89,6 +89,7 @@ const MediaDetails = ({ id, type, onAddToCollection }: MediaDetailsProps) => {
             <TVSeasons
               tvId={id}
               seasons={(media as TmdbTVDetails).seasons}
+              showTitle={title}
             />
           )}
 

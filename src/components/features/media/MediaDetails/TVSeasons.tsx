@@ -1,19 +1,21 @@
 import { useState } from 'react';
 import { useGetTVSeasonDetailsQuery } from '@/api/media/mediaApi';
 import type { TmdbTVSeasonBrief } from '@/types/tmdb.types';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, Award } from 'lucide-react';
 import { clsx } from 'clsx';
 import { motion } from 'framer-motion';
 import ScrollContainer from '@/components/patterns/ScrollContainer';
 import EpisodeCard from './EpisodeCard';
 import Skeleton from '../../../ui/Skeleton';
+import EpisodeRatingsModal from './EpisodeRatingsModal';
 
 interface TVSeasonsProps {
   tvId: number;
   seasons: TmdbTVSeasonBrief[];
+  showTitle: string;
 }
 
-const TVSeasons = ({ tvId, seasons }: TVSeasonsProps) => {
+const TVSeasons = ({ tvId, seasons, showTitle }: TVSeasonsProps) => {
   // Sort seasons by number, but handle season 0 (Specials) if it exists
   const sortedSeasons = [...seasons].sort((a, b) => a.season_number - b.season_number);
   
@@ -22,6 +24,7 @@ const TVSeasons = ({ tvId, seasons }: TVSeasonsProps) => {
   );
   
   const [visibleCount, setVisibleCount] = useState(2);
+  const [isRatingsModalOpen, setIsRatingsModalOpen] = useState(false);
 
   const { data: seasonDetails, isLoading, isError } = useGetTVSeasonDetailsQuery({
     tvId,
@@ -56,8 +59,18 @@ const TVSeasons = ({ tvId, seasons }: TVSeasonsProps) => {
           Seasons & Episodes
         </h2>
         
-        <div className="text-[10px] font-black text-brand-primary/60 uppercase tracking-[0.2em] hidden md:block">
-          {sortedSeasons.length} Seasons Available
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setIsRatingsModalOpen(true)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-brand-primary/10 border border-brand-primary/20 text-[10px] sm:text-[11px] font-black text-brand-primary uppercase tracking-wider hover:bg-brand-primary/20 hover:border-brand-primary/40 transition-all duration-300 transform active:scale-95 shadow-sm shadow-brand-primary/5 cursor-pointer"
+          >
+            <Award className="w-3.5 h-3.5" />
+            <span>Episode Ratings</span>
+          </button>
+          
+          <div className="text-[10px] font-black text-brand-primary/60 uppercase tracking-[0.2em] hidden md:block">
+            {sortedSeasons.length} Seasons Available
+          </div>
         </div>
       </div>
 
@@ -142,6 +155,13 @@ const TVSeasons = ({ tvId, seasons }: TVSeasonsProps) => {
           </div>
         )}
       </div>
+      <EpisodeRatingsModal
+        tvId={tvId}
+        seasons={seasons}
+        isOpen={isRatingsModalOpen}
+        onClose={() => setIsRatingsModalOpen(false)}
+        showTitle={showTitle}
+      />
     </section>
   );
 };

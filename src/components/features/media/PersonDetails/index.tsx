@@ -61,7 +61,7 @@ const PersonDetails = () => {
       <div className="py-8 md:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 md:gap-16">
           {/* Main Content (Left, Wider) */}
-          <main className="lg:col-span-8 space-y-12">
+          <main className="lg:col-span-8 space-y-12 order-2 lg:order-1">
             {/* Biography Section */}
             {person.biography && (
               <section className="space-y-4">
@@ -86,7 +86,7 @@ const PersonDetails = () => {
           </main>
 
           {/* Sidebar / Quick Facts (Right, Narrower) */}
-          <aside className="lg:col-span-4">
+          <aside className="lg:col-span-4 order-1 lg:order-2">
             <div className="sticky top-24 space-y-6">
               <PersonQuickFacts person={person} externalIds={externalIds} />
             </div>

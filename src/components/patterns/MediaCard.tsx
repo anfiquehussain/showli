@@ -34,7 +34,7 @@ export const MediaCard = ({ item, onAddClick }: MediaCardProps) => {
     >
       <motion.div
         whileHover={{ y: -5, scale: 1.02 }}
-        className="w-28 md:w-40 space-y-2 group/card snap-start"
+        className="w-36 md:w-40 space-y-2 group/card snap-start"
       >
         <div className="relative aspect-2/3 rounded-xl overflow-hidden glass-card transition-standard border-white/5 hover:border-brand-secondary/50 shadow-lg">
           <img

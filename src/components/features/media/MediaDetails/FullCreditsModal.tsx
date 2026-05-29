@@ -122,14 +122,14 @@ const FullCreditsModal = ({ isOpen, onClose, id, type, title }: FullCreditsModal
         {/* Content */}
         <div className="max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar min-h-[300px]">
           {isLoading ? (
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2 sm:gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2 sm:gap-4">
               {[...Array(18)].map((_, i) => (
                 <div key={i} className="aspect-2/3 bg-white/5 rounded-xl animate-pulse" />
               ))}
             </div>
           ) : (
             <div className="space-y-8">
-              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-x-2 sm:gap-x-4 gap-y-4 sm:gap-y-6">
+              <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-x-2 sm:gap-x-4 gap-y-4 sm:gap-y-6">
                 {displayedData.map((person, idx) => (
                   <Link 
                     key={`${person.id}-${idx}`}

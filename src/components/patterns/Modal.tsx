@@ -48,13 +48,13 @@ const Modal = ({ isOpen, onClose, title, children, className, maxWidth = 'max-w-
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ type: 'spring', duration: 0.4, bounce: 0.2 }}
             className={`
-              relative w-full ${maxWidth} overflow-hidden rounded-2xl border border-gray-border bg-card shadow-2xl
+              relative w-full ${maxWidth} flex flex-col max-h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-3rem)] overflow-hidden rounded-2xl border border-gray-border bg-card shadow-2xl
               ${className}
             `}
           >
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-gray-border px-6 py-4">
-              <h2 className="text-xl font-heading font-semibold text-foreground">
+            <div className="flex items-center justify-between border-b border-gray-border px-6 py-4 shrink-0">
+              <h2 className="text-xl font-heading font-semibold text-foreground truncate">
                 {title}
               </h2>
               <IconButton
@@ -66,7 +66,7 @@ const Modal = ({ isOpen, onClose, title, children, className, maxWidth = 'max-w-
             </div>
 
             {/* Body */}
-            <div className="p-6">
+            <div className="p-6 overflow-y-auto custom-scrollbar flex-1">
               {children}
             </div>
           </motion.div>

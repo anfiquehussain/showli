@@ -1,13 +1,18 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Star, Play, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
+
+import { motion, AnimatePresence } from 'framer-motion';
+import { Star, Plus, Info } from 'lucide-react';
+
 import { useGetTrendingQuery } from '@/api/media/mediaApi';
+import { useAddToCollection } from '@/hooks/useAddToCollection';
 import { getTmdbImageUrl, HERO_BACKDROP_SIZE } from '@/utils/image';
+
 import Button from '@/components/ui/Button';
 
 const HeroCarousel = () => {
   const { data, isLoading, isError } = useGetTrendingQuery({ type: 'all' });
+  const { openAddToCollection } = useAddToCollection();
   const [currentIndex, setCurrentIndex] = useState(0);
   const trendingItems = data?.results.slice(0, 10) || [];
 
@@ -89,9 +94,14 @@ const HeroCarousel = () => {
             </p>
 
             <div className="flex flex-row items-center gap-2 pt-1 md:pt-2">
-              <Button variant="primary" size="sm" className="px-3 md:px-5 md:py-2 gap-2 flex-1 sm:flex-initial rounded-lg">
-                <Play className="w-3 md:w-3.5 h-3 md:h-3.5 fill-current" />
-                <span className="text-[10px] md:text-xs">Trailer</span>
+              <Button
+                variant="primary"
+                size="sm"
+                className="px-3 md:px-5 md:py-2 gap-2 flex-1 sm:flex-initial rounded-lg"
+                onClick={() => openAddToCollection(activeMedia)}
+              >
+                <Plus className="w-3 md:w-3.5 h-3 md:h-3.5" />
+                <span className="text-[10px] md:text-xs">Add Collection</span>
               </Button>
               <Link to={`/${'title' in activeMedia ? 'movie' : 'tv'}/${activeMedia.id}`} className="flex-1 sm:flex-initial">
                 <Button variant="secondary" size="sm" className="px-3 md:px-5 md:py-2 gap-2 glass-card w-full sm:w-auto justify-center rounded-lg">

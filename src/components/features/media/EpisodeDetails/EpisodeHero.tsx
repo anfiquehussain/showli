@@ -1,4 +1,4 @@
-import { Star, Calendar, Clock, Share2, ChevronLeft, ThumbsUp } from 'lucide-react';
+import { Star, Calendar, Clock, Share2, ChevronLeft } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { getTmdbImageUrl } from '@/utils/image';
 import { useToast } from '@/hooks/useToast';

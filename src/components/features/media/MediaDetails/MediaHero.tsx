@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Star, Clock, Globe, Plus, Share2, ChevronLeft, ThumbsUp } from 'lucide-react';
+import { Star, Clock, Globe, Plus, Share2, ChevronLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getTmdbImageUrl } from '@/utils/image';
 import Button from '@/components/ui/Button';

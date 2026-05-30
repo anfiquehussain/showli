@@ -25,6 +25,10 @@ import type {
   TmdbKeywordsResponse,
   TmdbKeyword,
   TmdbCompany,
+  TmdbEpisode,
+  TmdbVideo,
+  TmdbCastMember,
+  TmdbCrewMember,
 } from "@/types/tmdb.types";
 
 export const mediaApi = createApi({
@@ -195,6 +199,18 @@ export const mediaApi = createApi({
       query: ({ tvId, seasonNumber }) =>
         `/tv/${tvId}/season/${seasonNumber}?api_key=${TMDB_API_KEY}`,
     }),
+    getTVEpisodeDetails: builder.query<
+      TmdbEpisode & {
+        images?: { stills: TmdbImage[] };
+        videos?: { results: TmdbVideo[] };
+        credits?: { cast: TmdbCastMember[]; crew: TmdbCrewMember[]; guest_stars: TmdbCastMember[] };
+        external_ids?: { imdb_id: string | null };
+      },
+      { tvId: number; seasonNumber: number; episodeNumber: number }
+    >({
+      query: ({ tvId, seasonNumber, episodeNumber }) =>
+        `/tv/${tvId}/season/${seasonNumber}/episode/${episodeNumber}?api_key=${TMDB_API_KEY}&append_to_response=credits,images,videos,external_ids`,
+    }),
     getCollectionImages: builder.query<TmdbImagesResponse, number>({
       query: (id) => `/collection/${id}/images?api_key=${TMDB_API_KEY}`,
     }),
@@ -295,6 +311,7 @@ export const {
   useGetMediaImagesQuery,
   useGetMediaVideosQuery,
   useGetTVSeasonDetailsQuery,
+  useGetTVEpisodeDetailsQuery,
   useGetCollectionImagesQuery,
   useGetPersonDetailsQuery,
   useGetPersonCombinedCreditsQuery,

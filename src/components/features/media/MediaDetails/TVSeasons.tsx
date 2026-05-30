@@ -1,10 +1,15 @@
-import { useState } from 'react';
-import { useGetTVSeasonDetailsQuery } from '@/api/media/mediaApi';
-import type { TmdbTVSeasonBrief } from '@/types/tmdb.types';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
+
+import { motion } from 'framer-motion';
 import { ChevronDown, ChevronUp, Award } from 'lucide-react';
 import { clsx } from 'clsx';
-import { motion } from 'framer-motion';
+
+import { useGetTVSeasonDetailsQuery } from '@/api/media/mediaApi';
 import ScrollContainer from '@/components/patterns/ScrollContainer';
+
+import type { TmdbTVSeasonBrief } from '@/types/tmdb.types';
+
 import EpisodeCard from './EpisodeCard';
 import Skeleton from '../../../ui/Skeleton';
 import EpisodeRatingsModal from './EpisodeRatingsModal';
@@ -16,15 +21,61 @@ interface TVSeasonsProps {
 }
 
 const TVSeasons = ({ tvId, seasons, showTitle }: TVSeasonsProps) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const seasonParam = searchParams.get('season');
+  const parsedSeasonParam = seasonParam ? parseInt(seasonParam, 10) : null;
+
   // Sort seasons by number, but handle season 0 (Specials) if it exists
   const sortedSeasons = [...seasons].sort((a, b) => a.season_number - b.season_number);
   
-  const [selectedSeason, setSelectedSeason] = useState(
-    sortedSeasons.find(s => s.season_number === 1)?.season_number ?? sortedSeasons[0]?.season_number ?? 0
-  );
-  
+  const initialSeason = (() => {
+    if (parsedSeasonParam !== null && !isNaN(parsedSeasonParam)) {
+      const exists = sortedSeasons.some(s => s.season_number === parsedSeasonParam);
+      if (exists) return parsedSeasonParam;
+    }
+    return sortedSeasons.find(s => s.season_number === 1)?.season_number ?? sortedSeasons[0]?.season_number ?? 0;
+  })();
+
+  const [selectedSeason, setSelectedSeason] = useState(initialSeason);
   const [visibleCount, setVisibleCount] = useState(2);
   const [isRatingsModalOpen, setIsRatingsModalOpen] = useState(false);
+
+  // Sync state if URL query param changes
+  useEffect(() => {
+    if (parsedSeasonParam !== null && !isNaN(parsedSeasonParam)) {
+      const exists = sortedSeasons.some(s => s.season_number === parsedSeasonParam);
+      if (exists && selectedSeason !== parsedSeasonParam) {
+        setSelectedSeason(parsedSeasonParam);
+        setVisibleCount(2);
+      }
+    }
+  }, [parsedSeasonParam, sortedSeasons, selectedSeason]);
+
+  // Smooth scroll to seasons section if query param and hash are set initially
+  useEffect(() => {
+    if (parsedSeasonParam !== null && !isNaN(parsedSeasonParam) && window.location.hash === '#seasons-section') {
+      const exists = sortedSeasons.some(s => s.season_number === parsedSeasonParam);
+      if (exists) {
+        const timer = setTimeout(() => {
+          const element = document.getElementById('seasons-section');
+          if (element) {
+            const offset = 100;
+            const elementPosition = element.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + (window.scrollY ?? window.pageYOffset) - offset;
+            
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: 'smooth'
+            });
+
+            // Clean up the hash in the browser address bar so subsequent refreshes don't re-scroll
+            window.history.replaceState(null, '', window.location.pathname + window.location.search);
+          }
+        }, 300);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [parsedSeasonParam, sortedSeasons]);
 
   const { data: seasonDetails, isLoading, isError } = useGetTVSeasonDetailsQuery({
     tvId,
@@ -34,6 +85,10 @@ const TVSeasons = ({ tvId, seasons, showTitle }: TVSeasonsProps) => {
   const handleSeasonChange = (num: number) => {
     setSelectedSeason(num);
     setVisibleCount(2);
+    setSearchParams(prev => {
+      prev.set('season', num.toString());
+      return prev;
+    }, { replace: true });
   };
 
   const handleShowLess = () => {
@@ -122,7 +177,7 @@ const TVSeasons = ({ tvId, seasons, showTitle }: TVSeasonsProps) => {
               className="grid grid-cols-1 gap-4"
             >
               {seasonDetails?.episodes.slice(0, visibleCount).map((episode) => (
-                <EpisodeCard key={episode.id} episode={episode} />
+                <EpisodeCard key={episode.id} episode={episode} tvId={tvId} />
               ))}
             </motion.div>
 

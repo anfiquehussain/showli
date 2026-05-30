@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { Star, Calendar, Clock, ChevronDown, ChevronUp } from 'lucide-react';
 import { clsx } from 'clsx';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -7,9 +8,10 @@ import { getTmdbImageUrl } from '@/utils/image';
 
 interface EpisodeCardProps {
   episode: TmdbEpisode;
+  tvId: number;
 }
 
-const EpisodeCard = ({ episode }: EpisodeCardProps) => {
+const EpisodeCard = ({ episode, tvId }: EpisodeCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isDescExpanded, setIsDescExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
@@ -22,11 +24,13 @@ const EpisodeCard = ({ episode }: EpisodeCardProps) => {
     }
   }, [episode.overview]);
 
+  const episodeUrl = `/tv/${tvId}/season/${episode.season_number}/episode/${episode.episode_number}`;
+
   return (
     <div className="group bg-white/3 hover:bg-white/6 border border-white/10 rounded-2xl overflow-hidden transition-all duration-300">
       <div className="p-3 flex flex-col md:flex-row gap-4">
         {/* Still Image */}
-        <div className="relative shrink-0 w-full md:w-40 aspect-video rounded-xl overflow-hidden bg-white/5">
+        <Link to={episodeUrl} className="relative shrink-0 w-full md:w-40 aspect-video rounded-xl overflow-hidden bg-white/5 block">
           {episode.still_path ? (
             <img
               src={getTmdbImageUrl(episode.still_path, 'w300')}
@@ -44,14 +48,16 @@ const EpisodeCard = ({ episode }: EpisodeCardProps) => {
               Ep {episode.episode_number}
             </span>
           </div>
-        </div>
+        </Link>
 
         {/* Info */}
         <div className="flex-1 space-y-2 min-w-0">
           <div className="flex items-start justify-between gap-3">
-            <h3 className="text-sm md:text-base font-bold text-white group-hover:text-brand-primary transition-colors truncate">
-              {episode.name}
-            </h3>
+            <Link to={episodeUrl} className="min-w-0 flex-1 block">
+              <h3 className="text-sm md:text-base font-bold text-white group-hover:text-brand-primary transition-colors truncate">
+                {episode.name}
+              </h3>
+            </Link>
             <div className="flex items-center gap-1.5 px-1.5 py-0.5 bg-brand-primary/10 rounded-md border border-brand-primary/20 shrink-0">
               <Star className="w-2.5 h-2.5 text-brand-primary fill-brand-primary" />
               <span className="text-[10px] font-black text-brand-primary">

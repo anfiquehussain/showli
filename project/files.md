@@ -50,6 +50,13 @@ src/
 │       │   │   ├── EpisodeCard.tsx
 │       │   │   ├── EpisodeRatingsModal.tsx
 │       │   │   └── FullCreditsModal.tsx
+│       │   ├── EpisodeDetails/ # Decomposed episode details component
+│       │   │   ├── index.tsx
+│       │   │   ├── EpisodeHero.tsx
+│       │   │   ├── EpisodeInfo.tsx
+│       │   │   ├── EpisodeCredits.tsx
+│       │   │   ├── EpisodeGallery.tsx
+│       │   │   └── EpisodeNavigation.tsx
 │       │   ├── Browse/ # Advanced search & filters
 │       │   │   ├── index.tsx
 │       │   │   ├── BrowseToolbar.tsx
@@ -113,6 +120,7 @@ src/
 │   ├── BrowsePage.tsx    # Advanced search and filters
 │   ├── ProfilePage.tsx   # User profile and favorites
 │   ├── MediaDetailsPage.tsx   # Media (Movie/TV) detail view
+│   ├── EpisodeDetailsPage.tsx # Episode detail view
 │   ├── CollectionsPage.tsx # Library dashboard and collections list
 │   ├── CollectionDetailsPage.tsx # Individual collection view
 │   └── PersonPage.tsx      # Person biography and credits

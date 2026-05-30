@@ -1,4 +1,4 @@
-import { Star, Calendar, Clock, Share2, ChevronLeft } from 'lucide-react';
+import { Star, Calendar, Clock, Share2, ChevronLeft, ThumbsUp } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { getTmdbImageUrl } from '@/utils/image';
 import { useToast } from '@/hooks/useToast';
@@ -73,19 +73,62 @@ const EpisodeHero = ({ episode, show, tvId }: EpisodeHeroProps) => {
       {/* Identity & Poster Container */}
       <div className="relative z-20 pb-4">
         <div className="flex flex-col md:flex-row items-center md:items-end gap-5 md:gap-8">
-          {/* Episode Still Poster Card (Landscape Aspect Video) */}
+          {/* Episode Still Poster Card Wrapper */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="relative shrink-0 w-44 sm:w-56 md:w-72 aspect-video rounded-xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-white/10 group/poster bg-white/5"
+            className="relative shrink-0 group/poster"
           >
-            <img
-              src={getTmdbImageUrl(episode.still_path || show.poster_path, 'w500')}
-              alt={episode.name}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover/poster:scale-105"
-            />
-            <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent opacity-0 group-hover/poster:opacity-100 transition-opacity duration-300" />
+            {/* Image card with overflow-hidden */}
+            <div className="w-44 sm:w-56 md:w-72 aspect-video rounded-xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-white/10 relative bg-white/5">
+              <img
+                src={getTmdbImageUrl(episode.still_path || show.poster_path, 'w500')}
+                alt={episode.name}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover/poster:scale-105"
+              />
+              <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent opacity-0 group-hover/poster:opacity-100 transition-opacity duration-300" />
+            </div>
+
+            {/* Circular User Like Percentage overlaying at bottom-left */}
+            {episode.vote_average !== undefined && episode.vote_average > 0 && (
+              <div 
+                className="absolute -bottom-3 -left-3 z-30 w-11 h-11 md:w-13 md:h-13 bg-zinc-950 rounded-full border border-white/10 flex items-center justify-center p-1 shadow-2xl transition-transform duration-300 hover:scale-110 select-none"
+                title={`User Score: ${Math.round(episode.vote_average * 10)}% Liked`}
+              >
+                <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                  {/* Track circle */}
+                  <circle
+                    className="text-zinc-800"
+                    strokeWidth="3.5"
+                    stroke="currentColor"
+                    fill="transparent"
+                    r="16"
+                    cx="18"
+                    cy="18"
+                  />
+                  {/* Progress circle */}
+                  <circle
+                    className="text-success transition-all duration-500"
+                    strokeWidth="3.5"
+                    strokeDasharray="100"
+                    strokeDashoffset={100 - Math.round(episode.vote_average * 10)}
+                    strokeLinecap="round"
+                    stroke="currentColor"
+                    fill="transparent"
+                    r="16"
+                    cx="18"
+                    cy="18"
+                  />
+                </svg>
+                {/* Centered Percentage Text */}
+                <div className="absolute flex flex-col items-center justify-center text-white">
+                  <span className="text-[10px] md:text-xs font-black font-heading tracking-tighter">
+                    {Math.round(episode.vote_average * 10)}<span className="text-[6px] md:text-[7px] font-bold">%</span>
+                  </span>
+                </div>
+              </div>
+            )}
           </motion.div>
 
           {/* Identity Block */}

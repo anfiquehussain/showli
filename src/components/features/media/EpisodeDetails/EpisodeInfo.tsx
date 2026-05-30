@@ -1,7 +1,16 @@
 import type { TmdbEpisode } from '@/types/tmdb.types';
+import { ExternalLink } from 'lucide-react';
 
 interface EpisodeInfoProps {
-  episode: TmdbEpisode;
+  episode: TmdbEpisode & {
+    external_ids?: {
+      imdb_id: string | null;
+      tvdb_id?: number | null;
+      wikidata_id?: string | null;
+      tvrage_id?: number | null;
+    };
+    vote_count?: number;
+  };
 }
 
 const EpisodeInfo = ({ episode }: EpisodeInfoProps) => {
@@ -45,8 +54,47 @@ const EpisodeInfo = ({ episode }: EpisodeInfoProps) => {
         {/* Average Rating */}
         <div className="flex flex-col gap-1">
           <span className="text-[10px] text-muted-foreground font-black uppercase tracking-wider">Community Rating</span>
-          <span className="text-sm text-warning font-black">{episode.vote_average?.toFixed(1) || '0.0'}/10</span>
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-sm text-warning font-black">{episode.vote_average?.toFixed(1) || '0.0'}/10</span>
+            {episode.vote_count && episode.vote_count > 0 && (
+              <span className="text-[10px] text-muted-foreground font-bold">
+                ({episode.vote_count.toLocaleString()} votes)
+              </span>
+            )}
+          </div>
         </div>
+
+        {/* TVDB ID */}
+        {episode.external_ids?.tvdb_id && (
+          <div className="flex flex-col gap-1">
+            <span className="text-[10px] text-muted-foreground font-black uppercase tracking-wider">TheTVDB</span>
+            <a 
+              href={`https://thetvdb.com/dereferrer/episode/${episode.external_ids.tvdb_id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-brand-secondary font-bold flex items-center gap-1 hover:text-brand-accent transition-colors w-fit"
+            >
+              <span>View Episode on TVDB</span>
+              <ExternalLink className="w-3 h-3" />
+            </a>
+          </div>
+        )}
+
+        {/* Wikidata */}
+        {episode.external_ids?.wikidata_id && (
+          <div className="flex flex-col gap-1">
+            <span className="text-[10px] text-muted-foreground font-black uppercase tracking-wider">Wikidata</span>
+            <a 
+              href={`https://www.wikidata.org/wiki/${episode.external_ids.wikidata_id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-brand-secondary font-bold flex items-center gap-1 hover:text-brand-accent transition-colors w-fit"
+            >
+              <span>{episode.external_ids.wikidata_id}</span>
+              <ExternalLink className="w-3 h-3" />
+            </a>
+          </div>
+        )}
       </div>
     </div>
   );

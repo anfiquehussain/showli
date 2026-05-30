@@ -204,7 +204,12 @@ export const mediaApi = createApi({
         images?: { stills: TmdbImage[] };
         videos?: { results: TmdbVideo[] };
         credits?: { cast: TmdbCastMember[]; crew: TmdbCrewMember[]; guest_stars: TmdbCastMember[] };
-        external_ids?: { imdb_id: string | null };
+        external_ids?: { 
+          imdb_id: string | null;
+          tvdb_id?: number | null;
+          wikidata_id?: string | null;
+          tvrage_id?: number | null;
+        };
       },
       { tvId: number; seasonNumber: number; episodeNumber: number }
     >({

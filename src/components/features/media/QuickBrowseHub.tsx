@@ -14,13 +14,17 @@ import {
   Flame,
   Sparkles,
   Music,
-  Play
+  Play,
+  Building2,
+  Tv,
+  Film
 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useDiscoverQuery } from '@/api/media/mediaApi';
+import { useDiscoverQuery, useGetAvailableWatchProvidersQuery } from '@/api/media/mediaApi';
 import { getTmdbImageUrl } from '@/utils/image';
 import ScrollContainer from '@/components/patterns/ScrollContainer';
 
+// Genres
 const CATEGORIES = [
   { id: 'action', name: 'Action', icon: Zap, color: 'bg-palette-orange/10 text-palette-orange', genreId: 28 },
   { id: 'adventure', name: 'Adventure', icon: Compass, color: 'bg-palette-cyan/10 text-palette-cyan', genreId: 12 },
@@ -36,23 +40,107 @@ const CATEGORIES = [
   { id: 'music', name: 'Music', icon: Music, color: 'bg-palette-emerald/10 text-palette-emerald', genreId: 10402 },
 ];
 
-const METADATA_LINKS = [
-  { id: 'countries', name: 'Countries', icon: Globe, path: '/browse?focus=countries' },
-  { id: 'languages', name: 'Languages', icon: Languages, path: '/browse?focus=languages' },
-  { id: 'upcoming', name: '2024 Releases', icon: Calendar, path: '/browse?year=2024' },
-  { id: 'explore', name: 'Explore All', icon: Compass, path: '/browse' },
+// Popular Watch Providers
+const POPULAR_PROVIDERS = [
+  { id: 8, name: 'Netflix' },
+  { id: 119, name: 'Prime Video' },
+  { id: 337, name: 'Disney+' },
+  { id: 2, name: 'Apple TV+' },
+  { id: 1899, name: 'Max' },
+  { id: 15, name: 'Hulu' },
+  { id: 531, name: 'Paramount+' },
+  { id: 384, name: 'Peacock' },
 ];
 
-interface CategoryCardProps {
-  cat: typeof CATEGORIES[number];
+// Popular Production Companies
+const POPULAR_COMPANIES = [
+  { id: 420, name: 'Marvel Studios', logoPath: '/hUzeosd33nzE5MCNsZxCGEKTXaQ.png' },
+  { id: 3, name: 'Pixar', logoPath: '/1TjvGVDMYsj6JBxOAkUHpPEwLf7.png' },
+  { id: 41077, name: 'A24', logoPath: '/1ZXsGaFPgrgS6ZZGS37AqD5uU12.png' },
+  { id: 10342, name: 'Studio Ghibli', logoPath: '/uFuxPEZRUcBTEiYIxjHJq62Vr77.png' },
+  { id: 174, name: 'Warner Bros.', logoPath: '/zhD3hhtKB5qyv7ZeL4uLpNxgMVU.png' },
+  { id: 2, name: 'Walt Disney', logoPath: '/wdrCwmRnLFJhEoH8GSfymY85KHT.png' },
+  { id: 33, name: 'Universal', logoPath: '/8lvHyhjr8oUKOOy2dKXoALWKdp0.png' },
+  { id: 4, name: 'Paramount', logoPath: '/jay6WcMgagAklUt7i9Euwj1pzTF.png' },
+  { id: 5, name: 'Columbia', logoPath: '/71BqEFAF4V3qjjMPCpLuyJFB9A.png' },
+  { id: 7, name: 'DreamWorks', logoPath: '/zcKhWbxFJ4CohZ9dLBMxmOArTVn.png' },
+  { id: 12, name: 'New Line', logoPath: '/2ycs64eqV5rqKYHyQK0GVoKGvfX.png' },
+  { id: 14, name: 'Miramax', logoPath: '/m6AHu84oZQxvq7n1rsvMNJIAsMu.png' },
+  { id: 21, name: 'MGM', logoPath: '/usUnaYV6hQnlVAXP6r4HwrlLFPG.png' },
+  { id: 34, name: 'Sony Pictures', logoPath: '/fl0GumpYvcu7cTHZlNNAMs8heP6.png' },
+  { id: 923, name: 'Legendary', logoPath: '/5UQsZrfbfG2dYJbx8DxfoTr2Bvu.png' },
+  { id: 1632, name: 'Lionsgate', logoPath: '/cisLn1YAUuptXVBa0xjq7ST9cH0.png' },
+  { id: 3172, name: 'Blumhouse', logoPath: '/rzKluDcRkIwHZK2pHsiT667A2Kw.png' },
+  { id: 3268, name: 'HBO', logoPath: '/tuomPhY2UtuPTqqFnKMVHvSb724.png' },
+  { id: 10146, name: 'Focus Features', logoPath: '/xnFIOeq5cKw09kCWqV7foWDe4AA.png' },
+  { id: 288, name: 'BBC Film', logoPath: '/aW0IpM9d4Zjj978EqgDVSxXXhTj.png' },
+  { id: 41, name: 'Orion', logoPath: '/em0rOXVRu3qprWZCx58uDDV2fze.png' },
+  { id: 43, name: 'Searchlight', logoPath: '/4RgIPr55kBakgupWkzdDxqXJEqr.png' },
+  { id: 56, name: 'Amblin', logoPath: '/cEaxANEisCqeEoRvODv2dO1I0iI.png' },
+  { id: 559, name: 'TriStar', logoPath: '/eC0bWHVjnjUducyA6YFoEFqnPMC.png' },
+];
+
+// Popular Countries
+const POPULAR_COUNTRIES = [
+  { code: 'US', name: 'United States', flag: '🇺🇸' },
+  { code: 'GB', name: 'United Kingdom', flag: '🇬🇧' },
+  { code: 'JP', name: 'Japan', flag: '🇯🇵' },
+  { code: 'KR', name: 'South Korea', flag: '🇰🇷' },
+  { code: 'IN', name: 'India', flag: '🇮🇳' },
+  { code: 'FR', name: 'France', flag: '🇫🇷' },
+  { code: 'ES', name: 'Spain', flag: '🇪🇸' },
+  { code: 'DE', name: 'Germany', flag: '🇩🇪' },
+];
+
+// Popular Languages
+const POPULAR_LANGUAGES = [
+  { code: 'en', name: 'English', label: 'EN' },
+  { code: 'es', name: 'Spanish', label: 'ES' },
+  { code: 'ja', name: 'Japanese', label: 'JA' },
+  { code: 'ko', name: 'Korean', label: 'KO' },
+  { code: 'hi', name: 'Hindi', label: 'HI' },
+  { code: 'fr', name: 'French', label: 'FR' },
+  { code: 'it', name: 'Italian', label: 'IT' },
+  { code: 'de', name: 'German', label: 'DE' },
+];
+
+// Years & Decades
+const POPULAR_YEARS = [
+  { id: '2026', name: '2026', type: 'year', value: '2026' },
+  { id: '2025', name: '2025', type: 'year', value: '2025' },
+  { id: '2024', name: '2024', type: 'year', value: '2024' },
+  { id: '2023', name: '2023', type: 'year', value: '2023' },
+  { id: '2010s', name: '2010s', type: 'decade', value: '2015' }, // Representative year for discover background
+  { id: '2000s', name: '2000s', type: 'decade', value: '2005' },
+  { id: '1990s', name: '1990s', type: 'decade', value: '1995' },
+  { id: 'Classics', name: 'Classics', type: 'decade', value: '1975' },
+];
+
+interface DynamicCardProps {
+  name: string;
+  icon?: React.ComponentType<{ className?: string }>;
+  logoPath?: string;
+  pillLabel?: string;
+  flagEmoji?: string;
+  discoverParams: Record<string, string | number>;
   onClick: () => void;
+  color?: string;
 }
 
-const CategoryCard = ({ cat, onClick }: CategoryCardProps) => {
+const DynamicCard = ({ 
+  name, 
+  icon: Icon, 
+  logoPath, 
+  pillLabel, 
+  flagEmoji, 
+  discoverParams, 
+  onClick, 
+  color = 'bg-brand-primary/10 text-brand-primary' 
+}: DynamicCardProps) => {
   const { data, isLoading } = useDiscoverQuery({
     type: 'movie',
     params: {
-      with_genres: cat.genreId,
+      ...discoverParams,
       sort_by: 'popularity.desc',
       page: 1,
     },
@@ -78,27 +166,46 @@ const CategoryCard = ({ cat, onClick }: CategoryCardProps) => {
         <>
           <img
             src={backdropUrl}
-            alt={movieTitle || cat.name}
+            alt={movieTitle || name}
             className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-20 group-hover:opacity-30"
             loading="lazy"
           />
           <div className="absolute inset-0 bg-linear-to-t from-background/90 via-background/50 to-transparent" />
         </>
       ) : (
-        <div className={`absolute inset-0 opacity-5 ${cat.color.split(' ')[0]}`} />
+        <div className={`absolute inset-0 opacity-5 ${color.split(' ')[0]}`} />
       )}
 
       {/* Content overlay */}
       <div className="relative z-10 flex flex-col items-center justify-center w-full">
-        <div className={`p-2 rounded-xl mb-1.5 transition-colors duration-300 group-hover:bg-brand-primary/20 ${cat.color}`}>
-          <cat.icon className="w-5 h-5" />
-        </div>
+        {logoPath ? (
+          <div className="w-10 h-10 rounded-xl overflow-hidden mb-1.5 border border-white/10 group-hover:border-brand-primary/30 transition-colors bg-black/40 p-1 flex items-center justify-center">
+            <img 
+              src={`https://image.tmdb.org/t/p/w92${logoPath}`}
+              alt={name}
+              className="w-full h-full object-contain"
+            />
+          </div>
+        ) : flagEmoji ? (
+          <span className="text-2xl mb-1.5 select-none leading-none filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+            {flagEmoji}
+          </span>
+        ) : pillLabel ? (
+          <div className="px-2 py-0.5 rounded-lg bg-brand-primary/20 text-brand-primary text-[10px] font-black tracking-widest mb-2 border border-brand-primary/30">
+            {pillLabel}
+          </div>
+        ) : Icon ? (
+          <div className={`p-2 rounded-xl mb-1.5 transition-colors duration-300 group-hover:bg-brand-primary/20 ${color}`}>
+            <Icon className="w-5 h-5" />
+          </div>
+        ) : null}
+
         <span className="text-xs font-bold uppercase tracking-wider text-foreground group-hover:text-brand-primary transition-colors">
-          {cat.name}
+          {name}
         </span>
         {movieTitle && (
           <span className="text-[9px] text-muted-foreground mt-1 line-clamp-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            Featuring: {movieTitle}
+            {movieTitle}
           </span>
         )}
       </div>
@@ -106,42 +213,238 @@ const CategoryCard = ({ cat, onClick }: CategoryCardProps) => {
   );
 };
 
+interface ProviderCardProps {
+  name: string;
+  logoPath?: string;
+  onClick: () => void;
+}
+
+const ProviderCard = ({ name, logoPath, onClick }: ProviderCardProps) => {
+  return (
+    <motion.button
+      whileHover={{ y: -4, scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      onClick={onClick}
+      className="relative flex flex-col items-center justify-center p-2 shrink-0 w-20 sm:w-24 text-center cursor-pointer group"
+    >
+      {logoPath ? (
+        <div className="w-12 h-12 rounded-xl overflow-hidden mb-2 border border-white/5 group-hover:border-brand-primary/50 transition-colors shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
+          <img 
+            src={`https://image.tmdb.org/t/p/w92${logoPath}`}
+            alt={name}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      ) : (
+        <div className="w-12 h-12 rounded-xl bg-brand-primary/10 text-brand-primary flex items-center justify-center mb-2 border border-brand-primary/20">
+          <Play className="w-6 h-6" />
+        </div>
+      )}
+      <span className="text-[10px] font-medium text-muted-foreground group-hover:text-brand-primary truncate w-full px-1 transition-colors">
+        {name}
+      </span>
+    </motion.button>
+  );
+};
+
+interface StudioCardProps {
+  name: string;
+  logoPath: string;
+  onClick: () => void;
+}
+
+const StudioCard = ({ name, logoPath, onClick }: StudioCardProps) => {
+  return (
+    <motion.button
+      whileHover={{ y: -4, scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      onClick={onClick}
+      className="relative flex flex-col items-center justify-center p-2 shrink-0 w-32 sm:w-36 text-center cursor-pointer group"
+    >
+      {logoPath ? (
+        <div className="w-24 h-14 flex items-center justify-center mb-2 bg-linear-to-b from-white to-neutral-100 rounded-xl p-2.5 shadow-[0_4px_12px_rgba(0,0,0,0.3)] border border-white/20 group-hover:scale-105 transition-transform duration-300">
+          <img 
+            src={`https://image.tmdb.org/t/p/w185${logoPath}`}
+            alt={name}
+            className="max-w-full max-h-full object-contain opacity-90 group-hover:opacity-100 transition-all duration-300"
+          />
+        </div>
+      ) : null}
+      <span className="text-[10px] font-medium text-muted-foreground group-hover:text-brand-primary truncate w-full px-1 transition-colors">
+        {name}
+      </span>
+    </motion.button>
+  );
+};
+
 const QuickBrowseHub = () => {
   const navigate = useNavigate();
+  
+  // Fetch watch provider data to get logo paths
+  const { data: providersData } = useGetAvailableWatchProvidersQuery({ 
+    type: 'movie', 
+    region: 'US' 
+  });
 
   return (
-    <section className="space-y-6 py-8">
-      <div className="flex flex-col">
-        <h2 className="text-base md:text-lg font-bold text-foreground uppercase tracking-wider">Explore Collections</h2>
-        <p className="text-xs text-muted-foreground">Find movies and shows by genre or origin.</p>
+    <section className="space-y-10 py-4">
+      {/* 1. Genres Section */}
+      <div className="space-y-4">
+        <div className="flex flex-col px-1">
+          <h2 className="text-sm md:text-base font-bold text-foreground uppercase tracking-widest flex items-center gap-2">
+            <span className="w-1 h-4 bg-brand-primary rounded-full shadow-[0_0_8px_rgba(99,102,241,0.5)]" />
+            Browse Genres
+          </h2>
+          <p className="text-[10px] text-muted-foreground">Find films tailored to your favorite styles.</p>
+        </div>
+        <ScrollContainer className="gap-3 pb-2" showButtons={true}>
+          {CATEGORIES.map((cat) => (
+            <DynamicCard
+              key={cat.id}
+              name={cat.name}
+              icon={cat.icon}
+              color={cat.color}
+              discoverParams={{ with_genres: cat.genreId }}
+              onClick={() => navigate(`/browse?genre=${cat.genreId}`)}
+            />
+          ))}
+        </ScrollContainer>
       </div>
 
-      {/* Genre Horizontal Scroll */}
-      <ScrollContainer className="gap-3 pb-2" showButtons={true}>
-        {CATEGORIES.map((cat) => (
-          <CategoryCard
-            key={cat.id}
-            cat={cat}
-            onClick={() => navigate(`/browse?genre=${cat.genreId}`)}
-          />
-        ))}
-      </ScrollContainer>
+      {/* 2. Streaming Providers Section */}
+      <div className="space-y-4">
+        <div className="flex flex-col px-1">
+          <h2 className="text-sm md:text-base font-bold text-foreground uppercase tracking-widest flex items-center gap-2">
+            <span className="w-1 h-4 bg-brand-secondary rounded-full shadow-[0_0_8px_rgba(6,182,212,0.5)]" />
+            Streaming Services
+          </h2>
+          <p className="text-[10px] text-muted-foreground">Explore what is playing on your favorite platforms.</p>
+        </div>
+        <ScrollContainer className="gap-3 pb-2" showButtons={true}>
+          {(providersData?.results
+            ? [...providersData.results]
+                .sort((a, b) => a.display_priority - b.display_priority)
+                .slice(0, 24)
+            : []
+          ).map((provider) => (
+            <ProviderCard
+              key={provider.provider_id}
+              name={provider.provider_name}
+              logoPath={provider.logo_path}
+              onClick={() => navigate(`/browse?provider=${provider.provider_id}`)}
+            />
+          ))}
+        </ScrollContainer>
+      </div>
 
-      {/* Secondary Links */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {METADATA_LINKS.map((link) => (
-          <motion.button
-            key={link.id}
-            whileHover={{ x: 4 }}
-            onClick={() => navigate(link.path)}
-            className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors text-left cursor-pointer"
-          >
-            <div className="p-2 rounded-lg bg-brand-primary/10 text-brand-primary">
-              <link.icon className="w-4 h-4" />
-            </div>
-            <span className="text-xs font-semibold text-foreground">{link.name}</span>
-          </motion.button>
-        ))}
+      {/* 3. Production Companies Section */}
+      <div className="space-y-4">
+        <div className="flex flex-col px-1">
+          <h2 className="text-sm md:text-base font-bold text-foreground uppercase tracking-widest flex items-center gap-2">
+            <span className="w-1 h-4 bg-brand-accent rounded-full shadow-[0_0_8px_rgba(139,92,246,0.5)]" />
+            Studios & Brands
+          </h2>
+          <p className="text-[10px] text-muted-foreground">Browse masterpieces from popular production houses.</p>
+        </div>
+        <ScrollContainer className="gap-3 pb-2" showButtons={true}>
+          {POPULAR_COMPANIES.map((company) => (
+            <StudioCard
+              key={company.id}
+              name={company.name}
+              logoPath={company.logoPath}
+              onClick={() => navigate(`/browse?company=${company.id}&companyName=${encodeURIComponent(company.name)}`)}
+            />
+          ))}
+        </ScrollContainer>
+      </div>
+
+      {/* 4. Origin Countries Section */}
+      <div className="space-y-4">
+        <div className="flex flex-col px-1">
+          <h2 className="text-sm md:text-base font-bold text-foreground uppercase tracking-widest flex items-center gap-2">
+            <span className="w-1 h-4 bg-palette-emerald rounded-full shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+            Origin Countries
+          </h2>
+          <p className="text-[10px] text-muted-foreground">Discover stories from around the globe.</p>
+        </div>
+        <ScrollContainer className="gap-3 pb-2" showButtons={true}>
+          {POPULAR_COUNTRIES.map((country) => (
+            <DynamicCard
+              key={country.code}
+              name={country.name}
+              flagEmoji={country.flag}
+              discoverParams={{ with_origin_country: country.code }}
+              onClick={() => navigate(`/browse?country=${country.code}`)}
+            />
+          ))}
+        </ScrollContainer>
+      </div>
+
+      {/* 5. Languages Section */}
+      <div className="space-y-4">
+        <div className="flex flex-col px-1">
+          <h2 className="text-sm md:text-base font-bold text-foreground uppercase tracking-widest flex items-center gap-2">
+            <span className="w-1 h-4 bg-palette-amber rounded-full shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
+            Original Languages
+          </h2>
+          <p className="text-[10px] text-muted-foreground">Filter cinema by original audio language.</p>
+        </div>
+        <ScrollContainer className="gap-3 pb-2" showButtons={true}>
+          {POPULAR_LANGUAGES.map((lang) => (
+            <DynamicCard
+              key={lang.code}
+              name={lang.name}
+              pillLabel={lang.label}
+              discoverParams={{ with_original_language: lang.code }}
+              onClick={() => navigate(`/browse?language=${lang.code}`)}
+            />
+          ))}
+        </ScrollContainer>
+      </div>
+
+      {/* 6. Release Years & Decades Section */}
+      <div className="space-y-4">
+        <div className="flex flex-col px-1">
+          <h2 className="text-sm md:text-base font-bold text-foreground uppercase tracking-widest flex items-center gap-2">
+            <span className="w-1 h-4 bg-palette-rose rounded-full shadow-[0_0_8px_rgba(244,63,94,0.5)]" />
+            Time Periods
+          </h2>
+          <p className="text-[10px] text-muted-foreground">Travel back in time to different cinema eras.</p>
+        </div>
+        <ScrollContainer className="gap-3 pb-2" showButtons={true}>
+          {POPULAR_YEARS.map((year) => {
+            const params = year.type === 'year'
+              ? { primary_release_year: year.value }
+              : { 
+                  'primary_release_date.gte': `${year.id.replace('s', '')}-01-01`,
+                  'primary_release_date.lte': `${year.id.replace('s', '').replace('Classics', '1989')}-12-31`
+                };
+            // Note: Classics searches pre-1990 movies
+            const backgroundParams = year.type === 'year'
+              ? { primary_release_year: year.value }
+              : { primary_release_year: year.value }; // use representative year for backdrop search query
+              
+            return (
+              <DynamicCard
+                key={year.id}
+                name={year.name}
+                color="bg-palette-rose/10 text-palette-rose"
+                discoverParams={backgroundParams}
+                onClick={() => {
+                  if (year.type === 'year') {
+                    navigate(`/browse?year=${year.value}`);
+                  } else if (year.id === 'Classics') {
+                    navigate(`/browse?primary_release_date.lte=1989-12-31`);
+                  } else {
+                    const startYear = year.id.replace('s', '');
+                    const endYear = Number(startYear) + 9;
+                    navigate(`/browse?primary_release_date.gte=${startYear}-01-01&primary_release_date.lte=${endYear}-12-31`);
+                  }
+                }}
+              />
+            );
+          })}
+        </ScrollContainer>
       </div>
     </section>
   );

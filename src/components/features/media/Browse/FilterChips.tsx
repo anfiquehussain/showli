@@ -17,6 +17,16 @@ interface FilterChipsProps {
   networkName: string;
   companyId: string;
   companyName: string;
+  status: string;
+  showType: string;
+  budgetGte: string;
+  budgetLte: string;
+  revenueGte: string;
+  revenueLte: string;
+  minSeasons: string;
+  maxSeasons: string;
+  minEpisodes: string;
+  maxEpisodes: string;
   onRemove: (key: string, value: string, extra?: { name: string; val: string }) => void;
   onClearAll: () => void;
 }
@@ -36,6 +46,16 @@ const FilterChips = ({
   networkName,
   companyId,
   companyName,
+  status,
+  showType,
+  budgetGte,
+  budgetLte,
+  revenueGte,
+  revenueLte,
+  minSeasons,
+  maxSeasons,
+  minEpisodes,
+  maxEpisodes,
   onRemove,
   onClearAll
 }: FilterChipsProps) => {
@@ -70,6 +90,31 @@ const FilterChips = ({
     return watchRegions?.results?.find((r: TmdbCountry) => r.iso_3166_1 === code)?.english_name || code;
   };
 
+  const getStatusLabel = (val: string) => {
+    const map: Record<string, string> = {
+      '0': 'Returning Series',
+      '1': 'Planned',
+      '2': 'In Production',
+      '3': 'Ended',
+      '4': 'Canceled',
+      '5': 'Pilot'
+    };
+    return map[val] || val;
+  };
+
+  const getShowTypeLabel = (val: string) => {
+    const map: Record<string, string> = {
+      '0': 'Documentary',
+      '1': 'News',
+      '2': 'Miniseries',
+      '3': 'Reality',
+      '4': 'Scripted',
+      '5': 'Talk Show',
+      '6': 'Video'
+    };
+    return map[val] || val;
+  };
+
   const activeFilters = [
     { key: 'q', value: query, label: `Search: ${query}` },
     { key: 'type', value: mediaType !== 'all' ? mediaType : '', label: `Type: ${mediaType}` },
@@ -82,6 +127,16 @@ const FilterChips = ({
     { key: 'keyword', value: keywordId, label: `Keyword: ${keywordName}`, extra: { name: 'keywordName', val: '' } },
     { key: 'network', value: networkId, label: `Network: ${networkName}`, extra: { name: 'networkName', val: '' } },
     { key: 'company', value: companyId, label: `Company: ${companyName}`, extra: { name: 'companyName', val: '' } },
+    { key: 'status', value: status, label: `Status: ${getStatusLabel(status)}` },
+    { key: 'showType', value: showType, label: `Show Type: ${getShowTypeLabel(showType)}` },
+    { key: 'budgetGte', value: budgetGte && !budgetLte ? `Budget: >= $${budgetGte}M` : budgetGte && budgetLte ? `Budget: $${budgetGte}M-$${budgetLte}M` : '', label: budgetGte && !budgetLte ? `Budget: >= $${budgetGte}M` : `Budget: $${budgetGte}M-$${budgetLte}M` },
+    { key: 'budgetLte', value: budgetLte && !budgetGte ? `Budget: <= $${budgetLte}M` : '', label: `Budget: <= $${budgetLte}M` },
+    { key: 'revenueGte', value: revenueGte && !revenueLte ? `Revenue: >= $${revenueGte}M` : revenueGte && revenueLte ? `Revenue: $${revenueGte}M-$${revenueLte}M` : '', label: revenueGte && !revenueLte ? `Revenue: >= $${revenueGte}M` : `Revenue: $${revenueGte}M-$${revenueLte}M` },
+    { key: 'revenueLte', value: revenueLte && !revenueGte ? `Revenue: <= $${revenueLte}M` : '', label: `Revenue: <= $${revenueLte}M` },
+    { key: 'minSeasons', value: minSeasons && !maxSeasons ? `Seasons: >= ${minSeasons}` : minSeasons && maxSeasons ? `Seasons: ${minSeasons}-${maxSeasons}` : '', label: minSeasons && !maxSeasons ? `Seasons: >= ${minSeasons}` : `Seasons: ${minSeasons}-${maxSeasons}` },
+    { key: 'maxSeasons', value: maxSeasons && !minSeasons ? `Seasons: <= ${maxSeasons}` : '', label: `Seasons: <= ${maxSeasons}` },
+    { key: 'minEpisodes', value: minEpisodes && !maxEpisodes ? `Episodes: >= ${minEpisodes}` : minEpisodes && maxEpisodes ? `Episodes: ${minEpisodes}-${maxEpisodes}` : '', label: minEpisodes && !maxEpisodes ? `Episodes: >= ${minEpisodes}` : `Episodes: ${minEpisodes}-${maxEpisodes}` },
+    { key: 'maxEpisodes', value: maxEpisodes && !minEpisodes ? `Episodes: <= ${maxEpisodes}` : '', label: `Episodes: <= ${maxEpisodes}` },
   ].filter(f => f.value);
 
   if (activeFilters.length === 0) return null;

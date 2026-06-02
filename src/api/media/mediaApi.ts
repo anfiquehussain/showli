@@ -287,6 +287,13 @@ export const mediaApi = createApi({
       query: ({ query, page = 1 }) =>
         `/search/company?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&page=${page}`,
     }),
+    searchNetworks: builder.query<
+      TmdbPaginatedResponse<{ id: number; name: string; logo_path: string | null }>,
+      { query: string; page?: number }
+    >({
+      query: ({ query, page = 1 }) =>
+        `/search/network?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&page=${page}`,
+    }),
   }),
 });
 
@@ -330,4 +337,5 @@ export const {
   useGetMediaKeywordsQuery,
   useSearchKeywordsQuery,
   useSearchCompaniesQuery,
+  useSearchNetworksQuery,
 } = mediaApi;

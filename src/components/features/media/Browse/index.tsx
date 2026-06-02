@@ -1,12 +1,13 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useDiscoverQuery, useSearchMediaQuery } from '@/api/media/mediaApi';
+import { useDiscoverQuery, useSearchMediaQuery, mediaApi } from '@/api/media/mediaApi';
 import BrowseToolbar from '@/components/features/media/Browse/BrowseToolbar';
 import BrowseFilters from '@/components/features/media/Browse/BrowseFilters';
 import BrowseResults from '@/components/features/media/Browse/BrowseResults';
 import FilterChips from '@/components/features/media/Browse/FilterChips';
+import { useAppDispatch } from '@/hooks/useRedux';
 
-import type { TmdbMedia } from '@/types/tmdb.types';
+import type { TmdbMedia, TmdbTVDetails, TmdbMovieDetails } from '@/types/tmdb.types';
 
 const Browse = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -63,7 +64,21 @@ const Browse = () => {
   const networkName = searchParams.get('networkName') || '';
   const company = searchParams.get('company') || '';
   const companyName = searchParams.get('companyName') || '';
+  const status = searchParams.get('status') || '';
+  const showType = searchParams.get('showType') || '';
+  const budgetGte = searchParams.get('budgetGte') || '';
+  const budgetLte = searchParams.get('budgetLte') || '';
+  const revenueGte = searchParams.get('revenueGte') || '';
+  const revenueLte = searchParams.get('revenueLte') || '';
+  const minSeasons = searchParams.get('minSeasons') || '';
+  const maxSeasons = searchParams.get('maxSeasons') || '';
+  const minEpisodes = searchParams.get('minEpisodes') || '';
+  const maxEpisodes = searchParams.get('maxEpisodes') || '';
   const page = Number(searchParams.get('page')) || 1;
+
+  const dispatch = useAppDispatch();
+  const [tvDetailsCache, setTvDetailsCache] = useState<Record<number, TmdbTVDetails>>({});
+  const [movieDetailsCache, setMovieDetailsCache] = useState<Record<number, TmdbMovieDetails>>({});
 
   // Handle 'focus=filters' to open sidebar automatically
   useEffect(() => {
@@ -112,14 +127,68 @@ const Browse = () => {
       with_keywords: keywordId,
       with_networks: network,
       with_companies: company,
+      with_status: discoverType === 'tv' && status ? status : undefined,
+      with_type: discoverType === 'tv' && showType ? showType : undefined,
+      'budget.gte': discoverType === 'movie' && budgetGte ? Number(budgetGte) * 1000000 : undefined,
+      'budget.lte': discoverType === 'movie' && budgetLte ? Number(budgetLte) * 1000000 : undefined,
+      'revenue.gte': discoverType === 'movie' && revenueGte ? Number(revenueGte) * 1000000 : undefined,
+      'revenue.lte': discoverType === 'movie' && revenueLte ? Number(revenueLte) * 1000000 : undefined,
       page,
-    }
+    } as Record<string, string | number>
   }, { skip: isSearching });
 
   const results = isSearching ? searchResults : discoverResults;
   const isLoading = isSearching ? isSearchLoading : isDiscoverLoading;
   const isFetching = isSearching ? isSearchFetching : isDiscoverFetching;
   const error = isSearching ? searchError : discoverError;
+
+  // Background fetch TV details if TV-specific client-side filters (seasons, episodes, status, showType in search mode) are active
+  useEffect(() => {
+    if (!results?.results) return;
+    const isTvFilterActive = !!(minSeasons || maxSeasons || minEpisodes || maxEpisodes || (isSearching && (status || showType)));
+    if (!isTvFilterActive) return;
+
+    const tvShowsToFetch = results.results.filter(
+      (item: TmdbMedia) =>
+        ('name' in item && !('profile_path' in item)) &&
+        !tvDetailsCache[item.id]
+    );
+
+    if (tvShowsToFetch.length === 0) return;
+
+    tvShowsToFetch.forEach((show) => {
+      dispatch(mediaApi.endpoints.getTVDetails.initiate(show.id))
+        .unwrap()
+        .then((details) => {
+          setTvDetailsCache((prev) => ({ ...prev, [show.id]: details }));
+        })
+        .catch((err) => console.error(err));
+    });
+  }, [results, tvDetailsCache, minSeasons, maxSeasons, minEpisodes, maxEpisodes, status, showType, isSearching, dispatch]);
+
+  // Background fetch Movie details if movie-specific client-side filters are active during search (where TMDB doesn't support them)
+  useEffect(() => {
+    if (!results?.results) return;
+    const isMovieFilterActive = !!(budgetGte || budgetLte || revenueGte || revenueLte);
+    if (!isSearching || !isMovieFilterActive) return;
+
+    const moviesToFetch = results.results.filter(
+      (item: TmdbMedia) =>
+        ('title' in item) &&
+        !movieDetailsCache[item.id]
+    );
+
+    if (moviesToFetch.length === 0) return;
+
+    moviesToFetch.forEach((movie) => {
+      dispatch(mediaApi.endpoints.getMovieDetails.initiate(movie.id))
+        .unwrap()
+        .then((details) => {
+          setMovieDetailsCache((prev) => ({ ...prev, [movie.id]: details }));
+        })
+        .catch((err) => console.error(err));
+    });
+  }, [results, movieDetailsCache, isSearching, budgetGte, budgetLte, revenueGte, revenueLte, dispatch]);
 
   const hasMore = (results?.page || 1) < Math.min(results?.total_pages || 1, 500);
 
@@ -181,8 +250,70 @@ const Browse = () => {
           if (!originCountry?.includes(country)) return false;
         }
 
-        // Provider Filter (Note: This is difficult to do client-side effectively without additional API calls per item, 
-        // but for search results we might just omit it or rely on the fact that TMDb doesn't support it in multi-search anyway)
+        // Status Filter in Search Mode
+        if (type === 'tv' && status) {
+          const details = tvDetailsCache[item.id];
+          if (!details) return false; // hide until details load
+          const statusTextMap: Record<string, string> = {
+            'Returning Series': '0',
+            'Planned': '1',
+            'In Production': '2',
+            'Ended': '3',
+            'Canceled': '4',
+            'Pilot': '5'
+          };
+          if (statusTextMap[details.status] !== status) return false;
+        }
+
+        // Show Type Filter in Search Mode
+        if (type === 'tv' && showType) {
+          const details = tvDetailsCache[item.id];
+          if (!details) return false;
+          const typeTextMap: Record<string, string> = {
+            'Documentary': '0',
+            'News': '1',
+            'Miniseries': '2',
+            'Reality': '3',
+            'Scripted': '4',
+            'Talk Show': '5',
+            'Video': '6'
+          };
+          if (typeTextMap[details.type] !== showType) return false;
+        }
+
+        // Budget Filter in Search Mode
+        if (type === 'movie' && (budgetGte || budgetLte)) {
+          const details = movieDetailsCache[item.id];
+          if (!details) return false;
+          const budgetMillions = details.budget / 1000000;
+          if (budgetGte && budgetMillions < Number(budgetGte)) return false;
+          if (budgetLte && budgetMillions > Number(budgetLte)) return false;
+        }
+
+        // Revenue Filter in Search Mode
+        if (type === 'movie' && (revenueGte || revenueLte)) {
+          const details = movieDetailsCache[item.id];
+          if (!details) return false;
+          const revenueMillions = details.revenue / 1000000;
+          if (revenueGte && revenueMillions < Number(revenueGte)) return false;
+          if (revenueLte && revenueMillions > Number(revenueLte)) return false;
+        }
+      }
+
+      // TV Seasons & Episodes Filter (Always Client-Side since TMDB Discover doesn't support them)
+      if (type === 'tv' && (minSeasons || maxSeasons)) {
+        const details = tvDetailsCache[item.id];
+        if (!details) return false;
+        const seasons = details.number_of_seasons;
+        if (minSeasons && seasons < Number(minSeasons)) return false;
+        if (maxSeasons && seasons > Number(maxSeasons)) return false;
+      }
+      if (type === 'tv' && (minEpisodes || maxEpisodes)) {
+        const details = tvDetailsCache[item.id];
+        if (!details) return false;
+        const episodes = details.number_of_episodes;
+        if (minEpisodes && episodes < Number(minEpisodes)) return false;
+        if (maxEpisodes && episodes > Number(maxEpisodes)) return false;
       }
       
       // 3. Deduplication
@@ -196,7 +327,7 @@ const Browse = () => {
       ...results,
       results: filteredResults
     };
-  }, [results, isSearching, mediaType, genreId, year, language, country]);
+  }, [results, isSearching, mediaType, genreId, year, language, country, status, showType, budgetGte, budgetLte, revenueGte, revenueLte, minSeasons, maxSeasons, minEpisodes, maxEpisodes, tvDetailsCache, movieDetailsCache]);
 
   const handleUpdateParam = (key: string, value: string, extra?: { name: string; val: string }) => {
     const newParams = new URLSearchParams(searchParams);
@@ -226,7 +357,17 @@ const Browse = () => {
       key === 'provider' ||
       key === 'keyword' ||
       key === 'network' ||
-      key === 'company'
+      key === 'company' ||
+      key === 'status' ||
+      key === 'showType' ||
+      key === 'budgetGte' ||
+      key === 'budgetLte' ||
+      key === 'revenueGte' ||
+      key === 'revenueLte' ||
+      key === 'minSeasons' ||
+      key === 'maxSeasons' ||
+      key === 'minEpisodes' ||
+      key === 'maxEpisodes'
     ) {
       newParams.delete('page');
     }
@@ -271,6 +412,18 @@ const Browse = () => {
             keywordName={keywordName}
             companyId={company}
             companyName={companyName}
+            status={status}
+            showType={showType}
+            budgetGte={budgetGte}
+            budgetLte={budgetLte}
+            revenueGte={revenueGte}
+            revenueLte={revenueLte}
+            minSeasons={minSeasons}
+            maxSeasons={maxSeasons}
+            minEpisodes={minEpisodes}
+            maxEpisodes={maxEpisodes}
+            networkId={network}
+            networkName={networkName}
             onFilterChange={handleUpdateParam}
             onClear={handleClearFilters}
           />
@@ -296,6 +449,18 @@ const Browse = () => {
                 keywordName={keywordName}
                 companyId={company}
                 companyName={companyName}
+                status={status}
+                showType={showType}
+                budgetGte={budgetGte}
+                budgetLte={budgetLte}
+                revenueGte={revenueGte}
+                revenueLte={revenueLte}
+                minSeasons={minSeasons}
+                maxSeasons={maxSeasons}
+                minEpisodes={minEpisodes}
+                maxEpisodes={maxEpisodes}
+                networkId={network}
+                networkName={networkName}
                 onFilterChange={handleUpdateParam}
                 onClear={handleClearFilters}
                 onClose={toggleSidebar}
@@ -320,6 +485,16 @@ const Browse = () => {
             networkName={networkName}
             companyId={company}
             companyName={companyName}
+            status={status}
+            showType={showType}
+            budgetGte={budgetGte}
+            budgetLte={budgetLte}
+            revenueGte={revenueGte}
+            revenueLte={revenueLte}
+            minSeasons={minSeasons}
+            maxSeasons={maxSeasons}
+            minEpisodes={minEpisodes}
+            maxEpisodes={maxEpisodes}
             onRemove={handleUpdateParam}
             onClearAll={handleClearFilters}
           />

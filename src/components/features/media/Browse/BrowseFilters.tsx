@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, RotateCcw, Search, Tag, Building2 } from 'lucide-react';
+import { X, RotateCcw, Search, Tag, Building2, Tv } from 'lucide-react';
 import {
   useGetMovieGenresQuery,
   useGetTVGenresQuery,
@@ -8,7 +8,8 @@ import {
   useGetAvailableWatchProvidersQuery,
   useGetWatchProviderRegionsQuery,
   useSearchKeywordsQuery,
-  useSearchCompaniesQuery
+  useSearchCompaniesQuery,
+  useSearchNetworksQuery
 } from '@/api/media/mediaApi';
 import Button from '@/components/ui/Button';
 
@@ -24,6 +25,18 @@ interface BrowseFiltersProps {
   keywordName: string;
   companyId: string;
   companyName: string;
+  status: string;
+  showType: string;
+  budgetGte: string;
+  budgetLte: string;
+  revenueGte: string;
+  revenueLte: string;
+  minSeasons: string;
+  maxSeasons: string;
+  minEpisodes: string;
+  maxEpisodes: string;
+  networkId: string;
+  networkName: string;
   onFilterChange: (key: string, value: string, extra?: { name: string; val: string }) => void;
   onClear: () => void;
   onClose?: () => void;
@@ -54,6 +67,18 @@ const BrowseFilters = ({
   keywordName,
   companyId,
   companyName,
+  status,
+  showType,
+  budgetGte,
+  budgetLte,
+  revenueGte,
+  revenueLte,
+  minSeasons,
+  maxSeasons,
+  minEpisodes,
+  maxEpisodes,
+  networkId: _networkId,
+  networkName,
   onFilterChange,
   onClear,
   onClose
@@ -73,6 +98,7 @@ const BrowseFilters = ({
   const [providerSearch, setProviderSearch] = React.useState('');
   const [keywordInput, setKeywordInput] = React.useState('');
   const [companyInput, setCompanyInput] = React.useState('');
+  const [networkInput, setNetworkInput] = React.useState('');
 
   const { data: keywordSuggestions, isLoading: isKeywordSearching } = useSearchKeywordsQuery(
     { query: keywordInput },
@@ -82,6 +108,11 @@ const BrowseFilters = ({
   const { data: companySuggestions, isLoading: isCompanySearching } = useSearchCompaniesQuery(
     { query: companyInput },
     { skip: companyInput.length < 2 }
+  );
+
+  const { data: networkSuggestions, isLoading: isNetworkSearching } = useSearchNetworksQuery(
+    { query: networkInput },
+    { skip: networkInput.length < 2 }
   );
 
   const genres = mediaType === 'tv' ? tvGenres?.genres : movieGenres?.genres;
@@ -308,6 +339,229 @@ const BrowseFilters = ({
             )}
           </div>
         </div>
+
+        {/* TV-Specific Filters */}
+        {(mediaType === 'tv' || mediaType === 'all') && (
+          <>
+            {/* Status */}
+            <div className="space-y-3">
+              <label className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+                TV Status
+              </label>
+              <select
+                value={status}
+                onChange={(e) => onFilterChange('status', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-primary/50 focus:outline-none appearance-none"
+                style={{ colorScheme: 'dark' }}
+              >
+                <option value="" className="bg-card text-foreground">All Statuses</option>
+                <option value="0" className="bg-card text-foreground">Returning Series</option>
+                <option value="1" className="bg-card text-foreground">Planned</option>
+                <option value="2" className="bg-card text-foreground">In Production</option>
+                <option value="3" className="bg-card text-foreground">Ended</option>
+                <option value="4" className="bg-card text-foreground">Canceled</option>
+                <option value="5" className="bg-card text-foreground">Pilot</option>
+              </select>
+            </div>
+
+            {/* Show Type (TV Only) */}
+            {mediaType === 'tv' && (
+              <div className="space-y-3">
+                <label className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+                  Show Type
+                </label>
+                <select
+                  value={showType}
+                  onChange={(e) => onFilterChange('showType', e.target.value)}
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-primary/50 focus:outline-none appearance-none"
+                  style={{ colorScheme: 'dark' }}
+                >
+                  <option value="" className="bg-card text-foreground">All Types</option>
+                  <option value="0" className="bg-card text-foreground">Documentary</option>
+                  <option value="1" className="bg-card text-foreground">News</option>
+                  <option value="2" className="bg-card text-foreground">Miniseries</option>
+                  <option value="3" className="bg-card text-foreground">Reality</option>
+                  <option value="4" className="bg-card text-foreground">Scripted</option>
+                  <option value="5" className="bg-card text-foreground">Talk Show</option>
+                  <option value="6" className="bg-card text-foreground">Video</option>
+                </select>
+              </div>
+            )}
+
+            {/* TV Seasons Range */}
+            {mediaType === 'tv' && (
+              <div className="space-y-3">
+                <label className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+                  Seasons Count
+                </label>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="number"
+                    min="1"
+                    placeholder="Min"
+                    value={minSeasons}
+                    onChange={(e) => onFilterChange('minSeasons', e.target.value)}
+                    className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-brand-primary/50 focus:outline-none transition-standard placeholder:text-muted-foreground/30"
+                  />
+                  <span className="text-muted-foreground text-xs">—</span>
+                  <input
+                    type="number"
+                    min="1"
+                    placeholder="Max"
+                    value={maxSeasons}
+                    onChange={(e) => onFilterChange('maxSeasons', e.target.value)}
+                    className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-brand-primary/50 focus:outline-none transition-standard placeholder:text-muted-foreground/30"
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* TV Episodes Range */}
+            {mediaType === 'tv' && (
+              <div className="space-y-3">
+                <label className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+                  Episode Count
+                </label>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="number"
+                    min="1"
+                    placeholder="Min"
+                    value={minEpisodes}
+                    onChange={(e) => onFilterChange('minEpisodes', e.target.value)}
+                    className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-brand-primary/50 focus:outline-none transition-standard placeholder:text-muted-foreground/30"
+                  />
+                  <span className="text-muted-foreground text-xs">—</span>
+                  <input
+                    type="number"
+                    min="1"
+                    placeholder="Max"
+                    value={maxEpisodes}
+                    onChange={(e) => onFilterChange('maxEpisodes', e.target.value)}
+                    className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-brand-primary/50 focus:outline-none transition-standard placeholder:text-muted-foreground/30"
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Networks Search (TV Only) */}
+            {mediaType === 'tv' && (
+              <div className="space-y-3 relative">
+                <label className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+                  Networks
+                </label>
+                {networkName ? (
+                  <div className="flex items-center justify-between bg-brand-primary/10 border border-brand-primary/30 rounded-xl px-4 py-2.5">
+                    <div className="flex items-center gap-2 text-brand-primary">
+                      <Tv className="w-4 h-4" />
+                      <span className="text-sm font-semibold truncate max-w-[180px]">{networkName}</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => onFilterChange('network', '', { name: 'networkName', val: '' })}
+                      className="text-brand-primary hover:text-brand-accent transition-colors cursor-pointer"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <div className="relative group">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-brand-primary transition-colors" />
+                      <input
+                        type="text"
+                        placeholder="Search networks…"
+                        value={networkInput}
+                        onChange={(e) => setNetworkInput(e.target.value)}
+                        className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-primary/50 focus:outline-none transition-standard placeholder:text-muted-foreground/30"
+                      />
+                      {networkInput.length >= 2 && networkSuggestions?.results && (
+                        <div className="absolute z-50 w-full bg-card border border-white/10 rounded-xl shadow-2xl mt-1 max-h-48 overflow-y-auto custom-scrollbar p-1.5 space-y-1">
+                          {isNetworkSearching && (
+                            <div className="text-xs text-muted-foreground italic px-3 py-2">Searching…</div>
+                          )}
+                          {!isNetworkSearching && networkSuggestions.results.length === 0 && (
+                            <div className="text-xs text-muted-foreground italic px-3 py-2">No networks found</div>
+                          )}
+                          {networkSuggestions.results.map((net) => (
+                            <button
+                              key={net.id}
+                              type="button"
+                              onClick={() => {
+                                onFilterChange('network', String(net.id), { name: 'networkName', val: net.name });
+                                setNetworkInput('');
+                              }}
+                              className="w-full text-left px-3 py-2 text-xs font-semibold text-white/70 hover:text-brand-primary hover:bg-brand-primary/10 rounded-lg transition-colors cursor-pointer"
+                            >
+                              {net.name}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </>
+        )}
+
+        {/* Movie-Specific Filters (Budget and Revenue) */}
+        {(mediaType === 'movie' || mediaType === 'all') && (
+          <>
+            {/* Budget Range */}
+            <div className="space-y-3">
+              <label className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+                Budget (Millions USD)
+              </label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  min="0"
+                  placeholder="Min"
+                  value={budgetGte}
+                  onChange={(e) => onFilterChange('budgetGte', e.target.value)}
+                  className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-brand-primary/50 focus:outline-none transition-standard placeholder:text-muted-foreground/30"
+                />
+                <span className="text-muted-foreground text-xs">—</span>
+                <input
+                  type="number"
+                  min="0"
+                  placeholder="Max"
+                  value={budgetLte}
+                  onChange={(e) => onFilterChange('budgetLte', e.target.value)}
+                  className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-brand-primary/50 focus:outline-none transition-standard placeholder:text-muted-foreground/30"
+                />
+              </div>
+            </div>
+
+            {/* Revenue Range */}
+            <div className="space-y-3">
+              <label className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+                Revenue (Millions USD)
+              </label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  min="0"
+                  placeholder="Min"
+                  value={revenueGte}
+                  onChange={(e) => onFilterChange('revenueGte', e.target.value)}
+                  className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-brand-primary/50 focus:outline-none transition-standard placeholder:text-muted-foreground/30"
+                />
+                <span className="text-muted-foreground text-xs">—</span>
+                <input
+                  type="number"
+                  min="0"
+                  placeholder="Max"
+                  value={revenueLte}
+                  onChange={(e) => onFilterChange('revenueLte', e.target.value)}
+                  className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-brand-primary/50 focus:outline-none transition-standard placeholder:text-muted-foreground/30"
+                />
+              </div>
+            </div>
+          </>
+        )}
 
         {/* Language */}
         <div className="space-y-3">

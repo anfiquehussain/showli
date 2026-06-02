@@ -4,9 +4,6 @@ import {
   Ghost, 
   Heart, 
   Rocket, 
-  Globe, 
-  Languages, 
-  Calendar, 
   Compass,
   Smile,
   Shield,
@@ -14,10 +11,7 @@ import {
   Flame,
   Sparkles,
   Music,
-  Play,
-  Building2,
-  Tv,
-  Film
+  Play
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useDiscoverQuery, useGetAvailableWatchProvidersQuery } from '@/api/media/mediaApi';
@@ -38,18 +32,6 @@ const CATEGORIES = [
   { id: 'thriller', name: 'Thriller', icon: Flame, color: 'bg-palette-amber/10 text-palette-amber', genreId: 53 },
   { id: 'animation', name: 'Animation', icon: Play, color: 'bg-palette-orange/10 text-palette-orange', genreId: 16 },
   { id: 'music', name: 'Music', icon: Music, color: 'bg-palette-emerald/10 text-palette-emerald', genreId: 10402 },
-];
-
-// Popular Watch Providers
-const POPULAR_PROVIDERS = [
-  { id: 8, name: 'Netflix' },
-  { id: 119, name: 'Prime Video' },
-  { id: 337, name: 'Disney+' },
-  { id: 2, name: 'Apple TV+' },
-  { id: 1899, name: 'Max' },
-  { id: 15, name: 'Hulu' },
-  { id: 531, name: 'Paramount+' },
-  { id: 384, name: 'Peacock' },
 ];
 
 // Popular Production Companies
@@ -413,12 +395,6 @@ const QuickBrowseHub = () => {
         </div>
         <ScrollContainer className="gap-3 pb-2" showButtons={true}>
           {POPULAR_YEARS.map((year) => {
-            const params = year.type === 'year'
-              ? { primary_release_year: year.value }
-              : { 
-                  'primary_release_date.gte': `${year.id.replace('s', '')}-01-01`,
-                  'primary_release_date.lte': `${year.id.replace('s', '').replace('Classics', '1989')}-12-31`
-                };
             // Note: Classics searches pre-1990 movies
             const backgroundParams = year.type === 'year'
               ? { primary_release_year: year.value }

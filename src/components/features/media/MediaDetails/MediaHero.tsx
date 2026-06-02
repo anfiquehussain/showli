@@ -248,7 +248,7 @@ const MediaHero = ({
                   href={`https://www.imdb.com/title/${imdbId}`}
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="px-3 sm:px-3.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-warning/50 transition-all text-[10px] sm:text-xs font-black uppercase tracking-widest text-warning flex items-center justify-center h-8 sm:h-9 active:scale-95 transition-transform"
+                  className="px-3 sm:px-3.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-warning/50 transition text-[10px] sm:text-xs font-black uppercase tracking-widest text-warning flex items-center justify-center h-8 sm:h-9 active:scale-95"
                   title="View on IMDb"
                 >
                   IMDb

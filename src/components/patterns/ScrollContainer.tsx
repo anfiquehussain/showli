@@ -96,7 +96,7 @@ const ScrollContainer = ({
               "opacity-0 group-hover/scroll:opacity-100 hover:bg-brand-primary hover:border-brand-primary shadow-[0_0_20px_rgba(0,0,0,0.5)]",
               buttonClasses,
               offsetClasses,
-              !showLeft && "pointer-events-none !opacity-0"
+              !showLeft && "pointer-events-none opacity-0!"
             )}
             aria-label="Scroll Left"
           >
@@ -112,7 +112,7 @@ const ScrollContainer = ({
               "opacity-0 group-hover/scroll:opacity-100 hover:bg-brand-primary hover:border-brand-primary shadow-[0_0_20px_rgba(0,0,0,0.5)]",
               buttonClasses,
               offsetRightClasses,
-              !showRight && "pointer-events-none !opacity-0"
+              !showRight && "pointer-events-none opacity-0!"
             )}
             aria-label="Scroll Right"
           >

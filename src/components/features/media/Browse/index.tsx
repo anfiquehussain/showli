@@ -26,6 +26,29 @@ const Browse = () => {
 
   // Sync state with URL params
   const query = searchParams.get('q') || '';
+  const [searchVal, setSearchVal] = useState(query);
+
+  // Sync local state when URL parameter changes externally (e.g. chip removal, reset filters)
+  useEffect(() => {
+    setSearchVal(query);
+  }, [query]);
+
+  // Debounce search query parameter updates to prevent input lag & autofill merge bugs
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (searchVal !== query) {
+        const newParams = new URLSearchParams(searchParams);
+        if (searchVal) {
+          newParams.set('q', searchVal);
+        } else {
+          newParams.delete('q');
+        }
+        newParams.delete('page');
+        setSearchParams(newParams);
+      }
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchVal, query, searchParams, setSearchParams]);
   const mediaType = (searchParams.get('type') as 'movie' | 'tv' | 'all') || 'all';
   const sortBy = searchParams.get('sort') || 'popularity.desc';
   const genreId = searchParams.get('genre') || '';
@@ -220,10 +243,16 @@ const Browse = () => {
   return (
     <div className="flex flex-col gap-6">
       <BrowseToolbar 
-        query={query}
+        query={searchVal}
         mediaType={mediaType}
         sortBy={sortBy}
-        onUpdateParam={handleUpdateParam}
+        onUpdateParam={(key: string, val: string) => {
+          if (key === 'q') {
+            setSearchVal(val);
+          } else {
+            handleUpdateParam(key, val);
+          }
+        }}
         onToggleFilters={toggleSidebar}
       />
 

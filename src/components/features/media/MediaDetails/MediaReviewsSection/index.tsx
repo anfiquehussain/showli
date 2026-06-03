@@ -38,7 +38,7 @@ const MediaReviewsSection = ({ id, type, mediaTitle, posterPath }: MediaReviewsS
           <button
             onClick={() => setActiveTab('showli')}
             className={`
-              relative flex items-center gap-2 md:gap-3 px-4 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl text-[10px] md:text-xs font-black transition-all duration-300 uppercase tracking-widest
+              relative flex items-center gap-2 md:gap-3 px-4 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl text-[10px] md:text-xs font-black transition-colors duration-300 uppercase tracking-widest
               ${activeTab === 'showli' ? 'text-white' : 'text-white/30 hover:text-white/50'}
             `}
           >
@@ -55,7 +55,7 @@ const MediaReviewsSection = ({ id, type, mediaTitle, posterPath }: MediaReviewsS
           <button
             onClick={() => setActiveTab('tmdb')}
             className={`
-              relative flex items-center gap-2 md:gap-3 px-4 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl text-[10px] md:text-xs font-black transition-all duration-300 uppercase tracking-widest
+              relative flex items-center gap-2 md:gap-3 px-4 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl text-[10px] md:text-xs font-black transition-colors duration-300 uppercase tracking-widest
               ${activeTab === 'tmdb' ? 'text-white' : 'text-white/30 hover:text-white/50'}
             `}
           >

@@ -64,7 +64,7 @@ const EpisodeHero = ({ episode, show, tvId }: EpisodeHeroProps) => {
       {/* Back Button - Floating */}
       <button 
         onClick={() => navigate(-1)}
-        className="absolute top-4 left-4 p-2 rounded-full bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/20 transition-all text-white z-30 shadow-lg active:scale-95 cursor-pointer"
+        className="absolute top-4 left-4 p-2 rounded-full bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/20 transition-colors text-white z-30 shadow-lg active:scale-95 cursor-pointer"
         aria-label="Go back"
       >
         <ChevronLeft className="w-4 h-4" aria-hidden="true" />
@@ -109,7 +109,7 @@ const EpisodeHero = ({ episode, show, tvId }: EpisodeHeroProps) => {
                   />
                   {/* Progress circle */}
                   <circle
-                    className="text-success transition-all duration-500"
+                    className="text-success transition-colors duration-500"
                     strokeWidth="3.5"
                     strokeDasharray="100"
                     strokeDashoffset={100 - Math.round(episode.vote_average * 10)}
@@ -192,7 +192,7 @@ const EpisodeHero = ({ episode, show, tvId }: EpisodeHeroProps) => {
                   href={`https://www.imdb.com/title/${episode.external_ids.imdb_id}`}
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="px-3 sm:px-3.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-warning/50 transition-all text-[10px] sm:text-xs font-black uppercase tracking-widest text-warning flex items-center justify-center h-8 sm:h-9 active:scale-95"
+                  className="px-3 sm:px-3.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-warning/50 transition-colors text-[10px] sm:text-xs font-black uppercase tracking-widest text-warning flex items-center justify-center h-8 sm:h-9 active:scale-95"
                   title="View on IMDb"
                 >
                   IMDb

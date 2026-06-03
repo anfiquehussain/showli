@@ -250,7 +250,7 @@ const StudioCard = ({ name, logoPath, invertLogo, onClick }: StudioCardProps) =>
           <img 
             src={`https://image.tmdb.org/t/p/w185${logoPath}`}
             alt={name}
-            className={`max-w-full max-h-full object-contain opacity-90 group-hover:opacity-100 transition-all duration-300 ${
+            className={`max-w-full max-h-full object-contain opacity-90 group-hover:opacity-100 transition-opacity duration-300 ${
               invertLogo ? 'invert' : ''
             }`}
           />
@@ -316,7 +316,7 @@ const CountryCard = ({ code, name, onClick }: CountryCardProps) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={onClick}
-      className="relative flex flex-col items-start justify-end p-4 h-32 rounded-2xl border border-white/5 transition-all duration-300 group shrink-0 w-48 sm:w-56 bg-card/20 cursor-pointer shadow-[0_8px_32px_rgba(0,0,0,0.4)] text-left"
+      className="relative flex flex-col items-start justify-end p-4 h-32 rounded-2xl border border-white/5 transition-colors duration-300 group shrink-0 w-48 sm:w-56 bg-card/20 cursor-pointer shadow-[0_8px_32px_rgba(0,0,0,0.4)] text-left"
     >
       {/* Background Image wrapped in a cropped container */}
       <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
@@ -327,7 +327,7 @@ const CountryCard = ({ code, name, onClick }: CountryCardProps) => {
             <img
               src={backdropUrl}
               alt={name}
-              className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500"
+              className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-[opacity,transform] duration-500"
               loading="lazy"
             />
             <div className="absolute inset-0 bg-linear-to-t from-black/95 via-black/40 to-transparent transition-opacity duration-300" />
@@ -354,7 +354,7 @@ const CountryCard = ({ code, name, onClick }: CountryCardProps) => {
           rx="17"
           stroke={`url(#${gradId})`}
           strokeWidth="2.5"
-          className="transition-all duration-1000 ease-in-out"
+          className="transition-[stroke-dashoffset] duration-1000 ease-in-out"
           style={{
             strokeDasharray: '800',
             strokeDashoffset: isTouchDevice || isHovered ? '0' : '800',
@@ -368,7 +368,7 @@ const CountryCard = ({ code, name, onClick }: CountryCardProps) => {
           {name}
         </span>
         {movieTitle && (
-          <div className="mt-1 w-full text-[9px] font-medium text-brand-secondary/90 transition-all duration-300 drop-shadow-[0_1.5px_4px_rgba(0,0,0,1)] truncate">
+          <div className="mt-1 w-full text-[9px] font-medium text-brand-secondary/90 transition-colors duration-300 drop-shadow-[0_1.5px_4px_rgba(0,0,0,1)] truncate">
             <span className="truncate font-semibold text-white/50 group-hover:text-white transition-colors">{movieTitle}</span>
           </div>
         )}
@@ -442,7 +442,7 @@ const TimePeriodCard = ({ id, name, type, value, onClick }: TimePeriodCardProps)
       whileTap={{ scale: 0.98 }}
       onMouseMove={handleMouseMove}
       onClick={onClick}
-      className="relative flex flex-col items-start justify-between p-4 h-36 rounded-2xl border border-white/5 hover:border-white/10 transition-all duration-300 group shrink-0 w-52 sm:w-60 bg-neutral-900/60 hover:bg-neutral-900/80 cursor-pointer shadow-[0_8px_32px_rgba(0,0,0,0.4)] text-left overflow-hidden select-none"
+      className="relative flex flex-col items-start justify-between p-4 h-36 rounded-2xl border border-white/5 hover:border-white/10 transition-colors duration-300 group shrink-0 w-52 sm:w-60 bg-neutral-900/60 hover:bg-neutral-900/80 cursor-pointer shadow-[0_8px_32px_rgba(0,0,0,0.4)] text-left overflow-hidden select-none"
       style={{
         // Set coordinates for radial gradient hover effect
         ['--x' as any]: `${coords.x}px`,
@@ -458,7 +458,7 @@ const TimePeriodCard = ({ id, name, type, value, onClick }: TimePeriodCardProps)
             <img
               src={backdropUrl}
               alt={name}
-              className="absolute inset-0 w-full h-full object-cover opacity-35 group-hover:opacity-45 group-hover:scale-110 transition-all duration-500"
+              className="absolute inset-0 w-full h-full object-cover opacity-35 group-hover:opacity-45 group-hover:scale-110 transition-[opacity,transform] duration-500"
               loading="lazy"
             />
             <div className="absolute inset-0 bg-linear-to-t from-black via-black/80 to-black/30" />
@@ -469,7 +469,7 @@ const TimePeriodCard = ({ id, name, type, value, onClick }: TimePeriodCardProps)
       </div>
 
       {/* Decorative vertical film sprocket strip on the left edge */}
-      <div className="absolute left-2.5 top-0 bottom-0 flex flex-col justify-between py-3.5 opacity-15 group-hover:opacity-30 transition-all duration-300 pointer-events-none z-10">
+      <div className="absolute left-2.5 top-0 bottom-0 flex flex-col justify-between py-3.5 opacity-15 group-hover:opacity-30 transition-opacity duration-300 pointer-events-none z-10">
         {[...Array(7)].map((_, i) => (
           <div key={i} className="w-1.5 h-2 rounded-[1px] bg-white border border-white/20" />
         ))}
@@ -496,7 +496,7 @@ const TimePeriodCard = ({ id, name, type, value, onClick }: TimePeriodCardProps)
       {/* Center/Bottom section: Large Title & Description */}
       <div className="pl-3.5 pr-8 z-10 flex flex-col pointer-events-none mt-auto w-full">
         <span 
-          className="text-2xl sm:text-3xl font-black tracking-tighter bg-clip-text text-transparent transition-all duration-300"
+          className="text-2xl sm:text-3xl font-black tracking-tighter bg-clip-text text-transparent transition-colors duration-300"
           style={{ 
             backgroundImage: `linear-gradient(to bottom right, #ffffff 30%, ${metadata.colors.start} 100%)`
           }}
@@ -507,14 +507,14 @@ const TimePeriodCard = ({ id, name, type, value, onClick }: TimePeriodCardProps)
           {metadata.desc}
         </span>
         {movieTitle && (
-          <div className="mt-1.5 w-full text-[9px] font-semibold text-brand-secondary/90 transition-all duration-300 drop-shadow-[0_1.5px_4px_rgba(0,0,0,1)] truncate">
+          <div className="mt-1.5 w-full text-[9px] font-semibold text-brand-secondary/90 transition-colors duration-300 drop-shadow-[0_1.5px_4px_rgba(0,0,0,1)] truncate">
             <span className="truncate font-semibold text-white/50 group-hover:text-white transition-colors">{movieTitle}</span>
           </div>
         )}
       </div>
 
       {/* Play/arrow indicator at bottom-right */}
-      <div className="absolute bottom-4 right-4 p-1.5 rounded-full bg-white/5 border border-white/10 group-hover:bg-white group-hover:border-white transition-all duration-300 group-hover:scale-105 pointer-events-none z-10">
+      <div className="absolute bottom-4 right-4 p-1.5 rounded-full bg-white/5 border border-white/10 group-hover:bg-white group-hover:border-white transition-colors duration-300 group-hover:scale-105 pointer-events-none z-10">
         <Play 
           className="w-2.5 h-2.5 text-white fill-white/20 group-hover:text-black group-hover:fill-black transition-colors" 
         />

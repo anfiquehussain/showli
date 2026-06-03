@@ -183,7 +183,7 @@ To ensure a premium, accessible, and performant user experience, follow these gu
 ### 10.5 Animation & Performance
 -   **Properties**: Animate ONLY `transform` and `opacity`. NEVER use `transition: all`.
 -   **Reduced Motion**: Honor `prefers-reduced-motion`.
--   **Images**: MUST have explicit `width` and `height` to prevent Layout Shift (CLS). Use `loading="lazy"` for below-fold images.
+-   **Images**: MUST have explicit `width` and `height` to prevent Layout Shift (CLS), except for TMDb media images (posters, backdrops, profile shots) which use CSS-driven sizing with `object-cover` and fixed aspect ratios (where CLS risk is minimal due to container-based sizing and explicit attributes could conflict with responsive layouts). Use `loading="lazy"` for below-fold images.
 
 ---
 

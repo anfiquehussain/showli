@@ -110,7 +110,7 @@ const AddMediaModal = ({ isOpen, onClose, collection }: AddMediaModalProps) => {
                 return (
                   <div 
                     key={item.id}
-                    className={`flex items-center gap-4 p-3 rounded-2xl border transition-all duration-300 ${
+                    className={`flex items-center gap-4 p-3 rounded-2xl border transition-colors duration-300 ${
                       isAdded 
                         ? 'bg-brand-primary/5 border-brand-primary/20' 
                         : 'bg-white/5 border-white/5 hover:border-white/20'
@@ -145,7 +145,7 @@ const AddMediaModal = ({ isOpen, onClose, collection }: AddMediaModalProps) => {
                     <Button
                       size="sm"
                       variant={isAdded ? 'secondary' : 'primary'}
-                      className={`h-9 px-4 rounded-xl text-xs font-bold transition-all duration-300 ${
+                      className={`h-9 px-4 rounded-xl text-xs font-bold transition-colors duration-300 ${
                         isAdded ? 'bg-brand-primary/20 text-brand-primary border-brand-primary/30' : ''
                       }`}
                       onClick={() => handleToggleMedia(item)}

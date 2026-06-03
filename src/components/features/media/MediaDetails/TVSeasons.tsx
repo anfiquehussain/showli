@@ -117,7 +117,7 @@ const TVSeasons = ({ tvId, seasons, showTitle }: TVSeasonsProps) => {
         <div className="flex items-center gap-3">
           <button
             onClick={() => setIsRatingsModalOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-brand-primary/10 border border-brand-primary/20 text-[10px] sm:text-[11px] font-black text-brand-primary uppercase tracking-wider hover:bg-brand-primary/20 hover:border-brand-primary/40 transition-all duration-300 transform active:scale-95 shadow-sm shadow-brand-primary/5 cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-brand-primary/10 border border-brand-primary/20 text-[10px] sm:text-[11px] font-black text-brand-primary uppercase tracking-wider hover:bg-brand-primary/20 hover:border-brand-primary/40 transition-colors duration-300 transform active:scale-95 shadow-sm shadow-brand-primary/5 cursor-pointer"
           >
             <Award className="w-3.5 h-3.5" />
             <span>Episode Ratings</span>
@@ -139,7 +139,7 @@ const TVSeasons = ({ tvId, seasons, showTitle }: TVSeasonsProps) => {
             key={season.id}
             onClick={() => handleSeasonChange(season.season_number)}
             className={clsx(
-              "px-4 py-1.5 rounded-full text-[13px] font-bold transition-all duration-300 whitespace-nowrap border shrink-0 flex items-center gap-2",
+              "px-4 py-1.5 rounded-full text-[13px] font-bold transition-colors duration-300 whitespace-nowrap border shrink-0 flex items-center gap-2",
               selectedSeason === season.season_number
                 ? "bg-brand-primary text-white border-brand-primary shadow-[0_0_15px_rgba(99,102,241,0.4)]"
                 : "bg-white/5 text-muted-foreground border-white/5 hover:bg-white/10 hover:text-white"
@@ -186,7 +186,7 @@ const TVSeasons = ({ tvId, seasons, showTitle }: TVSeasonsProps) => {
                 {visibleCount < seasonDetails.episodes.length && (
                   <button
                     onClick={() => setVisibleCount(prev => Math.min(prev + 10, seasonDetails.episodes.length))}
-                    className="flex-1 py-3 rounded-2xl bg-brand-primary/10 border border-brand-primary/20 text-xs font-black text-brand-primary uppercase tracking-[0.2em] hover:bg-brand-primary/20 hover:border-brand-primary/40 transition-all flex items-center justify-center gap-2 group"
+                    className="flex-1 py-3 rounded-2xl bg-brand-primary/10 border border-brand-primary/20 text-xs font-black text-brand-primary uppercase tracking-[0.2em] hover:bg-brand-primary/20 hover:border-brand-primary/40 transition-colors flex items-center justify-center gap-2 group"
                   >
                     Load More (+10)
                     <ChevronDown className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
@@ -197,7 +197,7 @@ const TVSeasons = ({ tvId, seasons, showTitle }: TVSeasonsProps) => {
                   <button
                     onClick={handleShowLess}
                     className={clsx(
-                      "py-3 rounded-2xl bg-white/5 border border-white/10 text-xs font-black text-muted-foreground uppercase tracking-[0.2em] hover:bg-white/10 hover:text-white transition-all flex items-center justify-center gap-2 group px-8",
+                      "py-3 rounded-2xl bg-white/5 border border-white/10 text-xs font-black text-muted-foreground uppercase tracking-[0.2em] hover:bg-white/10 hover:text-white transition-colors flex items-center justify-center gap-2 group px-8",
                       visibleCount >= seasonDetails.episodes.length ? "flex-1" : "w-auto"
                     )}
                   >

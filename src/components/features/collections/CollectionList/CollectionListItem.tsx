@@ -30,7 +30,7 @@ const CollectionListItem = ({
       whileHover={{ scale: 1.02, y: -4 }}
       whileTap={{ scale: 0.98 }}
       className={`
-        relative group flex transition-all duration-500 border cursor-pointer
+        relative group flex transition-colors duration-500 border cursor-pointer
         ${viewMode === 'grid' ? 'flex-col items-center p-4 pt-6' : 'items-center justify-between p-4'}
         ${selectedId === collection.id 
           ? 'bg-brand-primary/20 border-brand-primary/50 shadow-xl shadow-brand-primary/10' 

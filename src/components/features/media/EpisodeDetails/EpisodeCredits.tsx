@@ -177,7 +177,7 @@ const EpisodeCredits = ({ cast = [], crew = [], guestStars = [] }: EpisodeCredit
               <Link 
                 key={`${person.id}-${idx}`} 
                 to={`/person/${person.id}`}
-                className="shrink-0 w-36 md:w-48 group bg-white/5 border border-white/5 rounded-2xl p-2.5 flex items-center gap-3 hover:border-brand-primary/30 hover:bg-white/7 transition-all text-left"
+                className="shrink-0 w-36 md:w-48 group bg-white/5 border border-white/5 rounded-2xl p-2.5 flex items-center gap-3 hover:border-brand-primary/30 hover:bg-white/7 transition-colors text-left"
               >
                 <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 overflow-hidden shrink-0 group-hover:border-brand-primary/50 transition-colors">
                   {person.profile_path ? (
@@ -227,7 +227,7 @@ const EpisodeCredits = ({ cast = [], crew = [], guestStars = [] }: EpisodeCredit
                     placeholder={`Search in ${activeTab}…`}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl py-2.5 pl-11 pr-4 text-sm text-white placeholder:text-muted-foreground focus:outline-none focus:border-brand-primary/50 focus:bg-white/8 transition-all"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl py-2.5 pl-11 pr-4 text-sm text-white placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 focus:border-brand-primary/50 focus:bg-white/8 transition-colors"
                   />
                 </div>
 
@@ -235,7 +235,7 @@ const EpisodeCredits = ({ cast = [], crew = [], guestStars = [] }: EpisodeCredit
                   {cast.length > 0 && (
                     <button
                       onClick={() => { setActiveTab('cast'); setSearchQuery(''); }}
-                      className={`flex-1 md:flex-none md:px-8 py-2 text-[10px] font-bold uppercase tracking-widest rounded-lg transition-all cursor-pointer ${
+                      className={`flex-1 md:flex-none md:px-8 py-2 text-[10px] font-bold uppercase tracking-widest rounded-lg transition-colors cursor-pointer ${
                         activeTab === 'cast' 
                           ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' 
                           : 'text-muted-foreground hover:text-white hover:bg-white/5'
@@ -247,7 +247,7 @@ const EpisodeCredits = ({ cast = [], crew = [], guestStars = [] }: EpisodeCredit
                   {guestStars.length > 0 && (
                     <button
                       onClick={() => { setActiveTab('guest'); setSearchQuery(''); }}
-                      className={`flex-1 md:flex-none md:px-8 py-2 text-[10px] font-bold uppercase tracking-widest rounded-lg transition-all cursor-pointer ${
+                      className={`flex-1 md:flex-none md:px-8 py-2 text-[10px] font-bold uppercase tracking-widest rounded-lg transition-colors cursor-pointer ${
                         activeTab === 'guest' 
                           ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' 
                           : 'text-muted-foreground hover:text-white hover:bg-white/5'
@@ -259,7 +259,7 @@ const EpisodeCredits = ({ cast = [], crew = [], guestStars = [] }: EpisodeCredit
                   {crew.length > 0 && (
                     <button
                       onClick={() => { setActiveTab('crew'); setSearchQuery(''); }}
-                      className={`flex-1 md:flex-none md:px-8 py-2 text-[10px] font-bold uppercase tracking-widest rounded-lg transition-all cursor-pointer ${
+                      className={`flex-1 md:flex-none md:px-8 py-2 text-[10px] font-bold uppercase tracking-widest rounded-lg transition-colors cursor-pointer ${
                         activeTab === 'crew' 
                           ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' 
                           : 'text-muted-foreground hover:text-white hover:bg-white/5'
@@ -282,7 +282,7 @@ const EpisodeCredits = ({ cast = [], crew = [], guestStars = [] }: EpisodeCredit
                       onClick={() => setIsModalOpen(false)}
                       className="flex flex-col group"
                     >
-                      <div className="aspect-2/3 rounded-2xl overflow-hidden bg-white/5 border border-white/5 group-hover:border-brand-primary/50 transition-all duration-300 mb-3 shadow-lg">
+                      <div className="aspect-2/3 rounded-2xl overflow-hidden bg-white/5 border border-white/5 group-hover:border-brand-primary/50 transition-colors duration-300 mb-3 shadow-lg">
                         {person.profile_path ? (
                           <img 
                             src={getTmdbImageUrl(person.profile_path, 'w185')} 
@@ -314,7 +314,7 @@ const EpisodeCredits = ({ cast = [], crew = [], guestStars = [] }: EpisodeCredit
                       onClick={() => setIsModalOpen(false)}
                       className="flex flex-col group"
                     >
-                      <div className="aspect-2/3 rounded-2xl overflow-hidden bg-white/5 border border-white/5 group-hover:border-brand-primary/50 transition-all duration-300 mb-3 shadow-lg">
+                      <div className="aspect-2/3 rounded-2xl overflow-hidden bg-white/5 border border-white/5 group-hover:border-brand-primary/50 transition-colors duration-300 mb-3 shadow-lg">
                         {person.profile_path ? (
                           <img 
                             src={getTmdbImageUrl(person.profile_path, 'w185')} 
@@ -346,7 +346,7 @@ const EpisodeCredits = ({ cast = [], crew = [], guestStars = [] }: EpisodeCredit
                       onClick={() => setIsModalOpen(false)}
                       className="flex flex-col group"
                     >
-                      <div className="aspect-2/3 rounded-2xl overflow-hidden bg-white/5 border border-white/5 group-hover:border-brand-primary/50 transition-all duration-300 mb-3 shadow-lg">
+                      <div className="aspect-2/3 rounded-2xl overflow-hidden bg-white/5 border border-white/5 group-hover:border-brand-primary/50 transition-colors duration-300 mb-3 shadow-lg">
                         {person.profile_path ? (
                           <img 
                             src={getTmdbImageUrl(person.profile_path, 'w185')} 
@@ -376,7 +376,7 @@ const EpisodeCredits = ({ cast = [], crew = [], guestStars = [] }: EpisodeCredit
               <div className="pt-2 flex justify-end">
                 <button
                   onClick={() => setIsModalOpen(false)}
-                  className="px-6 py-2 rounded-xl font-bold text-[10px] uppercase tracking-[0.2em] bg-white/5 text-white hover:bg-brand-primary transition-all shadow-xl border border-white/10 hover:border-brand-primary/50 cursor-pointer"
+                  className="px-6 py-2 rounded-xl font-bold text-[10px] uppercase tracking-[0.2em] bg-white/5 text-white hover:bg-brand-primary transition-colors shadow-xl border border-white/10 hover:border-brand-primary/50 cursor-pointer"
                 >
                   Done
                 </button>

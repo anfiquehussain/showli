@@ -53,7 +53,7 @@ const MediaWatchProviders = ({ id, type }: MediaWatchProvidersProps) => {
             href={providers.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-white/5 border border-white/10 text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-white hover:bg-brand-primary/20 hover:border-brand-primary transition-all group"
+            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-white/5 border border-white/10 text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-white hover:bg-brand-primary/20 hover:border-brand-primary transition-colors group"
           >
             Powered by JustWatch
             <ExternalLink className="w-3 h-3 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
@@ -80,7 +80,7 @@ const ProviderSection = ({ label, providers, link }: { label: string; providers:
           className="group relative"
           title={provider.provider_name}
         >
-          <div className="w-10 h-10 rounded-xl overflow-hidden shadow-lg border border-white/10 group-hover:border-brand-primary/50 group-hover:scale-110 transition-all duration-300">
+          <div className="w-10 h-10 rounded-xl overflow-hidden shadow-lg border border-white/10 group-hover:border-brand-primary/50 group-hover:scale-110 transition-colors duration-300">
             <img 
               src={getTmdbImageUrl(provider.logo_path, 'w92')} 
               alt={provider.provider_name}

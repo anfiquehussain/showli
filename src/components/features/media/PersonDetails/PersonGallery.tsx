@@ -83,7 +83,7 @@ const PersonGallery = ({ personId, profileImages = [] }: PersonGalleryProps) => 
           <div className="flex items-center bg-white/5 rounded-full p-1 border border-white/10">
             <button
               onClick={() => { setActiveTab('profiles'); setSelectedIndex(null); }}
-              className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all ${activeTab === 'profiles'
+              className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-colors ${activeTab === 'profiles'
                   ? 'bg-brand-primary text-white shadow-[0_0_15px_rgba(99,102,241,0.4)]'
                   : 'text-muted-foreground hover:text-white'
                 }`}
@@ -92,7 +92,7 @@ const PersonGallery = ({ personId, profileImages = [] }: PersonGalleryProps) => 
             </button>
             <button
               onClick={() => { setActiveTab('tagged'); setSelectedIndex(null); }}
-              className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all ${activeTab === 'tagged'
+              className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-colors ${activeTab === 'tagged'
                   ? 'bg-brand-primary text-white shadow-[0_0_15px_rgba(99,102,241,0.4)]'
                   : 'text-muted-foreground hover:text-white'
                 }`}
@@ -175,13 +175,13 @@ const PersonGallery = ({ personId, profileImages = [] }: PersonGalleryProps) => 
 
             <button
               onClick={(e) => { e.stopPropagation(); handlePrev(); }}
-              className="absolute left-6 top-1/2 -translate-y-1/2 p-4 rounded-full bg-white/5 hover:bg-white/10 text-white z-10 transition-all border border-white/10 active:scale-90"
+              className="absolute left-6 top-1/2 -translate-y-1/2 p-4 rounded-full bg-white/5 hover:bg-white/10 text-white z-10 transition-colors border border-white/10 active:scale-90"
             >
               <ChevronLeft className="w-8 h-8" />
             </button>
             <button
               onClick={(e) => { e.stopPropagation(); handleNext(); }}
-              className="absolute right-6 top-1/2 -translate-y-1/2 p-4 rounded-full bg-white/5 hover:bg-white/10 text-white z-10 transition-all border border-white/10 active:scale-90"
+              className="absolute right-6 top-1/2 -translate-y-1/2 p-4 rounded-full bg-white/5 hover:bg-white/10 text-white z-10 transition-colors border border-white/10 active:scale-90"
             >
               <ChevronRight className="w-8 h-8" />
             </button>

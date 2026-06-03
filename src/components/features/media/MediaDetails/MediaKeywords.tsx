@@ -50,7 +50,7 @@ const MediaKeywords = ({ id, type }: MediaKeywordsProps) => {
           <button
             key={keyword.id}
             onClick={() => handleKeywordClick(keyword.id, keyword.name)}
-            className="px-3 py-1.5 text-xs font-bold text-white/60 bg-white/5 border border-white/5 hover:border-brand-primary/30 hover:bg-brand-primary/10 hover:text-brand-primary rounded-xl cursor-pointer transition-all duration-300 transform hover:scale-[1.02] active:scale-95"
+            className="px-3 py-1.5 text-xs font-bold text-white/60 bg-white/5 border border-white/5 hover:border-brand-primary/30 hover:bg-brand-primary/10 hover:text-brand-primary rounded-xl cursor-pointer transition-colors duration-300 transform hover:scale-[1.02] active:scale-95"
           >
             {keyword.name}
           </button>

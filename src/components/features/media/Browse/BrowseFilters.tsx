@@ -189,7 +189,7 @@ const BrowseFilters = ({
                   placeholder="Search keywords…"
                   value={keywordInput}
                   onChange={(e) => setKeywordInput(e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-primary/50 focus:outline-none transition-standard placeholder:text-muted-foreground/30"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 transition-standard placeholder:text-muted-foreground/30"
                 />
                 {keywordInput.length >= 2 && keywordSuggestions?.results && (
                   <div className="absolute z-50 w-full bg-card border border-white/10 rounded-xl shadow-2xl mt-1 max-h-48 overflow-y-auto custom-scrollbar p-1.5 space-y-1">
@@ -259,7 +259,7 @@ const BrowseFilters = ({
                   placeholder="Search companies…"
                   value={companyInput}
                   onChange={(e) => setCompanyInput(e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-primary/50 focus:outline-none transition-standard placeholder:text-muted-foreground/30"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 transition-standard placeholder:text-muted-foreground/30"
                 />
                 {companyInput.length >= 2 && companySuggestions?.results && (
                   <div className="absolute z-50 w-full bg-card border border-white/10 rounded-xl shadow-2xl mt-1 max-h-48 overflow-y-auto custom-scrollbar p-1.5 space-y-1">
@@ -327,7 +327,7 @@ const BrowseFilters = ({
               value={year}
               onChange={(e) => onFilterChange('year', e.target.value)}
               placeholder="e.g. 2024"
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-primary/50 focus:outline-none transition-standard placeholder:text-muted-foreground/30"
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 transition-standard placeholder:text-muted-foreground/30"
             />
             {year && (
               <button
@@ -351,7 +351,7 @@ const BrowseFilters = ({
               <select
                 value={status}
                 onChange={(e) => onFilterChange('status', e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-primary/50 focus:outline-none appearance-none"
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 appearance-none"
                 style={{ colorScheme: 'dark' }}
               >
                 <option value="" className="bg-card text-foreground">All Statuses</option>
@@ -373,7 +373,7 @@ const BrowseFilters = ({
                 <select
                   value={showType}
                   onChange={(e) => onFilterChange('showType', e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-primary/50 focus:outline-none appearance-none"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 appearance-none"
                   style={{ colorScheme: 'dark' }}
                 >
                   <option value="" className="bg-card text-foreground">All Types</option>
@@ -401,7 +401,7 @@ const BrowseFilters = ({
                     placeholder="Min"
                     value={minSeasons}
                     onChange={(e) => onFilterChange('minSeasons', e.target.value)}
-                    className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-brand-primary/50 focus:outline-none transition-standard placeholder:text-muted-foreground/30"
+                    className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 transition-standard placeholder:text-muted-foreground/30"
                   />
                   <span className="text-muted-foreground text-xs">—</span>
                   <input
@@ -410,7 +410,7 @@ const BrowseFilters = ({
                     placeholder="Max"
                     value={maxSeasons}
                     onChange={(e) => onFilterChange('maxSeasons', e.target.value)}
-                    className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-brand-primary/50 focus:outline-none transition-standard placeholder:text-muted-foreground/30"
+                    className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 transition-standard placeholder:text-muted-foreground/30"
                   />
                 </div>
               </div>
@@ -429,7 +429,7 @@ const BrowseFilters = ({
                     placeholder="Min"
                     value={minEpisodes}
                     onChange={(e) => onFilterChange('minEpisodes', e.target.value)}
-                    className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-brand-primary/50 focus:outline-none transition-standard placeholder:text-muted-foreground/30"
+                    className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 transition-standard placeholder:text-muted-foreground/30"
                   />
                   <span className="text-muted-foreground text-xs">—</span>
                   <input
@@ -438,7 +438,7 @@ const BrowseFilters = ({
                     placeholder="Max"
                     value={maxEpisodes}
                     onChange={(e) => onFilterChange('maxEpisodes', e.target.value)}
-                    className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-brand-primary/50 focus:outline-none transition-standard placeholder:text-muted-foreground/30"
+                    className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 transition-standard placeholder:text-muted-foreground/30"
                   />
                 </div>
               </div>
@@ -473,7 +473,7 @@ const BrowseFilters = ({
                         placeholder="Search networks…"
                         value={networkInput}
                         onChange={(e) => setNetworkInput(e.target.value)}
-                        className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-primary/50 focus:outline-none transition-standard placeholder:text-muted-foreground/30"
+                        className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 transition-standard placeholder:text-muted-foreground/30"
                       />
                       {networkInput.length >= 2 && networkSuggestions?.results && (
                         <div className="absolute z-50 w-full bg-card border border-white/10 rounded-xl shadow-2xl mt-1 max-h-48 overflow-y-auto custom-scrollbar p-1.5 space-y-1">
@@ -521,7 +521,7 @@ const BrowseFilters = ({
                   placeholder="Min"
                   value={budgetGte}
                   onChange={(e) => onFilterChange('budgetGte', e.target.value)}
-                  className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-brand-primary/50 focus:outline-none transition-standard placeholder:text-muted-foreground/30"
+                  className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 transition-standard placeholder:text-muted-foreground/30"
                 />
                 <span className="text-muted-foreground text-xs">—</span>
                 <input
@@ -530,7 +530,7 @@ const BrowseFilters = ({
                   placeholder="Max"
                   value={budgetLte}
                   onChange={(e) => onFilterChange('budgetLte', e.target.value)}
-                  className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-brand-primary/50 focus:outline-none transition-standard placeholder:text-muted-foreground/30"
+                  className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 transition-standard placeholder:text-muted-foreground/30"
                 />
               </div>
             </div>
@@ -547,7 +547,7 @@ const BrowseFilters = ({
                   placeholder="Min"
                   value={revenueGte}
                   onChange={(e) => onFilterChange('revenueGte', e.target.value)}
-                  className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-brand-primary/50 focus:outline-none transition-standard placeholder:text-muted-foreground/30"
+                  className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 transition-standard placeholder:text-muted-foreground/30"
                 />
                 <span className="text-muted-foreground text-xs">—</span>
                 <input
@@ -556,7 +556,7 @@ const BrowseFilters = ({
                   placeholder="Max"
                   value={revenueLte}
                   onChange={(e) => onFilterChange('revenueLte', e.target.value)}
-                  className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-brand-primary/50 focus:outline-none transition-standard placeholder:text-muted-foreground/30"
+                  className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 transition-standard placeholder:text-muted-foreground/30"
                 />
               </div>
             </div>
@@ -575,7 +575,7 @@ const BrowseFilters = ({
               const text = languages?.find(l => l.iso_639_1 === val)?.english_name || '';
               onFilterChange('language', val, val ? { name: 'languageName', val: text } : undefined);
             }}
-            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-primary/50 focus:outline-none appearance-none"
+            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 appearance-none"
             style={{ colorScheme: 'dark' }}
           >
             <option value="" className="bg-card text-foreground">All Languages</option>
@@ -599,7 +599,7 @@ const BrowseFilters = ({
               const text = countries?.find(c => c.iso_3166_1 === val)?.english_name || '';
               onFilterChange('country', val, val ? { name: 'countryName', val: text } : undefined);
             }}
-            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-primary/50 focus:outline-none appearance-none"
+            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 appearance-none"
             style={{ colorScheme: 'dark' }}
           >
             <option value="" className="bg-card text-foreground">All Countries</option>
@@ -619,7 +619,7 @@ const BrowseFilters = ({
           <select
             value={region}
             onChange={(e) => onFilterChange('region', e.target.value)}
-            className="w-full rounded-xl border border-white/5 bg-white/5 px-4 py-2 text-sm text-white focus:border-brand-primary/50 focus:outline-none"
+            className="w-full rounded-xl border border-white/5 bg-white/5 px-4 py-2 text-sm text-white focus:border-brand-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50"
           >
             {watchRegions?.results.map((r) => (
               <option key={r.iso_3166_1} value={r.iso_3166_1} className="bg-card">
@@ -643,7 +643,7 @@ const BrowseFilters = ({
                   placeholder="Search…"
                   value={providerSearch}
                   onChange={(e) => setProviderSearch(e.target.value)}
-                  className="bg-white/5 border border-white/10 rounded-lg pl-8 pr-2 py-1 text-xs w-32 focus:w-40 focus:ring-1 focus:ring-brand-primary/50 focus:outline-none transition-all placeholder:text-muted-foreground/30"
+                  className="bg-white/5 border border-white/10 rounded-lg pl-8 pr-2 py-1 text-xs w-32 focus:w-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 transition-colors placeholder:text-muted-foreground/30"
                 />
               </div>
             )}
@@ -669,7 +669,7 @@ const BrowseFilters = ({
                 <div className={`absolute inset-0 bg-brand-primary/20 transition-opacity ${provider === String(p.provider_id) ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
 
                 {/* Floating Tooltip on Hover */}
-                <div className="absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1.5 bg-card border border-white/10 rounded text-[10px] text-white opacity-0 group-hover:opacity-100 transition-all pointer-events-none z-50 shadow-xl group-hover:-top-12 duration-200 min-w-[60px] max-w-[100px] text-center leading-tight wrap-break-word">
+                <div className="absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1.5 bg-card border border-white/10 rounded text-[10px] text-white opacity-0 group-hover:opacity-100 transition-colors pointer-events-none z-50 shadow-xl group-hover:-top-12 duration-200 min-w-[60px] max-w-[100px] text-center leading-tight wrap-break-word">
                   {p.provider_name}
                   {/* Arrow */}
                   <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-card border-r border-b border-white/10 rotate-45" />

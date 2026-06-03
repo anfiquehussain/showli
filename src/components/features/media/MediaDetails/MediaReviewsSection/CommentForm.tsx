@@ -99,7 +99,7 @@ const CommentForm = ({
               onChange={(e) => setContent(e.target.value)}
               placeholder={placeholder}
               rows={4}
-              className="w-full bg-white/[0.03] border border-white/10 rounded-xl md:rounded-2xl p-4 md:p-5 text-sm md:text-base text-white placeholder:text-white/20 focus:outline-none focus:border-brand-primary/50 focus:bg-white/[0.05] transition-all resize-none shadow-inner"
+              className="w-full bg-white/[0.03] border border-white/10 rounded-xl md:rounded-2xl p-4 md:p-5 text-sm md:text-base text-white placeholder:text-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 focus:border-brand-primary/50 focus:bg-white/[0.05] transition-colors resize-none shadow-inner"
             />
 
             <div className="flex items-center justify-between gap-4">

@@ -111,7 +111,7 @@ const PersonAllCreditsModal = ({ isOpen, onClose, credits, personName }: PersonA
                 setSearchQuery(e.target.value);
                 setVisibleCount(ITEMS_PER_PAGE);
               }}
-              className="w-full bg-white/5 border border-white/10 rounded-xl py-2.5 pl-11 pr-4 text-sm text-white placeholder:text-muted-foreground focus:outline-none focus:border-brand-primary/50 focus:bg-white/8 transition-all"
+              className="w-full bg-white/5 border border-white/10 rounded-xl py-2.5 pl-11 pr-4 text-sm text-white placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 focus:border-brand-primary/50 focus:bg-white/8 transition-colors"
             />
             {searchQuery && (
               <button
@@ -132,7 +132,7 @@ const PersonAllCreditsModal = ({ isOpen, onClose, credits, personName }: PersonA
                   setTypeFilter(type);
                   setVisibleCount(ITEMS_PER_PAGE);
                 }}
-                className={`px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
+                className={`px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors ${
                   typeFilter === type 
                     ? 'bg-brand-primary text-white shadow-lg' 
                     : 'text-muted-foreground hover:text-white'
@@ -152,7 +152,7 @@ const PersonAllCreditsModal = ({ isOpen, onClose, credits, personName }: PersonA
                 setSortBy(e.target.value as SortOption);
                 setVisibleCount(ITEMS_PER_PAGE);
               }}
-              className="bg-transparent text-xs font-bold uppercase tracking-wider text-white focus:outline-none cursor-pointer"
+              className="bg-transparent text-xs font-bold uppercase tracking-wider text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 cursor-pointer"
             >
               <option value="popularity" className="bg-background text-white">Popular</option>
               <option value="newest" className="bg-background text-white">Newest</option>

@@ -4,7 +4,7 @@ import { AnimatePresence } from 'framer-motion';
 import MainLayout from './components/features/layout/MainLayout';
 import ProtectedRoute from './components/patterns/ProtectedRoute';
 import ScrollToTop from './components/patterns/ScrollToTop';
-import { AddToCollectionProvider } from './components/patterns/AddToCollectionProvider';
+import { AddToCollectionProvider } from './components/features/collections/AddToCollectionProvider';
 import SplashScreen from './components/ui/SplashScreen';
 import { useAppSelector } from '@/hooks/useRedux';
 

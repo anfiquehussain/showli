@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { AddToCollectionContext } from '@/components/patterns/AddToCollectionProvider';
+import { AddToCollectionContext } from '@/components/features/collections/AddToCollectionProvider';
 
 export const useAddToCollection = () => {
   const context = useContext(AddToCollectionContext);

@@ -92,13 +92,13 @@ const EpisodeGallery = ({ images = [] }: EpisodeGalleryProps) => {
             {/* Navigation Buttons */}
             <button
               onClick={(e) => { e.stopPropagation(); handlePrev(); }}
-              className="absolute left-6 top-1/2 -translate-y-1/2 p-4 rounded-full bg-white/5 hover:bg-white/10 text-white z-10 transition-all border border-white/10 active:scale-90 cursor-pointer"
+              className="absolute left-6 top-1/2 -translate-y-1/2 p-4 rounded-full bg-white/5 hover:bg-white/10 text-white z-10 transition-colors border border-white/10 active:scale-90 cursor-pointer"
             >
               <span className="text-xl font-bold">←</span>
             </button>
             <button
               onClick={(e) => { e.stopPropagation(); handleNext(); }}
-              className="absolute right-6 top-1/2 -translate-y-1/2 p-4 rounded-full bg-white/5 hover:bg-white/10 text-white z-10 transition-all border border-white/10 active:scale-90 cursor-pointer"
+              className="absolute right-6 top-1/2 -translate-y-1/2 p-4 rounded-full bg-white/5 hover:bg-white/10 text-white z-10 transition-colors border border-white/10 active:scale-90 cursor-pointer"
             >
               <span className="text-xl font-bold">→</span>
             </button>

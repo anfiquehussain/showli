@@ -89,7 +89,7 @@ export const CollectionModal = ({ isOpen, onClose, onSubmit, collection, isLoadi
                 key={c}
                 type="button"
                 onClick={() => setColor(c)}
-                className={`w-9 h-9 rounded-full transition-all duration-300 ring-offset-2 ring-offset-card ${color === c ? 'scale-110 ring-2 ring-white shadow-lg' : 'hover:scale-105 ring-1 ring-white/10 opacity-70 hover:opacity-100'}`}
+                className={`w-9 h-9 rounded-full transition-colors duration-300 ring-offset-2 ring-offset-card ${color === c ? 'scale-110 ring-2 ring-white shadow-lg' : 'hover:scale-105 ring-1 ring-white/10 opacity-70 hover:opacity-100'}`}
                 style={{ backgroundColor: c }}
                 aria-label={`Select color ${c}`}
               />

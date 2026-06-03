@@ -155,7 +155,7 @@ const EpisodeDetails = ({ tvId, seasonNumber, episodeNumber }: EpisodeDetailsPro
               <Link
                 key={ep.id}
                 to={`/tv/${tvId}/season/${seasonNumber}/episode/${ep.episode_number}`}
-                className="group w-48 sm:w-56 shrink-0 flex flex-col bg-white/3 border border-white/10 hover:border-brand-primary/40 rounded-2xl overflow-hidden transition-all duration-300 transform hover:-translate-y-0.5"
+                className="group w-48 sm:w-56 shrink-0 flex flex-col bg-white/3 border border-white/10 hover:border-brand-primary/40 rounded-2xl overflow-hidden transition-colors duration-300 transform hover:-translate-y-0.5"
               >
                 <div className="relative aspect-video bg-white/5 border-b border-white/5 overflow-hidden">
                   {ep.still_path ? (
@@ -209,7 +209,7 @@ const EpisodeDetails = ({ tvId, seasonNumber, episodeNumber }: EpisodeDetailsPro
               <Link
                 key={s.id}
                 to={`/tv/${tvId}?season=${s.season_number}#seasons-section`}
-                className="group w-32 sm:w-40 shrink-0 flex flex-col bg-white/3 border border-white/10 hover:border-brand-primary/40 rounded-2xl overflow-hidden transition-all duration-300 transform hover:-translate-y-0.5"
+                className="group w-32 sm:w-40 shrink-0 flex flex-col bg-white/3 border border-white/10 hover:border-brand-primary/40 rounded-2xl overflow-hidden transition-colors duration-300 transform hover:-translate-y-0.5"
               >
                 <div className="relative aspect-2/3 bg-white/5 border-b border-white/5 overflow-hidden">
                   {s.poster_path ? (

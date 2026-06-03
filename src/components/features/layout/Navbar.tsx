@@ -88,7 +88,7 @@ const Navbar = () => {
                     key={link.path}
                     to={link.path}
                     className={`
-                      relative px-4 py-2 text-sm font-medium rounded-xl transition-all duration-300
+                      relative px-4 py-2 text-sm font-medium rounded-xl transition-colors duration-300
                       ${location.pathname === link.path 
                         ? 'text-white' 
                         : 'text-muted-foreground hover:text-white hover:bg-white/5'}
@@ -232,7 +232,7 @@ const Navbar = () => {
               <Link
                 key={link.path}
                 to={link.path}
-                className="relative flex-1 flex flex-col items-center justify-center py-2.5 transition-all group"
+                className="relative flex-1 flex flex-col items-center justify-center py-2.5 transition-colors group"
               >
                 {isActive && (
                   <motion.div

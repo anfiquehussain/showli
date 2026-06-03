@@ -195,7 +195,7 @@ const ExportModal = ({ isOpen, onClose, collection, mediaItems }: ExportModalPro
               <div className="grid grid-cols-3 gap-2">
                 <button
                   onClick={() => setFormat('json')}
-                  className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border transition-all duration-300 ${
+                  className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border transition-colors duration-300 ${
                     format === 'json'
                       ? 'bg-brand-primary/10 border-brand-primary/40 text-brand-primary shadow-lg shadow-brand-primary/5'
                       : 'bg-white/5 border-white/5 text-text-secondary hover:bg-white/10 hover:text-white'
@@ -206,7 +206,7 @@ const ExportModal = ({ isOpen, onClose, collection, mediaItems }: ExportModalPro
                 </button>
                 <button
                   onClick={() => setFormat('csv')}
-                  className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border transition-all duration-300 ${
+                  className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border transition-colors duration-300 ${
                     format === 'csv'
                       ? 'bg-brand-primary/10 border-brand-primary/40 text-brand-primary shadow-lg shadow-brand-primary/5'
                       : 'bg-white/5 border-white/5 text-text-secondary hover:bg-white/10 hover:text-white'
@@ -217,7 +217,7 @@ const ExportModal = ({ isOpen, onClose, collection, mediaItems }: ExportModalPro
                 </button>
                 <button
                   onClick={() => setFormat('text')}
-                  className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border transition-all duration-300 ${
+                  className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border transition-colors duration-300 ${
                     format === 'text'
                       ? 'bg-brand-primary/10 border-brand-primary/40 text-brand-primary shadow-lg shadow-brand-primary/5'
                       : 'bg-white/5 border-white/5 text-text-secondary hover:bg-white/10 hover:text-white'
@@ -250,7 +250,7 @@ const ExportModal = ({ isOpen, onClose, collection, mediaItems }: ExportModalPro
                     type="checkbox"
                     checked={fields.year}
                     onChange={() => handleFieldToggle('year')}
-                    className="w-4 h-4 rounded border-white/10 bg-white/5 text-brand-primary focus:ring-brand-primary cursor-pointer transition-all group-hover:border-brand-primary"
+                    className="w-4 h-4 rounded border-white/10 bg-white/5 text-brand-primary focus:ring-brand-primary cursor-pointer transition-colors group-hover:border-brand-primary"
                   />
                   <span className="text-sm font-medium text-text-secondary group-hover:text-white select-none transition-colors">Release Year</span>
                 </label>
@@ -261,7 +261,7 @@ const ExportModal = ({ isOpen, onClose, collection, mediaItems }: ExportModalPro
                     type="checkbox"
                     checked={fields.mediaType}
                     onChange={() => handleFieldToggle('mediaType')}
-                    className="w-4 h-4 rounded border-white/10 bg-white/5 text-brand-primary focus:ring-brand-primary cursor-pointer transition-all group-hover:border-brand-primary"
+                    className="w-4 h-4 rounded border-white/10 bg-white/5 text-brand-primary focus:ring-brand-primary cursor-pointer transition-colors group-hover:border-brand-primary"
                   />
                   <span className="text-sm font-medium text-text-secondary group-hover:text-white select-none transition-colors">Media Type</span>
                 </label>
@@ -272,7 +272,7 @@ const ExportModal = ({ isOpen, onClose, collection, mediaItems }: ExportModalPro
                     type="checkbox"
                     checked={fields.rating}
                     onChange={() => handleFieldToggle('rating')}
-                    className="w-4 h-4 rounded border-white/10 bg-white/5 text-brand-primary focus:ring-brand-primary cursor-pointer transition-all group-hover:border-brand-primary"
+                    className="w-4 h-4 rounded border-white/10 bg-white/5 text-brand-primary focus:ring-brand-primary cursor-pointer transition-colors group-hover:border-brand-primary"
                   />
                   <span className="text-sm font-medium text-text-secondary group-hover:text-white select-none transition-colors">TMDb Rating</span>
                 </label>
@@ -283,7 +283,7 @@ const ExportModal = ({ isOpen, onClose, collection, mediaItems }: ExportModalPro
                     type="checkbox"
                     checked={fields.tmdbId}
                     onChange={() => handleFieldToggle('tmdbId')}
-                    className="w-4 h-4 rounded border-white/10 bg-white/5 text-brand-primary focus:ring-brand-primary cursor-pointer transition-all group-hover:border-brand-primary"
+                    className="w-4 h-4 rounded border-white/10 bg-white/5 text-brand-primary focus:ring-brand-primary cursor-pointer transition-colors group-hover:border-brand-primary"
                   />
                   <span className="text-sm font-medium text-text-secondary group-hover:text-white select-none transition-colors">TMDb ID</span>
                 </label>
@@ -294,7 +294,7 @@ const ExportModal = ({ isOpen, onClose, collection, mediaItems }: ExportModalPro
                     type="checkbox"
                     checked={fields.status}
                     onChange={() => handleFieldToggle('status')}
-                    className="w-4 h-4 rounded border-white/10 bg-white/5 text-brand-primary focus:ring-brand-primary cursor-pointer transition-all group-hover:border-brand-primary"
+                    className="w-4 h-4 rounded border-white/10 bg-white/5 text-brand-primary focus:ring-brand-primary cursor-pointer transition-colors group-hover:border-brand-primary"
                   />
                   <span className="text-sm font-medium text-text-secondary group-hover:text-white select-none transition-colors">Watch Status</span>
                 </label>
@@ -305,7 +305,7 @@ const ExportModal = ({ isOpen, onClose, collection, mediaItems }: ExportModalPro
                     type="checkbox"
                     checked={fields.addedAt}
                     onChange={() => handleFieldToggle('addedAt')}
-                    className="w-4 h-4 rounded border-white/10 bg-white/5 text-brand-primary focus:ring-brand-primary cursor-pointer transition-all group-hover:border-brand-primary"
+                    className="w-4 h-4 rounded border-white/10 bg-white/5 text-brand-primary focus:ring-brand-primary cursor-pointer transition-colors group-hover:border-brand-primary"
                   />
                   <span className="text-sm font-medium text-text-secondary group-hover:text-white select-none transition-colors">Added Date</span>
                 </label>
@@ -316,7 +316,7 @@ const ExportModal = ({ isOpen, onClose, collection, mediaItems }: ExportModalPro
                     type="checkbox"
                     checked={fields.posterUrl}
                     onChange={() => handleFieldToggle('posterUrl')}
-                    className="w-4 h-4 rounded border-white/10 bg-white/5 text-brand-primary focus:ring-brand-primary cursor-pointer transition-all group-hover:border-brand-primary"
+                    className="w-4 h-4 rounded border-white/10 bg-white/5 text-brand-primary focus:ring-brand-primary cursor-pointer transition-colors group-hover:border-brand-primary"
                   />
                   <span className="text-sm font-medium text-text-secondary group-hover:text-white select-none transition-colors">Poster URL</span>
                 </label>
@@ -331,7 +331,7 @@ const ExportModal = ({ isOpen, onClose, collection, mediaItems }: ExportModalPro
                   type="text"
                   value={separator}
                   onChange={(e) => setSeparator(e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-brand-primary transition-colors"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-sm text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 focus:border-brand-primary transition-colors"
                   placeholder="e.g.  -  or , "
                 />
                 <p className="text-[10px] text-text-secondary">Separates the chosen fields on each line.</p>

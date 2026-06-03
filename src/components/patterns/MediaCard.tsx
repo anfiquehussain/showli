@@ -53,7 +53,7 @@ export const MediaCard = ({ item, onAddClick }: MediaCardProps) => {
           {/* Add to Collection Button (Responsive: always visible on mobile, hover-only on desktop) */}
           <button
             onClick={handleAddClick}
-            className="absolute top-2 left-2 p-1.5 rounded-lg bg-background/60 hover:bg-brand-primary hover:text-white text-brand-primary backdrop-blur-md border border-white/10 transition-all duration-300 shadow-lg z-10 scale-100 active:scale-90 opacity-100 md:opacity-0 md:group-hover/card:opacity-100"
+            className="absolute top-2 left-2 p-1.5 rounded-lg bg-background/60 hover:bg-brand-primary hover:text-white text-brand-primary backdrop-blur-md border border-white/10 transition-colors duration-300 shadow-lg z-10 scale-100 active:scale-90 opacity-100 md:opacity-0 md:group-hover/card:opacity-100"
             aria-label="Add to collection"
           >
             <Plus className="w-3.5 h-3.5" />

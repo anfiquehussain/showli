@@ -91,7 +91,7 @@ const ScrollContainer = ({
             onClick={() => scroll('left')}
             disabled={!showLeft}
             className={clsx(
-              "absolute left-0 top-[calc(50%+2px)] md:top-[calc(50%-4px)] -translate-y-1/2 -translate-x-2 flex items-center justify-center text-white transition-all duration-300 z-10",
+              "absolute left-0 top-[calc(50%+2px)] md:top-[calc(50%-4px)] -translate-y-1/2 -translate-x-2 flex items-center justify-center text-white transition-colors duration-300 z-10",
               "bg-black/60 backdrop-blur-xl border border-white/10",
               "opacity-0 group-hover/scroll:opacity-100 hover:bg-brand-primary hover:border-brand-primary shadow-[0_0_20px_rgba(0,0,0,0.5)]",
               buttonClasses,
@@ -107,7 +107,7 @@ const ScrollContainer = ({
             onClick={() => scroll('right')}
             disabled={!showRight}
             className={clsx(
-              "absolute right-0 top-[calc(50%+2px)] md:top-[calc(50%-4px)] -translate-y-1/2 translate-x-2 flex items-center justify-center text-white transition-all duration-300 z-10",
+              "absolute right-0 top-[calc(50%+2px)] md:top-[calc(50%-4px)] -translate-y-1/2 translate-x-2 flex items-center justify-center text-white transition-colors duration-300 z-10",
               "bg-black/60 backdrop-blur-xl border border-white/10",
               "opacity-0 group-hover/scroll:opacity-100 hover:bg-brand-primary hover:border-brand-primary shadow-[0_0_20px_rgba(0,0,0,0.5)]",
               buttonClasses,

@@ -106,7 +106,7 @@ const HomeFeatured = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => setIsFocused(true)}
-              className="w-full h-12 pl-12 pr-4 bg-card/40 backdrop-blur-xl border border-white/5 rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-primary/50 transition-standard"
+              className="w-full h-12 pl-12 pr-4 bg-card/40 backdrop-blur-xl border border-white/5 rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 transition-standard"
             />
           </form>
 
@@ -158,7 +158,7 @@ const HomeFeatured = () => {
                             </div>
                           </div>
                         </div>
-                        <ArrowRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover/item:opacity-100 group-hover/item:translate-x-1 transition-all" />
+                        <ArrowRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover/item:opacity-100 group-hover/item:translate-x-1 transition-colors" />
                       </Link>
                     );
                   })}

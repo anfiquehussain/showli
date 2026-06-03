@@ -211,7 +211,7 @@ const ShowliDiscussion = ({ mediaId, mediaType, mediaTitle, posterPath }: Showli
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-            className="flex-1 sm:flex-initial bg-card border border-white/10 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest text-white/60 hover:text-white hover:border-white/20 transition-all outline-none cursor-pointer appearance-none"
+            className="flex-1 sm:flex-initial bg-card border border-white/10 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest text-white/60 hover:text-white hover:border-white/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 cursor-pointer appearance-none"
           >
             <option value="newest" className="bg-card text-white">Sort by: Newest</option>
             <option value="oldest" className="bg-card text-white">Sort by: Oldest</option>

@@ -27,7 +27,7 @@ const EpisodeCard = ({ episode, tvId }: EpisodeCardProps) => {
   const episodeUrl = `/tv/${tvId}/season/${episode.season_number}/episode/${episode.episode_number}`;
 
   return (
-    <div className="group bg-white/3 hover:bg-white/6 border border-white/10 rounded-2xl overflow-hidden transition-all duration-300">
+    <div className="group bg-white/3 hover:bg-white/6 border border-white/10 rounded-2xl overflow-hidden transition-colors duration-300">
       <div className="p-3 flex flex-col md:flex-row gap-4">
         {/* Still Image */}
         <Link to={episodeUrl} className="relative shrink-0 w-full md:w-40 aspect-video rounded-xl overflow-hidden bg-white/5 block">
@@ -88,7 +88,7 @@ const EpisodeCard = ({ episode, tvId }: EpisodeCardProps) => {
             <p 
               ref={textRef}
               className={clsx(
-                "text-[13px] text-muted-foreground/80 leading-relaxed font-medium transition-all duration-300",
+                "text-[13px] text-muted-foreground/80 leading-relaxed font-medium transition-colors duration-300",
                 !isDescExpanded && "line-clamp-2"
               )}
             >

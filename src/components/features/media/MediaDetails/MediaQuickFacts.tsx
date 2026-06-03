@@ -317,7 +317,7 @@ const FactItem = ({ icon: Icon, label, value, onClick }: FactItemProps) => (
       <button 
         type="button"
         onClick={onClick}
-        className="text-brand-primary text-[12px] font-bold bg-brand-primary/10 hover:bg-brand-primary/20 hover:text-brand-accent px-2 py-0.5 rounded border border-brand-primary/20 hover:border-brand-primary/40 cursor-pointer transition-all duration-300 transform active:scale-95 font-heading"
+        className="text-brand-primary text-[12px] font-bold bg-brand-primary/10 hover:bg-brand-primary/20 hover:text-brand-accent px-2 py-0.5 rounded border border-brand-primary/20 hover:border-brand-primary/40 cursor-pointer transition-colors duration-300 transform active:scale-95 font-heading"
       >
         {value}
       </button>

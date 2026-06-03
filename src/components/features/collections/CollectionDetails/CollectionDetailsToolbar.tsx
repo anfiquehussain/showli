@@ -53,7 +53,7 @@ const CollectionDetailsToolbar = ({
           <select
             value={sortBy}
             onChange={(e) => onSortChange(e.target.value as 'recent' | 'oldest' | 'random')}
-            className="pl-8 pr-7 py-1.5 rounded-xl text-xs font-semibold bg-white/5 border border-white/10 text-white focus:outline-none focus:border-brand-primary appearance-none cursor-pointer hover:bg-white/10 transition-colors h-9 shrink-0"
+            className="pl-8 pr-7 py-1.5 rounded-xl text-xs font-semibold bg-white/5 border border-white/10 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 focus:border-brand-primary appearance-none cursor-pointer hover:bg-white/10 transition-colors h-9 shrink-0"
           >
             <option value="recent" className="bg-card text-white">Recently Added</option>
             <option value="oldest" className="bg-card text-white">Oldest Added</option>
@@ -67,7 +67,7 @@ const CollectionDetailsToolbar = ({
               key={filter.value}
               onClick={() => onFilterChange(filter.value)}
               className={`
-                px-3 py-1.5 rounded-full text-[10px] sm:text-xs font-medium whitespace-nowrap transition-all
+                px-3 py-1.5 rounded-full text-[10px] sm:text-xs font-medium whitespace-nowrap transition-colors
                 ${filterStatus === filter.value
                   ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20'
                   : 'bg-white/5 text-text-secondary hover:bg-white/10 hover:text-white'}

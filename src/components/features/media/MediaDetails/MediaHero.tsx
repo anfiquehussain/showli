@@ -77,7 +77,7 @@ const MediaHero = ({
       {/* Back Button - Floating */}
       <button 
         onClick={() => navigate(-1)}
-        className="absolute top-4 left-4 p-2 rounded-full bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/20 transition-all text-white z-30 shadow-lg active:scale-95"
+        className="absolute top-4 left-4 p-2 rounded-full bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/20 transition-colors text-white z-30 shadow-lg active:scale-95"
         aria-label="Go back"
       >
         <ChevronLeft className="w-4 h-4" aria-hidden="true" />
@@ -122,7 +122,7 @@ const MediaHero = ({
                   />
                   {/* Progress circle */}
                   <circle
-                    className="text-success transition-all duration-500"
+                    className="text-success transition-colors duration-500"
                     strokeWidth="3.5"
                     strokeDasharray="100"
                     strokeDashoffset={100 - Math.round(media.vote_average * 10)}
@@ -178,7 +178,7 @@ const MediaHero = ({
                 {type === 'movie' && year ? (
                   <button 
                     onClick={() => navigate(`/browse?year=${year}`)}
-                    className="flex items-center gap-1 text-brand-primary text-[10px] font-bold backdrop-blur-md bg-brand-primary/10 hover:bg-brand-primary/20 border border-brand-primary/20 hover:border-brand-primary/40 px-2 py-0.5 rounded-md cursor-pointer transition-all duration-300 transform active:scale-95 shadow-md shadow-brand-primary/5 font-heading"
+                    className="flex items-center gap-1 text-brand-primary text-[10px] font-bold backdrop-blur-md bg-brand-primary/10 hover:bg-brand-primary/20 border border-brand-primary/20 hover:border-brand-primary/40 px-2 py-0.5 rounded-md cursor-pointer transition-colors duration-300 transform active:scale-95 shadow-md shadow-brand-primary/5 font-heading"
                   >
                     {year}
                   </button>
@@ -214,7 +214,7 @@ const MediaHero = ({
                 <button 
                   key={genre.id}
                   onClick={() => navigate(`/browse?genre=${genre.id}`)}
-                  className="px-2.5 py-0.5 bg-white/5 border border-white/10 hover:border-brand-primary/40 hover:bg-brand-primary/10 hover:text-brand-primary rounded-full text-[9px] font-bold text-white/70 transition-all duration-300 cursor-pointer transform active:scale-95 font-heading"
+                  className="px-2.5 py-0.5 bg-white/5 border border-white/10 hover:border-brand-primary/40 hover:bg-brand-primary/10 hover:text-brand-primary rounded-full text-[9px] font-bold text-white/70 transition-colors duration-300 cursor-pointer transform active:scale-95 font-heading"
                 >
                   {genre.name}
                 </button>

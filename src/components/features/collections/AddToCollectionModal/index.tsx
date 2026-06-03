@@ -149,7 +149,7 @@ export const AddToCollectionModal = ({ isOpen, onClose, media }: AddToCollection
                   if (sortBy === 'name') setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
                   else { setSortBy('name'); setSortOrder('asc'); }
                 }}
-                className={`px-2 py-1 rounded-md transition-all flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-bold ${sortBy === 'name' ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-text-secondary hover:text-primary hover:bg-white/5'}`}
+                className={`px-2 py-1 rounded-md transition-colors flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-bold ${sortBy === 'name' ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-text-secondary hover:text-primary hover:bg-white/5'}`}
               >
                 <Type className="w-3 h-3" />
                 <span>Name</span>
@@ -159,7 +159,7 @@ export const AddToCollectionModal = ({ isOpen, onClose, media }: AddToCollection
                   if (sortBy === 'count') setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
                   else { setSortBy('count'); setSortOrder('desc'); }
                 }}
-                className={`px-2 py-1 rounded-md transition-all flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-bold ${sortBy === 'count' ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-text-secondary hover:text-primary hover:bg-white/5'}`}
+                className={`px-2 py-1 rounded-md transition-colors flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-bold ${sortBy === 'count' ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-text-secondary hover:text-primary hover:bg-white/5'}`}
               >
                 <Hash className="w-3 h-3" />
                 <span>Count</span>
@@ -169,7 +169,7 @@ export const AddToCollectionModal = ({ isOpen, onClose, media }: AddToCollection
                   if (sortBy === 'recent') setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
                   else { setSortBy('recent'); setSortOrder('desc'); }
                 }}
-                className={`px-2 py-1 rounded-md transition-all flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-bold ${sortBy === 'recent' ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-text-secondary hover:text-primary hover:bg-white/5'}`}
+                className={`px-2 py-1 rounded-md transition-colors flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-bold ${sortBy === 'recent' ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-text-secondary hover:text-primary hover:bg-white/5'}`}
               >
                 <Clock className="w-3 h-3" />
                 <span>Recent</span>
@@ -178,7 +178,7 @@ export const AddToCollectionModal = ({ isOpen, onClose, media }: AddToCollection
             
             <button 
               onClick={() => setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc')}
-              className="p-1.5 rounded-lg bg-white/5 border border-white/5 text-text-secondary hover:text-primary hover:border-white/10 transition-all active:scale-95"
+              className="p-1.5 rounded-lg bg-white/5 border border-white/5 text-text-secondary hover:text-primary hover:border-white/10 transition-colors active:scale-95"
               title={`Sort ${sortOrder === 'asc' ? 'Descending' : 'Ascending'}`}
             >
               <ArrowUpDown className={`w-3.5 h-3.5 transition-transform duration-300 ${sortOrder === 'desc' ? 'rotate-180' : ''}`} />
@@ -197,7 +197,7 @@ export const AddToCollectionModal = ({ isOpen, onClose, media }: AddToCollection
             {!searchQuery && (
               <button
                 onClick={() => setIsCollectionModalOpen(true)}
-                className="w-full flex items-center gap-3 p-3 rounded-xl border border-dashed border-white/10 hover:border-brand-primary/50 hover:bg-brand-primary/5 transition-all group mb-2"
+                className="w-full flex items-center gap-3 p-3 rounded-xl border border-dashed border-white/10 hover:border-brand-primary/50 hover:bg-brand-primary/5 transition-colors group mb-2"
               >
                 <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-white/5 group-hover:bg-brand-primary/20 transition-colors">
                   <Plus className="w-4 h-4 text-text-secondary group-hover:text-brand-primary" />

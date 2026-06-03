@@ -42,7 +42,7 @@ const PersonHero = ({ person, bannerPath }: PersonHeroProps) => {
       {/* Back Button */}
       <button 
         onClick={() => navigate(-1)}
-        className="absolute top-4 left-4 p-2 rounded-full bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/20 transition-all text-white z-30 shadow-lg active:scale-95"
+        className="absolute top-4 left-4 p-2 rounded-full bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/20 transition-colors text-white z-30 shadow-lg active:scale-95"
         aria-label="Go back"
       >
         <ChevronLeft className="w-4 h-4" />

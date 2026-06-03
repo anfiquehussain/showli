@@ -106,7 +106,7 @@ const PersonQuickFacts = ({ person, externalIds }: PersonQuickFactsProps) => {
               href={link.url!}
               target="_blank"
               rel="noopener noreferrer"
-              className={`p-2.5 rounded-xl bg-white/5 border border-white/10 transition-all group ${link.hoverClass}`}
+              className={`p-2.5 rounded-xl bg-white/5 border border-white/10 transition-colors group ${link.hoverClass}`}
             >
               <div className="group-hover:scale-110 transition-transform">
                 {link.icon}
@@ -118,7 +118,7 @@ const PersonQuickFacts = ({ person, externalIds }: PersonQuickFactsProps) => {
               href={`https://www.imdb.com/name/${person.imdb_id}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-3 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-warning/50 transition-all text-[10px] font-black uppercase tracking-widest text-warning"
+              className="px-3 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-warning/50 transition-colors text-[10px] font-black uppercase tracking-widest text-warning"
             >
               IMDb
             </a>

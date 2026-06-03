@@ -122,7 +122,7 @@ const HeroCarousel = () => {
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}
-              className={`h-1 rounded-full transition-all duration-300 ${
+              className={`h-1 rounded-full transition-colors duration-300 ${
                 currentIndex === index ? 'w-6 bg-brand-primary' : 'w-1.5 bg-white/20'
               }`}
               aria-label={`Go to slide ${index + 1}`}
@@ -139,7 +139,7 @@ const HeroCarousel = () => {
               whileTap={{ scale: 0.95 }}
               onClick={() => setCurrentIndex(index)}
               className={`
-                relative shrink-0 w-20 md:w-24 aspect-video rounded-lg overflow-hidden border-2 transition-all duration-300
+                relative shrink-0 w-20 md:w-24 aspect-video rounded-lg overflow-hidden border-2 transition-colors duration-300
                 ${currentIndex === index ? 'border-brand-primary scale-105 shadow-lg shadow-brand-primary/20' : 'border-transparent opacity-60 hover:opacity-100'}
               `}
             >

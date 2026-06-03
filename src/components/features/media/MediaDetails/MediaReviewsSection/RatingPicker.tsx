@@ -39,7 +39,7 @@ const RatingPicker = ({ value, onChange, max = 10 }: RatingPickerProps) => {
                 className="group relative transition-transform active:scale-90"
               >
                 <Star
-                  className={`w-3.5 h-3.5 md:w-5 md:h-5 transition-all duration-300 ${
+                  className={`w-3.5 h-3.5 md:w-5 md:h-5 transition-colors duration-300 ${
                     isActive 
                       ? 'text-brand-primary fill-brand-primary drop-shadow-[0_0_12px_rgba(99,102,241,0.6)]' 
                       : 'text-white/10 fill-white/5 group-hover:text-white/40'

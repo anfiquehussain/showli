@@ -79,7 +79,7 @@ const CommentItem = ({
       <div className="relative">
         {/* Comment Card */}
         <div className={`
-          relative transition-all duration-300
+          relative transition-colors duration-300
           ${isCollapsed ? 'py-1.5 px-3 bg-white/[0.02] rounded-xl border border-white/5 opacity-50' : ''}
           ${!isCollapsed && isTopLevel ? 'bg-white/[0.04] border border-white/10 rounded-2xl p-4 md:p-6 mb-4 md:mb-8 shadow-2xl' : ''}
           ${!isCollapsed && !isTopLevel ? 'bg-white/[0.01] border border-white/5 rounded-xl p-3 md:p-5 mb-2 md:mb-4' : ''}
@@ -134,7 +134,7 @@ const CommentItem = ({
               {isCollapsed && (
                 <button
                   onClick={() => setIsCollapsed(false)}
-                  className="flex items-center gap-2 px-3 py-1 bg-brand-primary/10 hover:bg-brand-primary/20 border border-brand-primary/20 rounded-full transition-all group/expand"
+                  className="flex items-center gap-2 px-3 py-1 bg-brand-primary/10 hover:bg-brand-primary/20 border border-brand-primary/20 rounded-full transition-colors group/expand"
                 >
                   <span className="text-[10px] font-black text-brand-primary uppercase tracking-tighter">
                     {totalThreadReplies > 0 ? `Show ${totalThreadReplies} replies` : 'Show comment'}
@@ -145,7 +145,7 @@ const CommentItem = ({
               {!isCollapsed && !isTopLevel && (
                 <button
                   onClick={() => setIsCollapsed(true)}
-                  className="p-1.5 rounded-lg hover:bg-white/5 text-white/20 hover:text-white transition-all"
+                  className="p-1.5 rounded-lg hover:bg-white/5 text-white/20 hover:text-white transition-colors"
                   title="Collapse thread"
                 >
                   <ChevronDown className="w-4 h-4" />
@@ -176,7 +176,7 @@ const CommentItem = ({
                     <button
                       onClick={() => onLike(comment.id, isLiked)}
                       className={`
-                        flex items-center gap-1.5 md:gap-2 text-[9px] md:text-[10px] font-black uppercase tracking-tighter md:tracking-widest transition-all px-2 md:px-3 py-1 md:py-1.5 rounded-full border
+                        flex items-center gap-1.5 md:gap-2 text-[9px] md:text-[10px] font-black uppercase tracking-tighter md:tracking-widest transition-colors px-2 md:px-3 py-1 md:py-1.5 rounded-full border
                         ${isLiked
                           ? 'bg-brand-primary/20 text-brand-primary border-brand-primary/30'
                           : 'text-white/20 hover:text-white hover:bg-white/5 border-transparent'
@@ -190,7 +190,7 @@ const CommentItem = ({
                     <button
                       onClick={() => setIsReplying(!isReplying)}
                       className={`
-                        flex items-center gap-1.5 md:gap-2 text-[9px] md:text-[10px] font-black uppercase tracking-tighter md:tracking-widest transition-all px-2 md:px-3 py-1 md:py-1.5 rounded-full border
+                        flex items-center gap-1.5 md:gap-2 text-[9px] md:text-[10px] font-black uppercase tracking-tighter md:tracking-widest transition-colors px-2 md:px-3 py-1 md:py-1.5 rounded-full border
                         ${isReplying
                           ? 'bg-white/10 text-white border-white/20'
                           : 'text-white/20 hover:text-white hover:bg-white/5 border-transparent'
@@ -204,7 +204,7 @@ const CommentItem = ({
                     {isAuthor && onDelete && (
                       <button
                         onClick={() => onDelete(comment.id)}
-                        className="ml-auto p-2 rounded-lg hover:bg-error/10 text-white/10 hover:text-error transition-all"
+                        className="ml-auto p-2 rounded-lg hover:bg-error/10 text-white/10 hover:text-error transition-colors"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>

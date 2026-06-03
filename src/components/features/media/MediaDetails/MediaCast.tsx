@@ -84,7 +84,7 @@ const MediaCast = ({ id, type, onShowFullCredits }: MediaCastProps) => {
           onClick={onShowFullCredits}
           className="shrink-0 w-24 md:w-32 group text-left"
         >
-          <div className="aspect-2/3 rounded-2xl bg-white/5 border border-dashed border-white/20 flex flex-col items-center justify-center mb-3 group-hover:border-brand-primary/50 group-hover:bg-brand-primary/5 transition-all">
+          <div className="aspect-2/3 rounded-2xl bg-white/5 border border-dashed border-white/20 flex flex-col items-center justify-center mb-3 group-hover:border-brand-primary/50 group-hover:bg-brand-primary/5 transition-colors">
             <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform">
               <ChevronRight className="w-6 h-6 text-white/40 group-hover:text-brand-primary" />
             </div>

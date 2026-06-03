@@ -79,7 +79,7 @@ const SeasonRatingsSection = ({ tvId, seasonNumber, seasonName }: SeasonRatingsS
           return (
             <div 
               key={episode.id}
-              className="flex items-center justify-between p-3 bg-white/3 hover:bg-white/6 border border-white/5 rounded-xl transition-all duration-300 group"
+              className="flex items-center justify-between p-3 bg-white/3 hover:bg-white/6 border border-white/5 rounded-xl transition-colors duration-300 group"
             >
               <div className="flex flex-col min-w-0 pr-2">
                 <span className="text-[9px] font-black text-muted-foreground/60 uppercase tracking-widest">
@@ -149,7 +149,7 @@ const EpisodeRatingsModal = ({ tvId, seasons, isOpen, onClose, showTitle }: Epis
           <button
             onClick={() => setActiveTab('all')}
             className={clsx(
-              "px-3.5 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap border shrink-0 flex items-center gap-1.5",
+              "px-3.5 py-1.5 rounded-full text-xs font-bold transition-colors whitespace-nowrap border shrink-0 flex items-center gap-1.5",
               activeTab === 'all'
                 ? "bg-brand-primary text-white border-brand-primary shadow-[0_0_12px_rgba(99,102,241,0.3)]"
                 : "bg-white/5 text-muted-foreground border-white/5 hover:bg-white/10 hover:text-white"
@@ -163,7 +163,7 @@ const EpisodeRatingsModal = ({ tvId, seasons, isOpen, onClose, showTitle }: Epis
               key={season.id}
               onClick={() => setActiveTab(season.season_number)}
               className={clsx(
-                "px-3.5 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap border shrink-0",
+                "px-3.5 py-1.5 rounded-full text-xs font-bold transition-colors whitespace-nowrap border shrink-0",
                 activeTab === season.season_number
                   ? "bg-brand-primary text-white border-brand-primary shadow-[0_0_12px_rgba(99,102,241,0.3)]"
                   : "bg-white/5 text-muted-foreground border-white/5 hover:bg-white/10 hover:text-white"

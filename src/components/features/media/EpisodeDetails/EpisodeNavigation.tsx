@@ -31,7 +31,7 @@ const EpisodeNavigation = ({ tvId, seasonNumber, episodeNumber }: EpisodeNavigat
         <div className="flex items-center gap-3">
           <Link 
             to={`/tv/${tvId}`} 
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 border border-white/5 hover:border-brand-primary/30 hover:bg-brand-primary/10 text-[10px] font-black text-white/80 hover:text-brand-primary uppercase tracking-wider transition-all duration-300 transform active:scale-95"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 border border-white/5 hover:border-brand-primary/30 hover:bg-brand-primary/10 text-[10px] font-black text-white/80 hover:text-brand-primary uppercase tracking-wider transition-colors duration-300 transform active:scale-95"
           >
             <Tv className="w-3.5 h-3.5" />
             <span>Series Details</span>
@@ -45,7 +45,7 @@ const EpisodeNavigation = ({ tvId, seasonNumber, episodeNumber }: EpisodeNavigat
         {prevEpisode ? (
           <Link 
             to={`/tv/${tvId}/season/${seasonNumber}/episode/${prevEpisode.episode_number}`}
-            className="group flex gap-4 p-3 bg-white/3 hover:bg-white/6 border border-white/10 rounded-2xl transition-all duration-300 text-left"
+            className="group flex gap-4 p-3 bg-white/3 hover:bg-white/6 border border-white/10 rounded-2xl transition-colors duration-300 text-left"
           >
             <div className="relative shrink-0 w-24 sm:w-28 aspect-video rounded-xl overflow-hidden bg-white/5 self-center">
               {prevEpisode.still_path ? (
@@ -85,7 +85,7 @@ const EpisodeNavigation = ({ tvId, seasonNumber, episodeNumber }: EpisodeNavigat
         {nextEpisode ? (
           <Link 
             to={`/tv/${tvId}/season/${seasonNumber}/episode/${nextEpisode.episode_number}`}
-            className="group flex gap-4 p-3 bg-white/3 hover:bg-white/6 border border-white/10 rounded-2xl transition-all duration-300 text-left"
+            className="group flex gap-4 p-3 bg-white/3 hover:bg-white/6 border border-white/10 rounded-2xl transition-colors duration-300 text-left"
           >
             <div className="min-w-0 flex-1 flex flex-col justify-center space-y-1">
               <span className="text-[10px] font-black uppercase tracking-wider text-brand-primary flex items-center gap-1 justify-end md:justify-start">

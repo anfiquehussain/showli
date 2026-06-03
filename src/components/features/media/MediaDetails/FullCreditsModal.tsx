@@ -84,7 +84,7 @@ const FullCreditsModal = ({ isOpen, onClose, id, type, title }: FullCreditsModal
               placeholder={`Search in ${activeTab}…`}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-white/5 border border-white/10 rounded-xl py-2.5 pl-11 pr-4 text-sm text-white placeholder:text-muted-foreground focus:outline-none focus:border-brand-primary/50 focus:bg-white/[0.08] transition-all"
+              className="w-full bg-white/5 border border-white/10 rounded-xl py-2.5 pl-11 pr-4 text-sm text-white placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 focus:border-brand-primary/50 focus:bg-white/[0.08] transition-colors"
             />
           </div>
 
@@ -95,7 +95,7 @@ const FullCreditsModal = ({ isOpen, onClose, id, type, title }: FullCreditsModal
                 setActiveTab('cast');
                 setVisibleCount(ITEMS_PER_PAGE);
               }}
-              className={`flex-1 md:flex-none md:px-8 py-2 text-[10px] font-bold uppercase tracking-widest rounded-lg transition-all ${
+              className={`flex-1 md:flex-none md:px-8 py-2 text-[10px] font-bold uppercase tracking-widest rounded-lg transition-colors ${
                 activeTab === 'cast' 
                   ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' 
                   : 'text-muted-foreground hover:text-white hover:bg-white/5'
@@ -108,7 +108,7 @@ const FullCreditsModal = ({ isOpen, onClose, id, type, title }: FullCreditsModal
                 setActiveTab('crew');
                 setVisibleCount(ITEMS_PER_PAGE);
               }}
-              className={`flex-1 md:flex-none md:px-8 py-2 text-[10px] font-bold uppercase tracking-widest rounded-lg transition-all ${
+              className={`flex-1 md:flex-none md:px-8 py-2 text-[10px] font-bold uppercase tracking-widest rounded-lg transition-colors ${
                 activeTab === 'crew' 
                   ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' 
                   : 'text-muted-foreground hover:text-white hover:bg-white/5'
@@ -137,7 +137,7 @@ const FullCreditsModal = ({ isOpen, onClose, id, type, title }: FullCreditsModal
                     onClick={onClose}
                     className="flex flex-col group block"
                   >
-                  <div className="aspect-2/3 rounded-xl sm:rounded-2xl overflow-hidden bg-white/5 border border-white/5 group-hover:border-brand-primary/50 transition-all duration-300 mb-2 sm:mb-3 shadow-lg">
+                  <div className="aspect-2/3 rounded-xl sm:rounded-2xl overflow-hidden bg-white/5 border border-white/5 group-hover:border-brand-primary/50 transition-colors duration-300 mb-2 sm:mb-3 shadow-lg">
                     {person.profile_path ? (
                       <img 
                         src={getTmdbImageUrl(person.profile_path, 'w185')} 
@@ -194,7 +194,7 @@ const FullCreditsModal = ({ isOpen, onClose, id, type, title }: FullCreditsModal
         <div className="pt-2 flex justify-end">
           <button
             onClick={onClose}
-            className="px-6 py-2 rounded-xl font-bold text-[10px] uppercase tracking-[0.2em] bg-white/5 text-white hover:bg-brand-primary transition-all shadow-xl border border-white/10 hover:border-brand-primary/50"
+            className="px-6 py-2 rounded-xl font-bold text-[10px] uppercase tracking-[0.2em] bg-white/5 text-white hover:bg-brand-primary transition-colors shadow-xl border border-white/10 hover:border-brand-primary/50"
           >
             Done
           </button>

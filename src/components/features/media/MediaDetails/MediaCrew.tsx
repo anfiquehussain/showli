@@ -67,7 +67,7 @@ const MediaCrew = ({ id, type, onShowFullCredits }: MediaCrewProps) => {
           <Link 
             key={`${person.id}-${idx}`} 
             to={`/person/${person.id}`}
-            className="shrink-0 w-36 md:w-48 group bg-white/5 border border-white/5 rounded-2xl p-2.5 flex items-center gap-3 hover:border-brand-primary/30 hover:bg-white/7 transition-all"
+            className="shrink-0 w-36 md:w-48 group bg-white/5 border border-white/5 rounded-2xl p-2.5 flex items-center gap-3 hover:border-brand-primary/30 hover:bg-white/7 transition-colors"
           >
             <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 overflow-hidden shrink-0 group-hover:border-brand-primary/50 transition-colors">
               {person.profile_path ? (
@@ -100,7 +100,7 @@ const MediaCrew = ({ id, type, onShowFullCredits }: MediaCrewProps) => {
         
         <button 
           onClick={onShowFullCredits}
-          className="shrink-0 w-24 md:w-32 flex flex-col items-center justify-center rounded-2xl bg-white/5 border border-dashed border-white/10 hover:border-brand-primary/50 hover:bg-brand-primary/5 transition-all group p-2"
+          className="shrink-0 w-24 md:w-32 flex flex-col items-center justify-center rounded-2xl bg-white/5 border border-dashed border-white/10 hover:border-brand-primary/50 hover:bg-brand-primary/5 transition-colors group p-2"
         >
           <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center mb-1 group-hover:scale-110 transition-transform">
             <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-brand-primary" />

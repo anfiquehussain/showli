@@ -34,7 +34,7 @@ const ProfileHero = ({
       <div className="h-28 sm:h-36 md:h-44 w-full relative overflow-hidden group/banner">
         <div className="absolute inset-0 bg-linear-to-br from-brand-primary/20 via-background to-brand-secondary/20 z-0" />
         <div 
-          className="absolute inset-0 bg-cover bg-center opacity-65 transition-all duration-700 z-0" 
+          className="absolute inset-0 bg-cover bg-center opacity-65 transition-colors duration-700 z-0" 
           style={{ backgroundImage: `url("${bannerURL || 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=2070&auto=format&fit=crop'}")` }}
         />
         <div className="absolute inset-0 bg-linear-to-t from-zinc-950 to-transparent z-10" />
@@ -57,7 +57,7 @@ const ProfileHero = ({
           {/* Avatar & Basic Info */}
           <div className="flex flex-col md:flex-row items-center md:items-end gap-6">
             {/* Avatar */}
-            <div className="relative group cursor-pointer" onClick={onEditProfile} title="Change Profile Avatar">
+            <button type="button" className="relative group cursor-pointer bg-transparent border-none p-0" onClick={onEditProfile} aria-label="Change Profile Avatar">
               <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-2xl bg-card border-4 border-zinc-950 overflow-hidden shadow-2xl transition-standard group-hover:scale-[1.02] relative">
                 {user?.photoURL ? (
                   <img
@@ -75,7 +75,7 @@ const ProfileHero = ({
                   <Camera className="w-5 h-5 text-white" />
                 </div>
               </div>
-            </div>
+            </button>
 
              {/* User Meta Details */}
             <div className="space-y-1.5 md:pb-1">

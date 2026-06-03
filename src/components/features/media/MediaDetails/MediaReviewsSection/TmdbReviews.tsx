@@ -56,7 +56,7 @@ const TmdbReviews = ({ mediaId, mediaType }: TmdbReviewsProps) => {
 
       <div className="grid grid-cols-1 gap-4 max-h-[800px] overflow-y-auto pr-2 custom-scrollbar">
         {data.results.map((review) => (
-          <div key={review.id} className="glass-card rounded-2xl p-6 border border-white/5 space-y-4 hover:border-white/10 transition-all duration-300 group">
+          <div key={review.id} className="glass-card rounded-2xl p-6 border border-white/5 space-y-4 hover:border-white/10 transition-colors duration-300 group">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden shrink-0">

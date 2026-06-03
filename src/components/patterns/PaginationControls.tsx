@@ -114,7 +114,7 @@ const PaginationControls = ({
           value={jumpValue}
           onChange={(e) => setJumpValue(e.target.value)}
           placeholder={String(currentPage)}
-          className="w-12 h-8 bg-transparent border-none text-center text-sm focus:ring-0 focus:outline-none placeholder:text-muted-foreground/30"
+          className="w-12 h-8 bg-transparent border-none text-center text-sm focus:ring-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 placeholder:text-muted-foreground/30"
         />
         <Button 
           type="submit" 

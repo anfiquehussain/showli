@@ -23,7 +23,7 @@ src/
 ├── assets/             # Static assets (images, global icons)
 ├── components/         # UI Components (3-Layer Architecture)
 │   ├── ui/             # [Layer 1] Primitives (Button.tsx, IconButton.tsx, Input.tsx, Logo.tsx, Rating.tsx, Skeleton.tsx, SplashScreen.tsx)
-│   ├── patterns/       # [Layer 2] Reusable Patterns (Modal, ConfirmationModal, PageHeader, MediaScroll, MediaCard, PersonScroll, PersonCard, StatusBadge, SearchBar, ProtectedRoute, ScrollContainer, ScrollToTop, BackToTopButton, AddToCollectionProvider)
+│   ├── patterns/       # [Layer 2] Reusable Patterns (Modal, ConfirmationModal, PageHeader, MediaScroll, MediaCard, PersonScroll, PersonCard, PaginationControls, StatusBadge, SearchBar, ProtectedRoute, ScrollContainer, ScrollToTop, BackToTopButton)
 │   └── features/       # [Layer 3] Feature Components (Grouped by domain)
 │       ├── auth/       # Authentication (AuthModal.tsx)
 │       ├── layout/     # Global structure (MainLayout.tsx, Navbar.tsx)
@@ -42,6 +42,7 @@ src/
 │       │   │   ├── MediaCast.tsx
 │       │   │   ├── MediaCrew.tsx
 │       │   │   ├── MediaImages.tsx
+│       │   │   ├── MediaKeywords.tsx
 │       │   │   ├── MediaVideos.tsx
 │       │   │   ├── MediaWatchProviders.tsx
 │       │   │   ├── MediaRecommendations.tsx
@@ -84,8 +85,11 @@ src/
 │       │   ├── EditProfileModal.tsx
 │       │   ├── AllReviewsModal.tsx
 │       │   ├── ProfileReviewCard.tsx
-│       │   └── profile.types.ts
+│       │   ├── profile.types.ts
+│       │   └── hooks/      # Feature-specific hooks
+│       │       └── useProfilePage.ts
 │       └── collections/# Collection-related components
+│           ├── AddToCollectionProvider.tsx
 │           ├── CollectionDetails/ # Decomposed
 │           │   ├── index.tsx
 │           │   ├── CollectionDetailsHeader.tsx
@@ -124,7 +128,7 @@ src/
 │   ├── CollectionsPage.tsx # Library dashboard and collections list
 │   ├── CollectionDetailsPage.tsx # Individual collection view
 │   └── PersonPage.tsx      # Person biography and credits
-│── routes/             # Route definitions
+
 ├── store/              # Redux store configuration
 │   ├── index.ts        # Store setup, exports RootState & AppDispatch
 │   └── slices/         # Redux Toolkit slices
@@ -141,8 +145,7 @@ src/
 ├── utils/              # Helper functions (image.ts, date-fns helpers)
 │   └── image.ts        # TMDb image URL construction
 ├── App.tsx             # App entry with Router
-├── main.tsx            # React DOM mounting point
-└── netlify.toml        # Netlify deployment configuration
+└── main.tsx            # React DOM mounting point
 
 public/
 ├── icons/              # PWA icon assets (generated from icon_without_bg(v).png)

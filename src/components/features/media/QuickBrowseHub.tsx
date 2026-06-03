@@ -49,7 +49,7 @@ const POPULAR_COMPANIES = [
   { id: 12, name: 'New Line', logoPath: '/2ycs64eqV5rqKYHyQK0GVoKGvfX.png' },
   { id: 14, name: 'Miramax', logoPath: '/m6AHu84oZQxvq7n1rsvMNJIAsMu.png' },
   { id: 21, name: 'MGM', logoPath: '/usUnaYV6hQnlVAXP6r4HwrlLFPG.png' },
-  { id: 34, name: 'Sony Pictures', logoPath: '/fl0GumpYvcu7cTHZlNNAMs8heP6.png' },
+  { id: 34, name: 'Sony Pictures', logoPath: '/fl0GumpYvcu7cTHZlNNAMs8heP6.png', invertLogo: true },
   { id: 923, name: 'Legendary', logoPath: '/5UQsZrfbfG2dYJbx8DxfoTr2Bvu.png' },
   { id: 1632, name: 'Lionsgate', logoPath: '/cisLn1YAUuptXVBa0xjq7ST9cH0.png' },
   { id: 3172, name: 'Blumhouse', logoPath: '/rzKluDcRkIwHZK2pHsiT667A2Kw.png' },
@@ -232,10 +232,11 @@ const ProviderCard = ({ name, logoPath, onClick }: ProviderCardProps) => {
 interface StudioCardProps {
   name: string;
   logoPath: string;
+  invertLogo?: boolean;
   onClick: () => void;
 }
 
-const StudioCard = ({ name, logoPath, onClick }: StudioCardProps) => {
+const StudioCard = ({ name, logoPath, invertLogo, onClick }: StudioCardProps) => {
   return (
     <motion.button
       whileHover={{ y: -4, scale: 1.05 }}
@@ -248,7 +249,9 @@ const StudioCard = ({ name, logoPath, onClick }: StudioCardProps) => {
           <img 
             src={`https://image.tmdb.org/t/p/w185${logoPath}`}
             alt={name}
-            className="max-w-full max-h-full object-contain opacity-90 group-hover:opacity-100 transition-all duration-300"
+            className={`max-w-full max-h-full object-contain opacity-90 group-hover:opacity-100 transition-all duration-300 ${
+              invertLogo ? 'invert' : ''
+            }`}
           />
         </div>
       ) : null}
@@ -334,6 +337,7 @@ const QuickBrowseHub = () => {
               key={company.id}
               name={company.name}
               logoPath={company.logoPath}
+              invertLogo={company.invertLogo}
               onClick={() => navigate(`/browse?company=${company.id}&companyName=${encodeURIComponent(company.name)}`)}
             />
           ))}

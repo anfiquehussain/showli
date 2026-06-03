@@ -263,17 +263,6 @@ const StudioCard = ({ name, logoPath, invertLogo, onClick }: StudioCardProps) =>
   );
 };
 
-const COUNTRY_FLAG_GRADIENTS: Record<string, string> = {
-  US: 'from-flag-us-blue via-neutral-100 to-flag-us-red',
-  GB: 'from-flag-gb-blue via-neutral-100 to-flag-gb-red',
-  JP: 'from-neutral-100 via-neutral-100 to-flag-jp-red',
-  KR: 'from-flag-kr-blue via-neutral-100 to-flag-kr-red',
-  IN: 'from-flag-in-saffron via-neutral-100 to-flag-in-green',
-  FR: 'from-flag-fr-blue via-neutral-100 to-flag-fr-red',
-  ES: 'from-flag-es-red via-flag-es-yellow to-flag-es-red',
-  DE: 'from-neutral-950 via-flag-de-red to-flag-de-yellow',
-};
-
 // National flag hex color mapping for SVG border trace animation
 const COUNTRY_FLAG_COLORS: Record<string, { start: string; middle?: string; end: string }> = {
   US: { start: '#0a3161', middle: '#fafafa', end: '#b31942' },
@@ -315,6 +304,9 @@ const CountryCard = ({ code, name, onClick }: CountryCardProps) => {
 
   const featuredMovie = data?.results?.[0];
   const backdropUrl = getTmdbImageUrl(featuredMovie?.backdrop_path, 'w500');
+  const movieTitle = featuredMovie
+    ? ('title' in featuredMovie ? featuredMovie.title : ('name' in featuredMovie ? featuredMovie.name : ''))
+    : '';
   const colors = COUNTRY_FLAG_COLORS[code] || { start: '#10b981', end: '#06b6d4' };
   const gradId = `flag-border-grad-${code}`;
 
@@ -324,7 +316,7 @@ const CountryCard = ({ code, name, onClick }: CountryCardProps) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={onClick}
-      className="relative flex flex-col items-start justify-end p-4 h-32 rounded-2xl border border-white/5 transition-all duration-300 group shrink-0 w-48 sm:w-56 bg-card/20 cursor-pointer shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+      className="relative flex flex-col items-start justify-end p-4 h-32 rounded-2xl border border-white/5 transition-all duration-300 group shrink-0 w-48 sm:w-56 bg-card/20 cursor-pointer shadow-[0_8px_32px_rgba(0,0,0,0.4)] text-left"
     >
       {/* Background Image wrapped in a cropped container */}
       <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
@@ -335,10 +327,10 @@ const CountryCard = ({ code, name, onClick }: CountryCardProps) => {
             <img
               src={backdropUrl}
               alt={name}
-              className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity duration-300"
+              className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500"
               loading="lazy"
             />
-            <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/15 to-transparent transition-opacity duration-300" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/95 via-black/40 to-transparent transition-opacity duration-300" />
           </>
         ) : (
           <div className="absolute inset-0 opacity-20 bg-palette-emerald" />
@@ -370,11 +362,16 @@ const CountryCard = ({ code, name, onClick }: CountryCardProps) => {
         />
       </svg>
 
-      {/* Content overlay - only country name on the bottom */}
+      {/* Content overlay - country name and featured movie */}
       <div className="relative z-10 flex flex-col items-start w-full pointer-events-none mb-1">
         <span className="text-xs font-black uppercase tracking-widest text-foreground group-hover:text-white transition-colors duration-300 drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
           {name}
         </span>
+        {movieTitle && (
+          <div className="mt-1 w-full text-[9px] font-medium text-brand-secondary/90 transition-all duration-300 drop-shadow-[0_1.5px_4px_rgba(0,0,0,1)] truncate">
+            <span className="truncate font-semibold text-white/50 group-hover:text-white transition-colors">{movieTitle}</span>
+          </div>
+        )}
       </div>
     </motion.button>
   );
@@ -393,12 +390,20 @@ const QuickBrowseHub = () => {
     <section className="space-y-10 py-4">
       {/* 1. Genres Section */}
       <div className="space-y-4">
-        <div className="flex flex-col px-1">
-          <h2 className="text-sm md:text-base font-bold text-foreground uppercase tracking-widest flex items-center gap-2">
-            <span className="w-1 h-4 bg-brand-primary rounded-full shadow-[0_0_8px_rgba(99,102,241,0.5)]" />
-            Browse Genres
-          </h2>
-          <p className="text-[10px] text-muted-foreground">Find films tailored to your favorite styles.</p>
+        <div className="flex justify-between items-center px-1">
+          <div className="flex flex-col">
+            <h2 className="text-sm md:text-base font-bold text-foreground uppercase tracking-widest flex items-center gap-2">
+              <span className="w-1 h-4 bg-brand-primary rounded-full shadow-[0_0_8px_rgba(99,102,241,0.5)]" />
+              Browse Genres
+            </h2>
+            <p className="text-[10px] text-muted-foreground">Find films tailored to your favorite styles.</p>
+          </div>
+          <button
+            onClick={() => navigate('/browse')}
+            className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-white transition-colors px-3 py-1 bg-white/5 hover:bg-white/10 rounded-full border border-white/5 cursor-pointer"
+          >
+            View All
+          </button>
         </div>
         <ScrollContainer className="gap-3 pb-2" showButtons={true}>
           {CATEGORIES.map((cat) => (
@@ -416,12 +421,20 @@ const QuickBrowseHub = () => {
 
       {/* 2. Streaming Providers Section */}
       <div className="space-y-4">
-        <div className="flex flex-col px-1">
-          <h2 className="text-sm md:text-base font-bold text-foreground uppercase tracking-widest flex items-center gap-2">
-            <span className="w-1 h-4 bg-brand-secondary rounded-full shadow-[0_0_8px_rgba(6,182,212,0.5)]" />
-            Streaming Services
-          </h2>
-          <p className="text-[10px] text-muted-foreground">Explore what is playing on your favorite platforms.</p>
+        <div className="flex justify-between items-center px-1">
+          <div className="flex flex-col">
+            <h2 className="text-sm md:text-base font-bold text-foreground uppercase tracking-widest flex items-center gap-2">
+              <span className="w-1 h-4 bg-brand-secondary rounded-full shadow-[0_0_8px_rgba(6,182,212,0.5)]" />
+              Streaming Services
+            </h2>
+            <p className="text-[10px] text-muted-foreground">Explore what is playing on your favorite platforms.</p>
+          </div>
+          <button
+            onClick={() => navigate('/browse')}
+            className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-white transition-colors px-3 py-1 bg-white/5 hover:bg-white/10 rounded-full border border-white/5 cursor-pointer"
+          >
+            View All
+          </button>
         </div>
         <ScrollContainer className="gap-3 pb-2" showButtons={true}>
           {(providersData?.results
@@ -442,12 +455,20 @@ const QuickBrowseHub = () => {
 
       {/* 3. Production Companies Section */}
       <div className="space-y-4">
-        <div className="flex flex-col px-1">
-          <h2 className="text-sm md:text-base font-bold text-foreground uppercase tracking-widest flex items-center gap-2">
-            <span className="w-1 h-4 bg-brand-accent rounded-full shadow-[0_0_8px_rgba(139,92,246,0.5)]" />
-            Studios & Brands
-          </h2>
-          <p className="text-[10px] text-muted-foreground">Browse masterpieces from popular production houses.</p>
+        <div className="flex justify-between items-center px-1">
+          <div className="flex flex-col">
+            <h2 className="text-sm md:text-base font-bold text-foreground uppercase tracking-widest flex items-center gap-2">
+              <span className="w-1 h-4 bg-brand-accent rounded-full shadow-[0_0_8px_rgba(139,92,246,0.5)]" />
+              Studios & Brands
+            </h2>
+            <p className="text-[10px] text-muted-foreground">Browse masterpieces from popular production houses.</p>
+          </div>
+          <button
+            onClick={() => navigate('/browse')}
+            className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-white transition-colors px-3 py-1 bg-white/5 hover:bg-white/10 rounded-full border border-white/5 cursor-pointer"
+          >
+            View All
+          </button>
         </div>
         <ScrollContainer className="gap-3 pb-2" showButtons={true}>
           {POPULAR_COMPANIES.map((company) => (
@@ -464,12 +485,20 @@ const QuickBrowseHub = () => {
 
       {/* 4. Origin Countries Section */}
       <div className="space-y-4">
-        <div className="flex flex-col px-1">
-          <h2 className="text-sm md:text-base font-bold text-foreground uppercase tracking-widest flex items-center gap-2">
-            <span className="w-1 h-4 bg-palette-emerald rounded-full shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
-            Origin Countries
-          </h2>
-          <p className="text-[10px] text-muted-foreground">Discover stories from around the globe.</p>
+        <div className="flex justify-between items-center px-1">
+          <div className="flex flex-col">
+            <h2 className="text-sm md:text-base font-bold text-foreground uppercase tracking-widest flex items-center gap-2">
+              <span className="w-1 h-4 bg-palette-emerald rounded-full shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+              Origin Countries
+            </h2>
+            <p className="text-[10px] text-muted-foreground">Discover stories from around the globe.</p>
+          </div>
+          <button
+            onClick={() => navigate('/browse')}
+            className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-white transition-colors px-3 py-1 bg-white/5 hover:bg-white/10 rounded-full border border-white/5 cursor-pointer"
+          >
+            View All
+          </button>
         </div>
         <ScrollContainer className="gap-4 py-2 px-1.5" showButtons={true}>
           {POPULAR_COUNTRIES.map((country) => (
@@ -485,12 +514,20 @@ const QuickBrowseHub = () => {
 
       {/* 5. Languages Section */}
       <div className="space-y-4">
-        <div className="flex flex-col px-1">
-          <h2 className="text-sm md:text-base font-bold text-foreground uppercase tracking-widest flex items-center gap-2">
-            <span className="w-1 h-4 bg-palette-amber rounded-full shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
-            Original Languages
-          </h2>
-          <p className="text-[10px] text-muted-foreground">Filter cinema by original audio language.</p>
+        <div className="flex justify-between items-center px-1">
+          <div className="flex flex-col">
+            <h2 className="text-sm md:text-base font-bold text-foreground uppercase tracking-widest flex items-center gap-2">
+              <span className="w-1 h-4 bg-palette-amber rounded-full shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
+              Original Languages
+            </h2>
+            <p className="text-[10px] text-muted-foreground">Filter cinema by original audio language.</p>
+          </div>
+          <button
+            onClick={() => navigate('/browse')}
+            className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-white transition-colors px-3 py-1 bg-white/5 hover:bg-white/10 rounded-full border border-white/5 cursor-pointer"
+          >
+            View All
+          </button>
         </div>
         <ScrollContainer className="gap-3 pb-2" showButtons={true}>
           {POPULAR_LANGUAGES.map((lang) => (
@@ -507,12 +544,20 @@ const QuickBrowseHub = () => {
 
       {/* 6. Release Years & Decades Section */}
       <div className="space-y-4">
-        <div className="flex flex-col px-1">
-          <h2 className="text-sm md:text-base font-bold text-foreground uppercase tracking-widest flex items-center gap-2">
-            <span className="w-1 h-4 bg-palette-rose rounded-full shadow-[0_0_8px_rgba(244,63,94,0.5)]" />
-            Time Periods
-          </h2>
-          <p className="text-[10px] text-muted-foreground">Travel back in time to different cinema eras.</p>
+        <div className="flex justify-between items-center px-1">
+          <div className="flex flex-col">
+            <h2 className="text-sm md:text-base font-bold text-foreground uppercase tracking-widest flex items-center gap-2">
+              <span className="w-1 h-4 bg-palette-rose rounded-full shadow-[0_0_8px_rgba(244,63,94,0.5)]" />
+              Time Periods
+            </h2>
+            <p className="text-[10px] text-muted-foreground">Travel back in time to different cinema eras.</p>
+          </div>
+          <button
+            onClick={() => navigate('/browse')}
+            className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-white transition-colors px-3 py-1 bg-white/5 hover:bg-white/10 rounded-full border border-white/5 cursor-pointer"
+          >
+            View All
+          </button>
         </div>
         <ScrollContainer className="gap-3 pb-2" showButtons={true}>
           {POPULAR_YEARS.map((year) => {

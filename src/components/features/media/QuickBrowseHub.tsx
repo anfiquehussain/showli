@@ -338,7 +338,7 @@ const CountryCard = ({ code, name, onClick }: CountryCardProps) => {
       </div>
 
       {/* SVG drawing border trace animation outside the card perimeter */}
-      <svg className="absolute -inset-[6px] w-[calc(100%+12px)] h-[calc(100%+12px)] pointer-events-none z-20" fill="none">
+      <svg className="absolute inset-[-6px] w-[calc(100%+12px)] h-[calc(100%+12px)] pointer-events-none z-20" fill="none">
         <defs>
           <linearGradient id={gradId} x1="0%" y1="100%" x2="100%" y2="0%">
             <stop offset="0%" stopColor={colors.start} />

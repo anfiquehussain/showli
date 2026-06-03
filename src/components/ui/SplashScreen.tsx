@@ -10,8 +10,8 @@ const SplashScreen = () => {
     >
       {/* Background glow effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-[40%] -left-[30%] w-[80%] h-[80%] rounded-full bg-brand-primary/10 blur-[120px]" />
-        <div className="absolute -bottom-[40%] -right-[30%] w-[80%] h-[80%] rounded-full bg-brand-secondary/10 blur-[120px]" />
+        <div className="absolute top-[-40%] left-[-30%] w-[80%] h-[80%] rounded-full bg-brand-primary/10 blur-[120px]" />
+        <div className="absolute bottom-[-40%] right-[-30%] w-[80%] h-[80%] rounded-full bg-brand-secondary/10 blur-[120px]" />
       </div>
 
       <div className="relative flex flex-col items-center gap-6 z-10">

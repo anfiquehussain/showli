@@ -67,6 +67,23 @@
   --color-error-bg: rgba(239, 68, 68, 0.1);
   --color-info-bg: rgba(59, 130, 246, 0.1);
 
+  /* National Flag Colors for Country Cards */
+  --color-flag-us-blue: #0a3161;
+  --color-flag-us-red: #b31942;
+  --color-flag-gb-blue: #00247d;
+  --color-flag-gb-red: #cf142b;
+  --color-flag-jp-red: #bc002d;
+  --color-flag-kr-blue: #0047a0;
+  --color-flag-kr-red: #cd2e3a;
+  --color-flag-in-saffron: #ff9933;
+  --color-flag-in-green: #128807;
+  --color-flag-fr-blue: #00209f;
+  --color-flag-fr-red: #f62520;
+  --color-flag-es-red: #aa151b;
+  --color-flag-es-yellow: #f1bf00;
+  --color-flag-de-red: #dd0000;
+  --color-flag-de-yellow: #ffcf00;
+
   /* Layout Constants */
   --font-heading: 'Outfit', sans-serif;
   --font-body: 'Inter', sans-serif;

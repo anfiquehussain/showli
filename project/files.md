@@ -66,7 +66,15 @@ src/
 │       │   │   └── FilterChips.tsx
 │       │   ├── HeroCarousel.tsx
 │       │   ├── HomeToggle.tsx
-│       │   ├── QuickBrowseHub.tsx
+│       │   ├── QuickBrowseHub/ # Decomposed quick browse section
+│       │   │   ├── index.tsx
+│       │   │   ├── constants.ts
+│       │   │   ├── DynamicCard.tsx
+│       │   │   ├── ProviderCard.tsx
+│       │   │   ├── StudioCard.tsx
+│       │   │   ├── CountryCard.tsx
+│       │   │   ├── TimePeriodCard.tsx
+│       │   │   └── LanguageCard.tsx
 │       │   ├── HomeFeatured.tsx
 │       │   ├── HomeDiscovery.tsx
 │       │   ├── DiscoveryIcons.tsx

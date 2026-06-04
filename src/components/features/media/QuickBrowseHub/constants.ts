@@ -1,3 +1,4 @@
+import type { ComponentType } from 'react';
 import { 
   Zap, 
   Ghost, 
@@ -10,11 +11,24 @@ import {
   Flame,
   Sparkles,
   Music,
-  Play
+  Play,
+  Tv,
+  Film,
+  History
 } from 'lucide-react';
 
+export interface QuickBrowseCategory {
+  id: string;
+  name: string;
+  icon: ComponentType<{ className?: string }>;
+  color: string;
+  genreId: number;
+  discoverParams?: Record<string, string | number>;
+  path?: string;
+}
+
 // Genres
-export const CATEGORIES = [
+export const CATEGORIES: QuickBrowseCategory[] = [
   { id: 'action', name: 'Action', icon: Zap, color: 'bg-palette-orange/10 text-palette-orange', genreId: 28 },
   { id: 'adventure', name: 'Adventure', icon: Compass, color: 'bg-palette-cyan/10 text-palette-cyan', genreId: 12 },
   { id: 'comedy', name: 'Comedy', icon: Smile, color: 'bg-palette-yellow/10 text-palette-yellow', genreId: 35 },
@@ -26,6 +40,60 @@ export const CATEGORIES = [
   { id: 'fantasy', name: 'Fantasy', icon: Sparkles, color: 'bg-palette-lime/10 text-palette-lime', genreId: 14 },
   { id: 'thriller', name: 'Thriller', icon: Flame, color: 'bg-palette-amber/10 text-palette-amber', genreId: 53 },
   { id: 'animation', name: 'Animation', icon: Play, color: 'bg-palette-orange/10 text-palette-orange', genreId: 16 },
+  { 
+    id: 'anime', 
+    name: 'Anime', 
+    icon: Tv, 
+    color: 'bg-palette-pink/10 text-palette-pink', 
+    genreId: 16, 
+    discoverParams: { with_genres: 16, with_original_language: 'ja' }, 
+    path: '/browse?genre=16&language=ja' 
+  },
+  { 
+    id: 'malayalam', 
+    name: 'Malayalam', 
+    icon: Film, 
+    color: 'bg-palette-emerald/10 text-palette-emerald', 
+    genreId: 0, 
+    discoverParams: { with_original_language: 'ml' }, 
+    path: '/browse?language=ml' 
+  },
+  { 
+    id: 'tamil', 
+    name: 'Tamil', 
+    icon: Film, 
+    color: 'bg-palette-orange/10 text-palette-orange', 
+    genreId: 0, 
+    discoverParams: { with_original_language: 'ta' }, 
+    path: '/browse?language=ta' 
+  },
+  { 
+    id: 'mature', 
+    name: 'Romantic Mature', 
+    icon: Heart, 
+    color: 'bg-palette-pink/10 text-palette-pink', 
+    genreId: 10749, 
+    discoverParams: { with_genres: 10749, certification_country: 'US', certification: 'R' }, 
+    path: '/browse?genre=10749&certification=R' 
+  },
+  { 
+    id: 'classics80s', 
+    name: '80s Classics', 
+    icon: History, 
+    color: 'bg-palette-amber/10 text-palette-amber', 
+    genreId: 0, 
+    discoverParams: { 'primary_release_date.gte': '1980-01-01', 'primary_release_date.lte': '1989-12-31' }, 
+    path: '/browse?year=1980' 
+  },
+  { 
+    id: 'fun', 
+    name: 'Fun to Watch', 
+    icon: Smile, 
+    color: 'bg-palette-yellow/10 text-palette-yellow', 
+    genreId: 0, 
+    discoverParams: { with_genres: '35|12|10751' }, 
+    path: '/browse?genre=35' 
+  },
   { id: 'music', name: 'Music', icon: Music, color: 'bg-palette-emerald/10 text-palette-emerald', genreId: 10402 },
 ];
 

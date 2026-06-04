@@ -27,6 +27,7 @@ interface FilterChipsProps {
   maxSeasons: string;
   minEpisodes: string;
   maxEpisodes: string;
+  certification: string;
   onRemove: (key: string, value: string, extra?: { name: string; val: string }) => void;
   onClearAll: () => void;
 }
@@ -56,6 +57,7 @@ const FilterChips = ({
   maxSeasons,
   minEpisodes,
   maxEpisodes,
+  certification,
   onRemove,
   onClearAll
 }: FilterChipsProps) => {
@@ -137,6 +139,7 @@ const FilterChips = ({
     { key: 'maxSeasons', value: maxSeasons && !minSeasons ? `Seasons: <= ${maxSeasons}` : '', label: `Seasons: <= ${maxSeasons}` },
     { key: 'minEpisodes', value: minEpisodes && !maxEpisodes ? `Episodes: >= ${minEpisodes}` : minEpisodes && maxEpisodes ? `Episodes: ${minEpisodes}-${maxEpisodes}` : '', label: minEpisodes && !maxEpisodes ? `Episodes: >= ${minEpisodes}` : `Episodes: ${minEpisodes}-${maxEpisodes}` },
     { key: 'maxEpisodes', value: maxEpisodes && !minEpisodes ? `Episodes: <= ${maxEpisodes}` : '', label: `Episodes: <= ${maxEpisodes}` },
+    { key: 'certification', value: certification, label: `Rated: ${certification}` },
   ].filter(f => f.value);
 
   if (activeFilters.length === 0) return null;

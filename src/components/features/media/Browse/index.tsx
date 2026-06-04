@@ -74,6 +74,7 @@ const Browse = () => {
   const maxSeasons = searchParams.get('maxSeasons') || '';
   const minEpisodes = searchParams.get('minEpisodes') || '';
   const maxEpisodes = searchParams.get('maxEpisodes') || '';
+  const certification = searchParams.get('certification') || '';
   const page = Number(searchParams.get('page')) || 1;
 
   const dispatch = useAppDispatch();
@@ -133,6 +134,8 @@ const Browse = () => {
       'budget.lte': discoverType === 'movie' && budgetLte ? Number(budgetLte) * 1000000 : undefined,
       'revenue.gte': discoverType === 'movie' && revenueGte ? Number(revenueGte) * 1000000 : undefined,
       'revenue.lte': discoverType === 'movie' && revenueLte ? Number(revenueLte) * 1000000 : undefined,
+      certification_country: discoverType === 'movie' && certification ? 'US' : undefined,
+      certification: discoverType === 'movie' && certification ? certification : undefined,
       page,
     } as Record<string, string | number>
   }, { skip: isSearching });
@@ -367,7 +370,8 @@ const Browse = () => {
       key === 'minSeasons' ||
       key === 'maxSeasons' ||
       key === 'minEpisodes' ||
-      key === 'maxEpisodes'
+      key === 'maxEpisodes' ||
+      key === 'certification'
     ) {
       newParams.delete('page');
     }
@@ -495,6 +499,7 @@ const Browse = () => {
             maxSeasons={maxSeasons}
             minEpisodes={minEpisodes}
             maxEpisodes={maxEpisodes}
+            certification={certification}
             onRemove={handleUpdateParam}
             onClearAll={handleClearFilters}
           />

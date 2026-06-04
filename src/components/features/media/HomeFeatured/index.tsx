@@ -5,7 +5,8 @@ import {
   useGetTopRatedMoviesQuery, 
   useGetUpcomingMoviesQuery,
   useGetTopRatedTVQuery,
-  useGetPopularPeopleQuery
+  useGetPopularPeopleQuery,
+  useDiscoverQuery
 } from '@/api/media/mediaApi';
 import MediaScroll from '@/components/patterns/MediaScroll';
 import PersonScroll from '@/components/patterns/PersonScroll';
@@ -17,7 +18,11 @@ import {
   Star, 
   Calendar, 
   Tv, 
-  Users
+  Users,
+  Sparkles,
+  Smile,
+  Heart,
+  History
 } from 'lucide-react';
 import HomeSearchBar from './HomeSearchBar';
 
@@ -31,6 +36,64 @@ export const HomeFeatured = () => {
   const { data: upcomingMovies, isLoading: loadingUpcoming } = useGetUpcomingMoviesQuery();
   const { data: topRatedTV, isLoading: loadingTopTV } = useGetTopRatedTVQuery();
   const { data: popularPeople, isLoading: loadingPeople } = useGetPopularPeopleQuery({ page: 1 });
+  
+  const { data: popularAnime, isLoading: loadingAnime } = useDiscoverQuery({
+    type: 'tv',
+    params: {
+      with_genres: 16,
+      with_original_language: 'ja',
+      sort_by: 'popularity.desc',
+      page: 1,
+    },
+  });
+
+  const { data: popularMalayalam, isLoading: loadingMalayalam } = useDiscoverQuery({
+    type: 'movie',
+    params: {
+      with_original_language: 'ml',
+      sort_by: 'popularity.desc',
+      page: 1,
+    },
+  });
+
+  const { data: popularTamil, isLoading: loadingTamil } = useDiscoverQuery({
+    type: 'movie',
+    params: {
+      with_original_language: 'ta',
+      sort_by: 'popularity.desc',
+      page: 1,
+    },
+  });
+
+  const { data: matureContent, isLoading: loadingMature } = useDiscoverQuery({
+    type: 'movie',
+    params: {
+      with_genres: 10749,
+      certification_country: 'US',
+      certification: 'R',
+      sort_by: 'popularity.desc',
+      page: 1,
+    },
+  });
+
+  const { data: classics80s, isLoading: loadingClassics } = useDiscoverQuery({
+    type: 'movie',
+    params: {
+      'primary_release_date.gte': '1980-01-01',
+      'primary_release_date.lte': '1989-12-31',
+      sort_by: 'popularity.desc',
+      page: 1,
+    },
+  });
+
+  const { data: funToWatch, isLoading: loadingFun } = useDiscoverQuery({
+    type: 'movie',
+    params: {
+      with_genres: '35|12|10751',
+      sort_by: 'popularity.desc',
+      page: 1,
+    },
+  });
 
   return (
     <div className="space-y-12 animate-in fade-in duration-700">
@@ -92,6 +155,54 @@ export const HomeFeatured = () => {
         items={topRatedTV?.results || []} 
         isLoading={loadingTopTV}
         onViewAll={() => navigate('/browse?type=tv&sort_by=vote_average.desc')}
+      />
+
+      <MediaScroll 
+        title="Popular Anime" 
+        icon={<Sparkles className="w-4 h-4 text-palette-pink" />} 
+        items={popularAnime?.results || []} 
+        isLoading={loadingAnime}
+        onViewAll={() => navigate('/browse?genre=16&language=ja')}
+      />
+
+      <MediaScroll 
+        title="Popular Malayalam" 
+        icon={<Film className="w-4 h-4 text-palette-emerald" />} 
+        items={popularMalayalam?.results || []} 
+        isLoading={loadingMalayalam}
+        onViewAll={() => navigate('/browse?language=ml')}
+      />
+
+      <MediaScroll 
+        title="Popular Tamil" 
+        icon={<Film className="w-4 h-4 text-palette-orange" />} 
+        items={popularTamil?.results || []} 
+        isLoading={loadingTamil}
+        onViewAll={() => navigate('/browse?language=ta')}
+      />
+
+      <MediaScroll 
+        title="Romantic Mature" 
+        icon={<Heart className="w-4 h-4 text-palette-pink" />} 
+        items={matureContent?.results || []} 
+        isLoading={loadingMature}
+        onViewAll={() => navigate('/browse?genre=10749&certification=R')}
+      />
+
+      <MediaScroll 
+        title="80s Classics" 
+        icon={<History className="w-4 h-4 text-palette-amber" />} 
+        items={classics80s?.results || []} 
+        isLoading={loadingClassics}
+        onViewAll={() => navigate('/browse?year=1980')}
+      />
+
+      <MediaScroll 
+        title="Fun to Watch" 
+        icon={<Smile className="w-4 h-4 text-palette-yellow" />} 
+        items={funToWatch?.results || []} 
+        isLoading={loadingFun}
+        onViewAll={() => navigate('/browse?genre=35')}
       />
     </div>
   );

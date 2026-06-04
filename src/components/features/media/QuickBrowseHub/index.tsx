@@ -51,8 +51,8 @@ const QuickBrowseHub = () => {
               name={cat.name}
               icon={cat.icon}
               color={cat.color}
-              discoverParams={{ with_genres: cat.genreId }}
-              onClick={() => navigate(`/browse?genre=${cat.genreId}`)}
+              discoverParams={cat.discoverParams || { with_genres: cat.genreId }}
+              onClick={() => navigate(cat.path || `/browse?genre=${cat.genreId}`)}
             />
           ))}
         </ScrollContainer>

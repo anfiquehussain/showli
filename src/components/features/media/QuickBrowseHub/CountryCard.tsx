@@ -52,6 +52,7 @@ export const CountryCard = ({ code, name, onClick }: CountryCardProps) => {
 
   return (
     <motion.button
+      whileHover={{ y: -4 }}
       whileTap={{ scale: 0.98 }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -59,15 +60,23 @@ export const CountryCard = ({ code, name, onClick }: CountryCardProps) => {
       className="relative flex flex-col items-start justify-end p-4 h-32 rounded-2xl border border-white/5 transition-colors duration-300 group shrink-0 w-48 sm:w-56 bg-card/20 cursor-pointer shadow-[0_8px_32px_rgba(0,0,0,0.4)] text-left"
     >
       {/* Background Image wrapped in a cropped container */}
-      <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none z-0">
         {isLoading ? (
           <div className="absolute inset-0 bg-white/5 animate-pulse" />
         ) : backdropUrl ? (
           <>
-            <img
+            <motion.img
               src={backdropUrl}
               alt={name}
-              className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-[opacity,transform] duration-500"
+              animate={{
+                scale: isHovered ? 1.1 : 1.0,
+                opacity: isHovered ? 1.0 : 0.9,
+              }}
+              transition={{
+                duration: 0.8,
+                ease: [0.16, 1, 0.3, 1], // Premium easeOutExpo curve for buttery smooth scaling
+              }}
+              className="absolute inset-0 w-full h-full object-cover"
               loading="lazy"
             />
             <div className="absolute inset-0 bg-linear-to-t from-black/95 via-black/40 to-transparent transition-opacity duration-300" />
@@ -86,7 +95,7 @@ export const CountryCard = ({ code, name, onClick }: CountryCardProps) => {
             <stop offset="100%" stopColor={colors.end} />
           </linearGradient>
         </defs>
-        <rect
+        <motion.rect
           x="3"
           y="3"
           width="calc(100% - 6px)"
@@ -94,10 +103,15 @@ export const CountryCard = ({ code, name, onClick }: CountryCardProps) => {
           rx="17"
           stroke={`url(#${gradId})`}
           strokeWidth="2.5"
-          className="transition-[stroke-dashoffset] duration-1000 ease-in-out"
+          animate={{
+            strokeDashoffset: isTouchDevice || isHovered ? 0 : 800,
+          }}
+          transition={{
+            duration: 1.5,
+            ease: "easeInOut",
+          }}
           style={{
             strokeDasharray: '800',
-            strokeDashoffset: isTouchDevice || isHovered ? '0' : '800',
           }}
         />
       </svg>

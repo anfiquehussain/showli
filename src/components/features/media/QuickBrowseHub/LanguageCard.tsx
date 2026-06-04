@@ -11,11 +11,11 @@ const LANGUAGE_METADATA: Record<string, {
 }> = {
   en: { nativeName: 'English', char: 'Aa', colors: { start: '#3b82f6', end: '#60a5fa', glow: '59,130,246' }, desc: 'Global Cinema' },
   es: { nativeName: 'Español', char: 'Ñ', colors: { start: '#ef4444', end: '#f59e0b', glow: '239,68,68' }, desc: 'Passionate Tales' },
+  ml: { nativeName: 'മലയാളം', char: 'മ', colors: { start: '#10b981', end: '#f59e0b', glow: '16,185,129' }, desc: 'Vibrant Kerala Cinema' },
   ja: { nativeName: '日本語', char: 'あ', colors: { start: '#e11d48', end: '#f43f5e', glow: '225,29,72' }, desc: 'Masterful Artistry' },
   ko: { nativeName: '한국어', char: '한', colors: { start: '#0284c7', end: '#06b6d4', glow: '2,132,199' }, desc: 'Gripping Dramas' },
   hi: { nativeName: 'हिन्दी', char: 'अ', colors: { start: '#22d3ee', end: '#8b5cf6', glow: '34,211,238' }, desc: 'Epic Spectacles' },
   ta: { nativeName: 'தமிழ்', char: 'த', colors: { start: '#f97316', end: '#ef4444', glow: '249,115,22' }, desc: 'Kollywood Masterpieces' },
-  ml: { nativeName: 'മലയാളം', char: 'മ', colors: { start: '#10b981', end: '#f59e0b', glow: '16,185,129' }, desc: 'Vibrant Kerala Cinema' },
   tr: { nativeName: 'Türkçe', char: 'Ğ', colors: { start: '#ef4444', end: '#b91c1c', glow: '239,68,68' }, desc: 'Rich Historical Drama' },
   fa: { nativeName: 'فارسی', char: 'ف', colors: { start: '#0d9488', end: '#10b981', glow: '13,148,136' }, desc: 'Poetic Iranian Cinema' },
   tl: { nativeName: 'Filipino', char: 'Ph', colors: { start: '#3b82f6', end: '#06b6d4', glow: '59,130,246' }, desc: 'Compelling Narratives' },

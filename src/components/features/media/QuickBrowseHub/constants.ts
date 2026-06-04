@@ -73,11 +73,11 @@ export const POPULAR_COUNTRIES = [
 export const POPULAR_LANGUAGES = [
   { code: 'en', name: 'English', label: 'EN' },
   { code: 'es', name: 'Spanish', label: 'ES' },
+  { code: 'ml', name: 'Malayalam', label: 'ML' },
   { code: 'ja', name: 'Japanese', label: 'JA' },
   { code: 'ko', name: 'Korean', label: 'KO' },
   { code: 'hi', name: 'Hindi', label: 'HI' },
   { code: 'ta', name: 'Tamil', label: 'TA' },
-  { code: 'ml', name: 'Malayalam', label: 'ML' },
   { code: 'tr', name: 'Turkish', label: 'TR' },
   { code: 'fa', name: 'Persian', label: 'FA' },
   { code: 'tl', name: 'Filipino', label: 'TL' },

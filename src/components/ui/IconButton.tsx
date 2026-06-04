@@ -6,7 +6,7 @@ import type { LucideIcon } from 'lucide-react';
 type IconButtonVariant = 'primary' | 'secondary' | 'ghost';
 
 interface IconButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
-  icon: LucideIcon;
+  icon: LucideIcon | React.ComponentType<{ className?: string }>;
   variant?: IconButtonVariant;
   'aria-label': string;
 }

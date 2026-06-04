@@ -84,7 +84,7 @@ export const LanguageCard = ({ code, name, onClick }: LanguageCardProps) => {
 
       {/* Floating Cultural Character Watermark covering the background */}
       <div 
-        className="absolute inset-0 flex items-center justify-center text-[10rem] sm:text-[12rem] font-black text-white/[0.03] select-none pointer-events-none z-0 transition-all duration-500 ease-out group-hover:text-white/[0.20] leading-none mobile-watermark"
+        className="absolute inset-0 flex items-center justify-center text-[10rem] sm:text-[12rem] font-black text-white/3 select-none pointer-events-none z-0 transition-all duration-500 ease-out group-hover:text-white/20 leading-none mobile-watermark"
         style={{
           fontFamily: code === 'ja' || code === 'ko' || code === 'hi' || code === 'ta' || code === 'ml' || code === 'fa' ? 'inherit' : '"Outfit", "Inter", sans-serif'
         }}

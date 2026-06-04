@@ -25,8 +25,19 @@ src/
 │   ├── ui/             # [Layer 1] Primitives (Button.tsx, IconButton.tsx, Input.tsx, Logo.tsx, Rating.tsx, Skeleton.tsx, SplashScreen.tsx)
 │   ├── patterns/       # [Layer 2] Reusable Patterns (Modal, ConfirmationModal, PageHeader, MediaScroll, MediaCard, PersonScroll, PersonCard, PaginationControls, StatusBadge, SearchBar, ProtectedRoute, ScrollContainer, ScrollToTop, BackToTopButton)
 │   └── features/       # [Layer 3] Feature Components (Grouped by domain)
-│       ├── auth/       # Authentication (AuthModal.tsx)
-│       ├── layout/     # Global structure (MainLayout.tsx, Navbar.tsx)
+│       ├── auth/       # Authentication
+│       │   └── AuthModal/ # Decomposed authentication modal dialog
+│       │       ├── index.tsx
+│       │       ├── LoginForm.tsx
+│       │       ├── RegisterForm.tsx
+│       │       └── GoogleButton.tsx
+│       ├── layout/     # Global structure (MainLayout.tsx)
+│       │   └── Navbar/  # Decomposed global navigation header
+│       │       ├── index.tsx
+│       │       ├── DesktopNavbar.tsx
+│       │       ├── MobileNavbar.tsx
+│       │       ├── GithubIcon.tsx
+│       │       └── types.ts
 │       ├── media/      # Media-related components
 │       │   ├── MediaDetails/ # Decomposed details component
 │       │   │   ├── index.tsx
@@ -75,7 +86,9 @@ src/
 │       │   │   ├── CountryCard.tsx
 │       │   │   ├── TimePeriodCard.tsx
 │       │   │   └── LanguageCard.tsx
-│       │   ├── HomeFeatured.tsx
+│       │   ├── HomeFeatured/ # Decomposed trending & landing categories
+│       │   │   ├── index.tsx
+│       │   │   └── HomeSearchBar.tsx
 │       │   ├── HomeDiscovery.tsx
 │       │   ├── DiscoveryIcons.tsx
 │       │   └── PersonDetails/ # Decomposed person profile
@@ -90,7 +103,12 @@ src/
 │       │   ├── ProfileSection.tsx
 │       │   ├── ProfileFavorites.tsx
 │       │   ├── AddFavoriteModal.tsx
-│       │   ├── EditProfileModal.tsx
+│       │   ├── EditProfileModal/ # Decomposed edit profile modal
+│       │   │   ├── index.tsx
+│       │   │   ├── ProfilePreview.tsx
+│       │   │   ├── AvatarCustomizer.tsx
+│       │   │   ├── BannerCustomizer.tsx
+│       │   │   └── constants.ts
 │       │   ├── AllReviewsModal.tsx
 │       │   ├── ProfileReviewCard.tsx
 │       │   ├── profile.types.ts

@@ -1,5 +1,6 @@
 import { X } from 'lucide-react';
 import { useGetMovieGenresQuery, useGetTVGenresQuery, useGetLanguagesQuery, useGetCountriesQuery, useGetAvailableWatchProvidersQuery, useGetWatchProviderRegionsQuery } from '@/api/media/mediaApi';
+import { ALL_MODE_GENRES } from './BrowseFilters';
 import type { TmdbCountry } from '@/types/tmdb.types';
 
 interface FilterChipsProps {
@@ -28,6 +29,7 @@ interface FilterChipsProps {
   minEpisodes: string;
   maxEpisodes: string;
   certification: string;
+  minRating: string;
   onRemove: (key: string, value: string, extra?: { name: string; val: string }) => void;
   onClearAll: () => void;
 }
@@ -58,6 +60,7 @@ const FilterChips = ({
   minEpisodes,
   maxEpisodes,
   certification,
+  minRating,
   onRemove,
   onClearAll
 }: FilterChipsProps) => {
@@ -69,9 +72,11 @@ const FilterChips = ({
   const { data: providersData } = useGetAvailableWatchProvidersQuery({ 
     type: mediaType === 'all' ? 'movie' : mediaType as 'movie' | 'tv',
     region: country || 'US'
-  });
-
-  const getGenreName = (id: string) => {
+  });  const getGenreName = (id: string) => {
+    if (mediaType === 'all') {
+      const match = ALL_MODE_GENRES.find(g => g.ids.join('|') === id);
+      if (match) return match.name;
+    }
     const genres = mediaType === 'tv' ? tvGenres?.genres : movieGenres?.genres;
     return genres?.find(g => String(g.id) === id)?.name || id;
   };
@@ -140,6 +145,7 @@ const FilterChips = ({
     { key: 'minEpisodes', value: minEpisodes && !maxEpisodes ? `Episodes: >= ${minEpisodes}` : minEpisodes && maxEpisodes ? `Episodes: ${minEpisodes}-${maxEpisodes}` : '', label: minEpisodes && !maxEpisodes ? `Episodes: >= ${minEpisodes}` : `Episodes: ${minEpisodes}-${maxEpisodes}` },
     { key: 'maxEpisodes', value: maxEpisodes && !minEpisodes ? `Episodes: <= ${maxEpisodes}` : '', label: `Episodes: <= ${maxEpisodes}` },
     { key: 'certification', value: certification, label: `Rated: ${certification}` },
+    { key: 'minRating', value: minRating, label: `Rating: ${minRating}+` },
   ].filter(f => f.value);
 
   if (activeFilters.length === 0) return null;
@@ -149,7 +155,7 @@ const FilterChips = ({
       <span className="text-sm text-muted-foreground mr-1">Active filters:</span>
       {activeFilters.map((filter) => (
         <div 
-          key={filter.key}
+          key={`${filter.key}-${filter.value}`}
           className="flex items-center gap-1.5 px-3 py-1 bg-brand-primary/10 border border-brand-primary/20 text-brand-primary text-xs font-medium rounded-full"
         >
           <span className="capitalize">{filter.label}</span>

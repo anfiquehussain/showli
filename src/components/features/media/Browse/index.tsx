@@ -79,6 +79,7 @@ const Browse = () => {
   const minEpisodes = searchParams.get('minEpisodes') || '';
   const maxEpisodes = searchParams.get('maxEpisodes') || '';
   const certification = searchParams.get('certification') || '';
+  const minRating = searchParams.get('minRating') || '';
   const page = Number(searchParams.get('page')) || 1;
 
   const dispatch = useAppDispatch();
@@ -110,6 +111,18 @@ const Browse = () => {
 
   // Discovery API (Only one type at a time for discover)
   const discoverType = mediaType === 'all' ? 'movie' : mediaType;
+
+  // Sanitize sort_by parameter for TMDb API discover
+  const apiSortBy = useMemo(() => {
+    if (discoverType === 'tv') {
+      if (sortBy === 'revenue.desc') return 'popularity.desc';
+      if (sortBy === 'primary_release_date.desc') return 'first_air_date.desc';
+    } else {
+      if (sortBy === 'first_air_date.desc') return 'primary_release_date.desc';
+    }
+    return sortBy;
+  }, [discoverType, sortBy]);
+
   const { 
     data: discoverResults, 
     isLoading: isDiscoverLoading, 
@@ -119,7 +132,7 @@ const Browse = () => {
   } = useDiscoverQuery({
     type: discoverType,
     params: {
-      sort_by: sortBy,
+      sort_by: apiSortBy,
       with_genres: genreId,
       primary_release_year: year,
       first_air_date_year: year, // for TV
@@ -136,6 +149,7 @@ const Browse = () => {
       'budget.lte': discoverType === 'movie' && budgetLte ? Number(budgetLte) * 1000000 : undefined,
       'revenue.gte': discoverType === 'movie' && revenueGte ? Number(revenueGte) * 1000000 : undefined,
       'revenue.lte': discoverType === 'movie' && revenueLte ? Number(revenueLte) * 1000000 : undefined,
+      'vote_average.gte': minRating ? Number(minRating) : undefined,
       certification_country: discoverType === 'movie' && certification ? 'US' : undefined,
       certification: discoverType === 'movie' && certification ? certification : undefined,
       page,
@@ -237,7 +251,11 @@ const Browse = () => {
 
       if (isSearching) {
         // Genre Filter
-        if (genreId && !item.genre_ids?.includes(Number(genreId))) return false;
+        if (genreId) {
+          const selectedGenreIds = genreId.split('|').map(Number);
+          const hasMatchingGenre = item.genre_ids?.some(id => selectedGenreIds.includes(id));
+          if (!hasMatchingGenre) return false;
+        }
         
         // Year Filter
         if (year) {
@@ -254,6 +272,9 @@ const Browse = () => {
           const originCountry = 'origin_country' in item ? item.origin_country : [];
           if (!originCountry?.includes(country)) return false;
         }
+
+        // Rating Filter
+        if (minRating && (item.vote_average === undefined || item.vote_average < Number(minRating))) return false;
 
         // Status Filter in Search Mode
         if (type === 'tv' && status) {
@@ -332,7 +353,7 @@ const Browse = () => {
       ...results,
       results: filteredResults
     };
-  }, [results, isSearching, mediaType, genreId, year, language, country, status, showType, budgetGte, budgetLte, revenueGte, revenueLte, minSeasons, maxSeasons, minEpisodes, maxEpisodes, tvDetailsCache, movieDetailsCache]);
+  }, [results, isSearching, mediaType, genreId, year, language, country, minRating, status, showType, budgetGte, budgetLte, revenueGte, revenueLte, minSeasons, maxSeasons, minEpisodes, maxEpisodes, tvDetailsCache, movieDetailsCache]);
 
   const handleUpdateParam = (key: string, value: string, extra?: { name: string; val: string }) => {
     const newParams = new URLSearchParams(searchParams);
@@ -347,6 +368,68 @@ const Browse = () => {
         newParams.delete(extra.name);
       }
     }
+
+    // Proactively clean up incompatible filters when switching media type
+    if (key === 'type') {
+      if (value === 'movie') {
+        // Clear TV-specific filters
+        newParams.delete('status');
+        newParams.delete('showType');
+        newParams.delete('minSeasons');
+        newParams.delete('maxSeasons');
+        newParams.delete('minEpisodes');
+        newParams.delete('maxEpisodes');
+        newParams.delete('network');
+        newParams.delete('networkName');
+        newParams.delete('genre'); // Clear genre to avoid ID mismatch
+
+        // Sanitize sort options
+        const currentSort = newParams.get('sort');
+        if (currentSort === 'first_air_date.desc') {
+          newParams.set('sort', 'primary_release_date.desc');
+        }
+      } else if (value === 'tv') {
+        // Clear Movie-specific filters
+        newParams.delete('budgetGte');
+        newParams.delete('budgetLte');
+        newParams.delete('revenueGte');
+        newParams.delete('revenueLte');
+        newParams.delete('certification');
+        newParams.delete('genre'); // Clear genre to avoid ID mismatch
+
+        // Sanitize sort options
+        const currentSort = newParams.get('sort');
+        if (currentSort === 'revenue.desc') {
+          newParams.set('sort', 'popularity.desc');
+        } else if (currentSort === 'primary_release_date.desc') {
+          newParams.set('sort', 'first_air_date.desc');
+        }
+      } else if (value === 'all') {
+        // Clear all type-specific filters to avoid conflicts
+        newParams.delete('status');
+        newParams.delete('showType');
+        newParams.delete('minSeasons');
+        newParams.delete('maxSeasons');
+        newParams.delete('minEpisodes');
+        newParams.delete('maxEpisodes');
+        newParams.delete('network');
+        newParams.delete('networkName');
+        newParams.delete('budgetGte');
+        newParams.delete('budgetLte');
+        newParams.delete('revenueGte');
+        newParams.delete('revenueLte');
+        newParams.delete('certification');
+        newParams.delete('genre'); // Genres have different IDs on TMDb, clear to avoid bad matches
+        
+        // Sanitize sort options
+        const currentSort = newParams.get('sort');
+        if (currentSort === 'first_air_date.desc') {
+          newParams.set('sort', 'primary_release_date.desc');
+        } else if (currentSort === 'revenue.desc') {
+          newParams.set('sort', 'popularity.desc');
+        }
+      }
+    }
     
     // If updating filters, we no longer clear the search query
     // This allows hybrid filtering (search text + filters)
@@ -359,6 +442,7 @@ const Browse = () => {
       key === 'year' || 
       key === 'language' || 
       key === 'country' || 
+      key === 'minRating' || 
       key === 'provider' ||
       key === 'keyword' ||
       key === 'network' ||
@@ -431,6 +515,7 @@ const Browse = () => {
             networkId={network}
             networkName={networkName}
             certification={certification}
+            minRating={minRating}
             onFilterChange={handleUpdateParam}
             onClear={handleClearFilters}
           />
@@ -469,6 +554,7 @@ const Browse = () => {
                 networkId={network}
                 networkName={networkName}
                 certification={certification}
+                minRating={minRating}
                 onFilterChange={handleUpdateParam}
                 onClear={handleClearFilters}
                 onClose={toggleSidebar}
@@ -504,6 +590,7 @@ const Browse = () => {
             minEpisodes={minEpisodes}
             maxEpisodes={maxEpisodes}
             certification={certification}
+            minRating={minRating}
             onRemove={handleUpdateParam}
             onClearAll={handleClearFilters}
           />

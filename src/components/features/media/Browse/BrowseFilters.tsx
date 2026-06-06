@@ -38,6 +38,7 @@ interface BrowseFiltersProps {
   networkId: string;
   networkName: string;
   certification: string;
+  minRating: string;
   onFilterChange: (key: string, value: string, extra?: { name: string; val: string }) => void;
   onClear: () => void;
   onClose?: () => void;
@@ -55,6 +56,22 @@ const popularCompanies = [
   { id: 3, name: 'Pixar' },
   { id: 41077, name: 'A24' },
   { id: 10342, name: 'Studio Ghibli' }
+];
+
+export const ALL_MODE_GENRES = [
+  { name: 'Action & Adventure', ids: [28, 12, 10759] },
+  { name: 'Animation', ids: [16] },
+  { name: 'Comedy', ids: [35] },
+  { name: 'Crime', ids: [80] },
+  { name: 'Documentary', ids: [99] },
+  { name: 'Drama', ids: [18] },
+  { name: 'Family', ids: [10751] },
+  { name: 'Sci-Fi & Fantasy', ids: [14, 878, 10765] },
+  { name: 'Mystery', ids: [9648] },
+  { name: 'Romance', ids: [10749] },
+  { name: 'Horror & Thriller', ids: [27, 53] },
+  { name: 'War & Politics', ids: [10752, 10768] },
+  { name: 'Western', ids: [37] }
 ];
 
 const BrowseFilters = ({
@@ -81,6 +98,7 @@ const BrowseFilters = ({
   networkId: _networkId,
   networkName,
   certification,
+  minRating,
   onFilterChange,
   onClear,
   onClose
@@ -146,20 +164,44 @@ const BrowseFilters = ({
             Genres
           </label>
           <div className="flex flex-wrap gap-2">
-            {genres?.map((genre) => (
-              <button
-                key={genre.id}
-                onClick={() => onFilterChange('genre', genreId === String(genre.id) ? '' : String(genre.id))}
-                className={`
-                  px-3 py-1.5 text-sm rounded-lg border transition-standard
-                  ${genreId === String(genre.id)
-                    ? 'bg-brand-primary/20 border-brand-primary text-brand-primary'
-                    : 'bg-white/5 border-white/5 text-muted-foreground hover:border-white/10 hover:text-foreground'}
-                `}
-              >
-                {genre.name}
-              </button>
-            ))}
+            {mediaType === 'all' ? (
+              ALL_MODE_GENRES.map((genre) => {
+                const keyVal = genre.ids.join('|');
+                const isActive = genreId === keyVal;
+                return (
+                  <button
+                    key={genre.name}
+                    onClick={() => onFilterChange('genre', isActive ? '' : keyVal)}
+                    className={`
+                      px-3 py-1.5 text-sm rounded-lg border transition-standard
+                      ${isActive
+                        ? 'bg-brand-primary/20 border-brand-primary text-brand-primary'
+                        : 'bg-white/5 border-white/5 text-muted-foreground hover:border-white/10 hover:text-foreground'}
+                    `}
+                  >
+                    {genre.name}
+                  </button>
+                );
+              })
+            ) : (
+              genres?.map((genre) => {
+                const isActive = genreId === String(genre.id);
+                return (
+                  <button
+                    key={genre.id}
+                    onClick={() => onFilterChange('genre', isActive ? '' : String(genre.id))}
+                    className={`
+                      px-3 py-1.5 text-sm rounded-lg border transition-standard
+                      ${isActive
+                        ? 'bg-brand-primary/20 border-brand-primary text-brand-primary'
+                        : 'bg-white/5 border-white/5 text-muted-foreground hover:border-white/10 hover:text-foreground'}
+                    `}
+                  >
+                    {genre.name}
+                  </button>
+                );
+              })
+            )}
           </div>
         </div>
 
@@ -343,7 +385,7 @@ const BrowseFilters = ({
         </div>
 
         {/* Certification / Age Rating Filter (Movies only) */}
-        {(mediaType === 'movie' || mediaType === 'all') && (
+        {mediaType === 'movie' && (
           <div className="space-y-3">
             <label className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
               Age Rating (US)
@@ -365,7 +407,7 @@ const BrowseFilters = ({
         )}
 
         {/* TV-Specific Filters */}
-        {(mediaType === 'tv' || mediaType === 'all') && (
+        {mediaType === 'tv' && (
           <>
             {/* Status */}
             <div className="space-y-3">
@@ -389,149 +431,141 @@ const BrowseFilters = ({
             </div>
 
             {/* Show Type (TV Only) */}
-            {mediaType === 'tv' && (
-              <div className="space-y-3">
-                <label className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
-                  Show Type
-                </label>
-                <select
-                  value={showType}
-                  onChange={(e) => onFilterChange('showType', e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 appearance-none"
-                  style={{ colorScheme: 'dark' }}
-                >
-                  <option value="" className="bg-card text-foreground">All Types</option>
-                  <option value="0" className="bg-card text-foreground">Documentary</option>
-                  <option value="1" className="bg-card text-foreground">News</option>
-                  <option value="2" className="bg-card text-foreground">Miniseries</option>
-                  <option value="3" className="bg-card text-foreground">Reality</option>
-                  <option value="4" className="bg-card text-foreground">Scripted</option>
-                  <option value="5" className="bg-card text-foreground">Talk Show</option>
-                  <option value="6" className="bg-card text-foreground">Video</option>
-                </select>
-              </div>
-            )}
+            <div className="space-y-3">
+              <label className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+                Show Type
+              </label>
+              <select
+                value={showType}
+                onChange={(e) => onFilterChange('showType', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 appearance-none"
+                style={{ colorScheme: 'dark' }}
+              >
+                <option value="" className="bg-card text-foreground">All Types</option>
+                <option value="0" className="bg-card text-foreground">Documentary</option>
+                <option value="1" className="bg-card text-foreground">News</option>
+                <option value="2" className="bg-card text-foreground">Miniseries</option>
+                <option value="3" className="bg-card text-foreground">Reality</option>
+                <option value="4" className="bg-card text-foreground">Scripted</option>
+                <option value="5" className="bg-card text-foreground">Talk Show</option>
+                <option value="6" className="bg-card text-foreground">Video</option>
+              </select>
+            </div>
 
             {/* TV Seasons Range */}
-            {mediaType === 'tv' && (
-              <div className="space-y-3">
-                <label className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
-                  Seasons Count
-                </label>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="number"
-                    min="1"
-                    placeholder="Min"
-                    value={minSeasons}
-                    onChange={(e) => onFilterChange('minSeasons', e.target.value)}
-                    className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 transition-standard placeholder:text-muted-foreground/30"
-                  />
-                  <span className="text-muted-foreground text-xs">—</span>
-                  <input
-                    type="number"
-                    min="1"
-                    placeholder="Max"
-                    value={maxSeasons}
-                    onChange={(e) => onFilterChange('maxSeasons', e.target.value)}
-                    className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 transition-standard placeholder:text-muted-foreground/30"
-                  />
-                </div>
+            <div className="space-y-3">
+              <label className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+                Seasons Count
+              </label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  min="1"
+                  placeholder="Min"
+                  value={minSeasons}
+                  onChange={(e) => onFilterChange('minSeasons', e.target.value)}
+                  className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 transition-standard placeholder:text-muted-foreground/30"
+                />
+                <span className="text-muted-foreground text-xs">—</span>
+                <input
+                  type="number"
+                  min="1"
+                  placeholder="Max"
+                  value={maxSeasons}
+                  onChange={(e) => onFilterChange('maxSeasons', e.target.value)}
+                  className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 transition-standard placeholder:text-muted-foreground/30"
+                />
               </div>
-            )}
+            </div>
 
             {/* TV Episodes Range */}
-            {mediaType === 'tv' && (
-              <div className="space-y-3">
-                <label className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
-                  Episode Count
-                </label>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="number"
-                    min="1"
-                    placeholder="Min"
-                    value={minEpisodes}
-                    onChange={(e) => onFilterChange('minEpisodes', e.target.value)}
-                    className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 transition-standard placeholder:text-muted-foreground/30"
-                  />
-                  <span className="text-muted-foreground text-xs">—</span>
-                  <input
-                    type="number"
-                    min="1"
-                    placeholder="Max"
-                    value={maxEpisodes}
-                    onChange={(e) => onFilterChange('maxEpisodes', e.target.value)}
-                    className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 transition-standard placeholder:text-muted-foreground/30"
-                  />
-                </div>
+            <div className="space-y-3">
+              <label className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+                Episode Count
+              </label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  min="1"
+                  placeholder="Min"
+                  value={minEpisodes}
+                  onChange={(e) => onFilterChange('minEpisodes', e.target.value)}
+                  className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 transition-standard placeholder:text-muted-foreground/30"
+                />
+                <span className="text-muted-foreground text-xs">—</span>
+                <input
+                  type="number"
+                  min="1"
+                  placeholder="Max"
+                  value={maxEpisodes}
+                  onChange={(e) => onFilterChange('maxEpisodes', e.target.value)}
+                  className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 transition-standard placeholder:text-muted-foreground/30"
+                />
               </div>
-            )}
+            </div>
 
             {/* Networks Search (TV Only) */}
-            {mediaType === 'tv' && (
-              <div className="space-y-3 relative">
-                <label className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
-                  Networks
-                </label>
-                {networkName ? (
-                  <div className="flex items-center justify-between bg-brand-primary/10 border border-brand-primary/30 rounded-xl px-4 py-2.5">
-                    <div className="flex items-center gap-2 text-brand-primary">
-                      <Tv className="w-4 h-4" />
-                      <span className="text-sm font-semibold truncate max-w-[180px]">{networkName}</span>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => onFilterChange('network', '', { name: 'networkName', val: '' })}
-                      className="text-brand-primary hover:text-brand-accent transition-colors cursor-pointer"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
+            <div className="space-y-3 relative">
+              <label className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+                Networks
+              </label>
+              {networkName ? (
+                <div className="flex items-center justify-between bg-brand-primary/10 border border-brand-primary/30 rounded-xl px-4 py-2.5">
+                  <div className="flex items-center gap-2 text-brand-primary">
+                    <Tv className="w-4 h-4" />
+                    <span className="text-sm font-semibold truncate max-w-[180px]">{networkName}</span>
                   </div>
-                ) : (
-                  <div className="space-y-2">
-                    <div className="relative group">
-                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-brand-primary transition-colors" />
-                      <input
-                        type="text"
-                        placeholder="Search networks…"
-                        value={networkInput}
-                        onChange={(e) => setNetworkInput(e.target.value)}
-                        className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 transition-standard placeholder:text-muted-foreground/30"
-                      />
-                      {networkInput.length >= 2 && networkSuggestions?.results && (
-                        <div className="absolute z-50 w-full bg-card border border-white/10 rounded-xl shadow-2xl mt-1 max-h-48 overflow-y-auto custom-scrollbar p-1.5 space-y-1">
-                          {isNetworkSearching && (
-                            <div className="text-xs text-muted-foreground italic px-3 py-2">Searching…</div>
-                          )}
-                          {!isNetworkSearching && networkSuggestions.results.length === 0 && (
-                            <div className="text-xs text-muted-foreground italic px-3 py-2">No networks found</div>
-                          )}
-                          {networkSuggestions.results.map((net) => (
-                            <button
-                              key={net.id}
-                              type="button"
-                              onClick={() => {
-                                onFilterChange('network', String(net.id), { name: 'networkName', val: net.name });
-                                setNetworkInput('');
-                              }}
-                              className="w-full text-left px-3 py-2 text-xs font-semibold text-white/70 hover:text-brand-primary hover:bg-brand-primary/10 rounded-lg transition-colors cursor-pointer"
-                            >
-                              {net.name}
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
+                  <button
+                    type="button"
+                    onClick={() => onFilterChange('network', '', { name: 'networkName', val: '' })}
+                    className="text-brand-primary hover:text-brand-accent transition-colors cursor-pointer"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <div className="relative group">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-brand-primary transition-colors" />
+                    <input
+                      type="text"
+                      placeholder="Search networks…"
+                      value={networkInput}
+                      onChange={(e) => setNetworkInput(e.target.value)}
+                      className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 transition-standard placeholder:text-muted-foreground/30"
+                    />
+                    {networkInput.length >= 2 && networkSuggestions?.results && (
+                      <div className="absolute z-50 w-full bg-card border border-white/10 rounded-xl shadow-2xl mt-1 max-h-48 overflow-y-auto custom-scrollbar p-1.5 space-y-1">
+                        {isNetworkSearching && (
+                          <div className="text-xs text-muted-foreground italic px-3 py-2">Searching…</div>
+                        )}
+                        {!isNetworkSearching && networkSuggestions.results.length === 0 && (
+                          <div className="text-xs text-muted-foreground italic px-3 py-2">No networks found</div>
+                        )}
+                        {networkSuggestions.results.map((net) => (
+                          <button
+                            key={net.id}
+                            type="button"
+                            onClick={() => {
+                              onFilterChange('network', String(net.id), { name: 'networkName', val: net.name });
+                              setNetworkInput('');
+                            }}
+                            className="w-full text-left px-3 py-2 text-xs font-semibold text-white/70 hover:text-brand-primary hover:bg-brand-primary/10 rounded-lg transition-colors cursor-pointer"
+                          >
+                            {net.name}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            )}
+                </div>
+              )}
+            </div>
           </>
         )}
 
         {/* Movie-Specific Filters (Budget and Revenue) */}
-        {(mediaType === 'movie' || mediaType === 'all') && (
+        {mediaType === 'movie' && (
           <>
             {/* Budget Range */}
             <div className="space-y-3">
@@ -586,6 +620,25 @@ const BrowseFilters = ({
             </div>
           </>
         )}
+
+        {/* Minimum Rating */}
+        <div className="space-y-3">
+          <label className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+            Minimum Rating
+          </label>
+          <select
+            value={minRating}
+            onChange={(e) => onFilterChange('minRating', e.target.value)}
+            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 appearance-none text-foreground"
+            style={{ colorScheme: 'dark' }}
+          >
+            <option value="" className="bg-card text-foreground">Any Rating</option>
+            <option value="8" className="bg-card text-foreground">8.0+ Superb</option>
+            <option value="7" className="bg-card text-foreground">7.0+ Good</option>
+            <option value="6" className="bg-card text-foreground">6.0+ Above Average</option>
+            <option value="5" className="bg-card text-foreground">5.0+ Average</option>
+          </select>
+        </div>
 
         {/* Language */}
         <div className="space-y-3">

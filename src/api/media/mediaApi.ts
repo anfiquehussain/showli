@@ -107,11 +107,28 @@ export const mediaApi = createApi({
         return `${path}${separator}${searchParams.toString()}`;
       },
     }),
-    getMovieDetails: builder.query<TmdbMovieDetails, number>({
-      query: (id) => `/movie/${id}?api_key=${TMDB_API_KEY}`,
+    getMovieDetails: builder.query<TmdbMovieDetails & {
+      release_dates?: {
+        results: Array<{
+          iso_3166_1: string;
+          release_dates: Array<{
+            certification: string;
+            type: number;
+          }>;
+        }>;
+      };
+    }, number>({
+      query: (id) => `/movie/${id}?api_key=${TMDB_API_KEY}&append_to_response=release_dates`,
     }),
-    getTVDetails: builder.query<TmdbTVDetails, number>({
-      query: (id) => `/tv/${id}?api_key=${TMDB_API_KEY}`,
+    getTVDetails: builder.query<TmdbTVDetails & {
+      content_ratings?: {
+        results: Array<{
+          iso_3166_1: string;
+          rating: string;
+        }>;
+      };
+    }, number>({
+      query: (id) => `/tv/${id}?api_key=${TMDB_API_KEY}&append_to_response=content_ratings`,
     }),
     searchMedia: builder.query<
       TmdbPaginatedResponse<TmdbMedia>,

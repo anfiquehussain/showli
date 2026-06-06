@@ -11,7 +11,9 @@ import type { TmdbMedia, TmdbTVDetails, TmdbMovieDetails } from '@/types/tmdb.ty
 
 const Browse = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [isFilterSidebarOpen, setIsFilterSidebarOpen] = useState(false);
+  
+  // Initialize state directly from URL parameter to avoid effect-driven cascading renders
+  const [isFilterSidebarOpen, setIsFilterSidebarOpen] = useState(() => searchParams.get('focus') === 'filters');
 
   // Lock body scroll when mobile filter sidebar is open
   useEffect(() => {
@@ -28,11 +30,13 @@ const Browse = () => {
   // Sync state with URL params
   const query = searchParams.get('q') || '';
   const [searchVal, setSearchVal] = useState(query);
-
-  // Sync local state when URL parameter changes externally (e.g. chip removal, reset filters)
-  useEffect(() => {
+  
+  // Track previous query to adjust state during render (React recommended pattern)
+  const [prevQuery, setPrevQuery] = useState(query);
+  if (query !== prevQuery) {
+    setPrevQuery(query);
     setSearchVal(query);
-  }, [query]);
+  }
 
   // Debounce search query parameter updates to prevent input lag & autofill merge bugs
   useEffect(() => {
@@ -60,10 +64,10 @@ const Browse = () => {
   const provider = searchParams.get('provider') || '';
   const keywordId = searchParams.get('keyword') || '';
   const keywordName = searchParams.get('keywordName') || '';
-  const network = searchParams.get('network') || '';
-  const networkName = searchParams.get('networkName') || '';
   const company = searchParams.get('company') || '';
   const companyName = searchParams.get('companyName') || '';
+  const network = searchParams.get('network') || '';
+  const networkName = searchParams.get('networkName') || '';
   const status = searchParams.get('status') || '';
   const showType = searchParams.get('showType') || '';
   const budgetGte = searchParams.get('budgetGte') || '';
@@ -81,11 +85,9 @@ const Browse = () => {
   const [tvDetailsCache, setTvDetailsCache] = useState<Record<number, TmdbTVDetails>>({});
   const [movieDetailsCache, setMovieDetailsCache] = useState<Record<number, TmdbMovieDetails>>({});
 
-  // Handle 'focus=filters' to open sidebar automatically
+  // Handle URL 'focus=filters' parameter cleanup (no setState called inside)
   useEffect(() => {
     if (searchParams.get('focus') === 'filters') {
-      setIsFilterSidebarOpen(true);
-      // Clean up the param but keep other params
       const newParams = new URLSearchParams(searchParams);
       newParams.delete('focus');
       setSearchParams(newParams, { replace: true });
@@ -428,6 +430,7 @@ const Browse = () => {
             maxEpisodes={maxEpisodes}
             networkId={network}
             networkName={networkName}
+            certification={certification}
             onFilterChange={handleUpdateParam}
             onClear={handleClearFilters}
           />
@@ -465,6 +468,7 @@ const Browse = () => {
                 maxEpisodes={maxEpisodes}
                 networkId={network}
                 networkName={networkName}
+                certification={certification}
                 onFilterChange={handleUpdateParam}
                 onClear={handleClearFilters}
                 onClose={toggleSidebar}

@@ -85,13 +85,24 @@ const CollectionMediaCard = ({
           <div className="space-y-2">
             <div>
               <h3 className="text-sm font-medium text-white truncate">{item.title || 'Unknown'}</h3>
-              <div className="flex items-center gap-2 mt-0.5">
+              <div className="flex items-center gap-1.5 mt-0.5 text-[10px] text-white/70">
                 {item.vote_average > 0 && (
-                  <span className="text-xs font-medium text-warning flex items-center gap-1">
-                    ★ {item.vote_average.toFixed(1)}
-                  </span>
+                  <>
+                    <span className="font-medium text-warning flex items-center gap-0.5">
+                      ★ {item.vote_average.toFixed(1)}
+                    </span>
+                    <span>•</span>
+                  </>
                 )}
-                {item.release_date && <span className="text-xs text-white/70">{item.release_date.split('-')[0]}</span>}
+                {item.release_date && (
+                  <>
+                    <span>{item.release_date.split('-')[0]}</span>
+                    <span>•</span>
+                  </>
+                )}
+                <span className="uppercase text-[9px] font-semibold text-brand-secondary">
+                  {item.media_type === 'movie' ? 'Movie' : 'TV'}
+                </span>
               </div>
             </div>
 
@@ -136,8 +147,11 @@ const CollectionMediaCard = ({
         )}
       </div>
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-1">
-          <h3 className="text-lg font-medium text-primary truncate">{item.title || `Media ID: ${item.tmdb_id}`}</h3>
+        <div className="flex items-center gap-2 mb-1 flex-wrap">
+          <h3 className="text-lg font-medium text-primary truncate max-w-[180px] sm:max-w-xs">{item.title || `Media ID: ${item.tmdb_id}`}</h3>
+          <span className="px-1.5 py-0.5 rounded-sm bg-brand-secondary/10 border border-brand-secondary/30 text-[9px] font-bold text-brand-secondary uppercase shrink-0 leading-normal">
+            {item.media_type === 'movie' ? 'Movie' : 'TV'}
+          </span>
           <StatusBadge status={item.status || 'planned'} />
         </div>
         {item.release_date && <p className="text-sm text-text-secondary">{item.release_date.split('-')[0]}</p>}

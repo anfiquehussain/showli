@@ -58,16 +58,18 @@ export const MediaCard = ({ item, onAddClick }: MediaCardProps) => {
           >
             <Plus className="w-3.5 h-3.5" />
           </button>
-
-          <div className="absolute inset-0 bg-linear-to-t from-background/90 via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3">
-            <span className="text-[10px] font-bold text-brand-secondary uppercase tracking-tighter">
-              {year}
+        </div>
+        <div className="px-1 space-y-0.5">
+          <h3 className="text-sm font-medium text-primary truncate">
+            {title}
+          </h3>
+          <div className="flex items-center justify-between text-[10px] text-text-secondary font-medium">
+            <span>{year}</span>
+            <span className="uppercase text-[9px] font-semibold text-brand-secondary shrink-0">
+              {type === 'movie' ? 'Movie' : 'TV'}
             </span>
           </div>
         </div>
-        <h3 className="text-sm font-medium text-primary truncate px-1">
-          {title}
-        </h3>
       </motion.div>
     </Link>
   );

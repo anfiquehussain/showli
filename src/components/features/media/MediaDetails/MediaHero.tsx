@@ -19,6 +19,27 @@ interface MediaHeroProps {
   onAddToCollection?: () => void;
 }
 
+interface MovieWithDates extends TmdbMovieDetails {
+  release_dates?: {
+    results: Array<{
+      iso_3166_1: string;
+      release_dates: Array<{
+        certification: string;
+        type: number;
+      }>;
+    }>;
+  };
+}
+
+interface TVWithRatings extends TmdbTVDetails {
+  content_ratings?: {
+    results: Array<{
+      iso_3166_1: string;
+      rating: string;
+    }>;
+  };
+}
+
 const MediaHero = ({ 
   media, 
   type, 
@@ -35,6 +56,19 @@ const MediaHero = ({
   const imdbId = type === 'movie' 
     ? (media as TmdbMovieDetails).imdb_id 
     : tvExternalIds?.imdb_id;
+
+  // Extract US certification or fallback
+  const certification = (() => {
+    if (type === 'movie') {
+      const movieReleaseDates = (media as MovieWithDates).release_dates?.results;
+      const usRelease = movieReleaseDates?.find((r) => r.iso_3166_1 === 'US') || movieReleaseDates?.[0];
+      return usRelease?.release_dates?.find((rd) => rd.certification)?.certification || '';
+    } else {
+      const tvContentRatings = (media as TVWithRatings).content_ratings?.results;
+      const usRating = tvContentRatings?.find((r) => r.iso_3166_1 === 'US') || tvContentRatings?.[0];
+      return usRating?.rating || '';
+    }
+  })();
 
   const [showliRating, setShowliRating] = useState<number | null>(null);
   const [showliReviewCount, setShowliReviewCount] = useState<number>(0);
@@ -196,6 +230,15 @@ const MediaHero = ({
                 <div className="flex items-center gap-1 text-white/80 text-[10px] font-semibold backdrop-blur-md bg-white/5 px-2 py-0.5 rounded-md border border-white/10 uppercase">
                   {media.status}
                 </div>
+                {certification && (
+                  <div className={`flex items-center gap-1 text-[10px] font-black backdrop-blur-md px-2 py-0.5 rounded-md border select-none ${
+                    certification === 'R' || certification === 'TV-MA' || certification === '18+' || certification === 'NC-17'
+                      ? 'bg-error/10 border-error/30 text-error shadow-md shadow-error/5'
+                      : 'bg-white/5 border-white/10 text-white/80'
+                  }`}>
+                    {certification}
+                  </div>
+                )}
               </div>
 
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-heading font-black text-white tracking-tight leading-tight text-pretty">

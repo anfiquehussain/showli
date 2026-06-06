@@ -37,6 +37,7 @@ interface BrowseFiltersProps {
   maxEpisodes: string;
   networkId: string;
   networkName: string;
+  certification: string;
   onFilterChange: (key: string, value: string, extra?: { name: string; val: string }) => void;
   onClear: () => void;
   onClose?: () => void;
@@ -79,6 +80,7 @@ const BrowseFilters = ({
   maxEpisodes,
   networkId: _networkId,
   networkName,
+  certification,
   onFilterChange,
   onClear,
   onClose
@@ -339,6 +341,28 @@ const BrowseFilters = ({
             )}
           </div>
         </div>
+
+        {/* Certification / Age Rating Filter (Movies only) */}
+        {(mediaType === 'movie' || mediaType === 'all') && (
+          <div className="space-y-3">
+            <label className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+              Age Rating (US)
+            </label>
+            <select
+              value={certification}
+              onChange={(e) => onFilterChange('certification', e.target.value)}
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 appearance-none text-foreground"
+              style={{ colorScheme: 'dark' }}
+            >
+              <option value="" className="bg-card text-foreground">All Ratings</option>
+              <option value="G" className="bg-card text-foreground">G (General Audience)</option>
+              <option value="PG" className="bg-card text-foreground">PG (Parental Guidance)</option>
+              <option value="PG-13" className="bg-card text-foreground">PG-13 (Parents Strongly Cautioned)</option>
+              <option value="R" className="bg-card text-foreground">R (Restricted / 18+)</option>
+              <option value="NC-17" className="bg-card text-foreground">NC-17 (Adults Only)</option>
+            </select>
+          </div>
+        )}
 
         {/* TV-Specific Filters */}
         {(mediaType === 'tv' || mediaType === 'all') && (

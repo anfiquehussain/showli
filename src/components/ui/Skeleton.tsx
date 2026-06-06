@@ -8,7 +8,7 @@ const Skeleton = ({ className }: SkeletonProps) => {
   return (
     <div 
       className={clsx(
-        "animate-pulse bg-white/5 rounded-xl border border-white/5",
+        "shimmer-effect rounded-xl border border-white/5",
         className
       )} 
     />

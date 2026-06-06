@@ -36,6 +36,7 @@ export const mediaApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: TMDB_BASE_URL,
   }),
+  keepUnusedDataFor: 300, // Cache data for 5 minutes (300 seconds)
   endpoints: (builder) => ({
     getTrending: builder.query<
       TmdbPaginatedResponse<TmdbMedia>,
@@ -74,7 +75,8 @@ export const mediaApi = createApi({
         return `/discover/${type}?${searchParams.toString()}`;
       },
       serializeQueryArgs: ({ endpointName, queryArgs }) => {
-        const { page, ...restParams } = queryArgs.params || {};
+        const restParams = { ...queryArgs.params };
+        delete restParams.page;
         return `${endpointName}-${queryArgs.type}-${JSON.stringify(restParams)}`;
       },
       merge: (currentCache, newItems) => {

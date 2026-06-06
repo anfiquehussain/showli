@@ -1,12 +1,9 @@
-import { lazy, Suspense, useState, useEffect } from 'react';
+import { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AnimatePresence } from 'framer-motion';
 import MainLayout from './components/features/layout/MainLayout';
 import ProtectedRoute from './components/patterns/ProtectedRoute';
 import ScrollToTop from './components/patterns/ScrollToTop';
 import { AddToCollectionProvider } from './components/features/collections/AddToCollectionProvider';
-import SplashScreen from './components/ui/SplashScreen';
-import { useAppSelector } from '@/hooks/useRedux';
 
 // --- Lazy Loaded Pages ---
 const HomePage = lazy(() => import('./pages/HomePage'));
@@ -21,29 +18,8 @@ const EpisodeDetailsPage = lazy(() => import('./pages/EpisodeDetailsPage'));
 // --- App Root ---
 
 function App() {
-  const isLoading = useAppSelector((state) => state.auth.isLoading);
-  const [showSplash, setShowSplash] = useState(true);
-
-  useEffect(() => {
-    const startTime = Date.now();
-    
-    // Check if loading has finished
-    if (!isLoading) {
-      const elapsed = Date.now() - startTime;
-      const remainingTime = Math.max(0, 1000 - elapsed);
-      
-      const timer = setTimeout(() => {
-        setShowSplash(false);
-      }, remainingTime);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [isLoading]);
   return (
     <>
-      <AnimatePresence mode="wait">
-        {showSplash && <SplashScreen key="splash" />}
-      </AnimatePresence>
       <Router>
         <ScrollToTop />
         <AddToCollectionProvider>

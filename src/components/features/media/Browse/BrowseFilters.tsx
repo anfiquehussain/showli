@@ -39,6 +39,7 @@ interface BrowseFiltersProps {
   networkName: string;
   certification: string;
   minRating: string;
+  maxRating: string;
   onFilterChange: (key: string, value: string, extra?: { name: string; val: string }) => void;
   onClear: () => void;
   onClose?: () => void;
@@ -99,6 +100,7 @@ const BrowseFilters = ({
   networkName,
   certification,
   minRating,
+  maxRating,
   onFilterChange,
   onClear,
   onClose
@@ -621,23 +623,34 @@ const BrowseFilters = ({
           </>
         )}
 
-        {/* Minimum Rating */}
+        {/* Rating Range */}
         <div className="space-y-3">
           <label className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
-            Minimum Rating
+            Rating
           </label>
-          <select
-            value={minRating}
-            onChange={(e) => onFilterChange('minRating', e.target.value)}
-            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 appearance-none text-foreground"
-            style={{ colorScheme: 'dark' }}
-          >
-            <option value="" className="bg-card text-foreground">Any Rating</option>
-            <option value="8" className="bg-card text-foreground">8.0+ Superb</option>
-            <option value="7" className="bg-card text-foreground">7.0+ Good</option>
-            <option value="6" className="bg-card text-foreground">6.0+ Above Average</option>
-            <option value="5" className="bg-card text-foreground">5.0+ Average</option>
-          </select>
+          <div className="flex items-center gap-2">
+            <input
+              type="number"
+              min="1"
+              max="10"
+              step="0.1"
+              placeholder="Min"
+              value={minRating}
+              onChange={(e) => onFilterChange('minRating', e.target.value)}
+              className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 transition-standard placeholder:text-muted-foreground/30"
+            />
+            <span className="text-muted-foreground text-xs">-</span>
+            <input
+              type="number"
+              min="1"
+              max="10"
+              step="0.1"
+              placeholder="Max"
+              value={maxRating}
+              onChange={(e) => onFilterChange('maxRating', e.target.value)}
+              className="w-1/2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50 transition-standard placeholder:text-muted-foreground/30"
+            />
+          </div>
         </div>
 
         {/* Language */}

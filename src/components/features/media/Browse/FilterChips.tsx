@@ -30,6 +30,7 @@ interface FilterChipsProps {
   maxEpisodes: string;
   certification: string;
   minRating: string;
+  maxRating: string;
   onRemove: (key: string, value: string, extra?: { name: string; val: string }) => void;
   onClearAll: () => void;
 }
@@ -61,6 +62,7 @@ const FilterChips = ({
   maxEpisodes,
   certification,
   minRating,
+  maxRating,
   onRemove,
   onClearAll
 }: FilterChipsProps) => {
@@ -122,6 +124,12 @@ const FilterChips = ({
     return map[val] || val;
   };
 
+  const displayMinRating = minRating === '' ? '1' : minRating;
+  const displayMaxRating = maxRating === '' ? '10' : maxRating;
+  const ratingLabel = displayMinRating !== '1' || displayMaxRating !== '10'
+    ? `Rating: ${displayMinRating}-${displayMaxRating}`
+    : '';
+
   const activeFilters = [
     { key: 'q', value: query, label: `Search: ${query}` },
     { key: 'type', value: mediaType !== 'all' ? mediaType : '', label: `Type: ${mediaType}` },
@@ -145,7 +153,7 @@ const FilterChips = ({
     { key: 'minEpisodes', value: minEpisodes && !maxEpisodes ? `Episodes: >= ${minEpisodes}` : minEpisodes && maxEpisodes ? `Episodes: ${minEpisodes}-${maxEpisodes}` : '', label: minEpisodes && !maxEpisodes ? `Episodes: >= ${minEpisodes}` : `Episodes: ${minEpisodes}-${maxEpisodes}` },
     { key: 'maxEpisodes', value: maxEpisodes && !minEpisodes ? `Episodes: <= ${maxEpisodes}` : '', label: `Episodes: <= ${maxEpisodes}` },
     { key: 'certification', value: certification, label: `Rated: ${certification}` },
-    { key: 'minRating', value: minRating, label: `Rating: ${minRating}+` },
+    { key: 'rating', value: ratingLabel, label: ratingLabel },
   ].filter(f => f.value);
 
   if (activeFilters.length === 0) return null;

@@ -80,7 +80,10 @@ const Browse = () => {
   const maxEpisodes = searchParams.get('maxEpisodes') || '';
   const certification = searchParams.get('certification') || '';
   const minRating = searchParams.get('minRating') || '';
+  const maxRating = searchParams.get('maxRating') || '';
   const page = Number(searchParams.get('page')) || 1;
+  const effectiveMinRating = minRating === '' ? 1 : Number(minRating);
+  const effectiveMaxRating = maxRating === '' ? 10 : Number(maxRating);
 
   const dispatch = useAppDispatch();
   const [tvDetailsCache, setTvDetailsCache] = useState<Record<number, TmdbTVDetails>>({});
@@ -149,7 +152,8 @@ const Browse = () => {
       'budget.lte': discoverType === 'movie' && budgetLte ? Number(budgetLte) * 1000000 : undefined,
       'revenue.gte': discoverType === 'movie' && revenueGte ? Number(revenueGte) * 1000000 : undefined,
       'revenue.lte': discoverType === 'movie' && revenueLte ? Number(revenueLte) * 1000000 : undefined,
-      'vote_average.gte': minRating ? Number(minRating) : undefined,
+      'vote_average.gte': effectiveMinRating,
+      'vote_average.lte': effectiveMaxRating,
       certification_country: discoverType === 'movie' && certification ? 'US' : undefined,
       certification: discoverType === 'movie' && certification ? certification : undefined,
       page,
@@ -274,7 +278,9 @@ const Browse = () => {
         }
 
         // Rating Filter
-        if (minRating && (item.vote_average === undefined || item.vote_average < Number(minRating))) return false;
+        if (item.vote_average === undefined) return false;
+        if (item.vote_average < effectiveMinRating) return false;
+        if (item.vote_average > effectiveMaxRating) return false;
 
         // Status Filter in Search Mode
         if (type === 'tv' && status) {
@@ -353,12 +359,15 @@ const Browse = () => {
       ...results,
       results: filteredResults
     };
-  }, [results, isSearching, mediaType, genreId, year, language, country, minRating, status, showType, budgetGte, budgetLte, revenueGte, revenueLte, minSeasons, maxSeasons, minEpisodes, maxEpisodes, tvDetailsCache, movieDetailsCache]);
+  }, [results, isSearching, mediaType, genreId, year, language, country, effectiveMinRating, effectiveMaxRating, status, showType, budgetGte, budgetLte, revenueGte, revenueLte, minSeasons, maxSeasons, minEpisodes, maxEpisodes, tvDetailsCache, movieDetailsCache]);
 
   const handleUpdateParam = (key: string, value: string, extra?: { name: string; val: string }) => {
     const newParams = new URLSearchParams(searchParams);
-    if (value) {
-      newParams.set(key, value);
+    const normalizedValue = (key === 'minRating' || key === 'maxRating') && value
+      ? String(Math.min(10, Math.max(1, Number(value))))
+      : value;
+    if (normalizedValue) {
+      newParams.set(key, normalizedValue);
       if (extra) {
         newParams.set(extra.name, extra.val);
       }
@@ -430,6 +439,11 @@ const Browse = () => {
         }
       }
     }
+
+    if (key === 'rating') {
+      newParams.delete('minRating');
+      newParams.delete('maxRating');
+    }
     
     // If updating filters, we no longer clear the search query
     // This allows hybrid filtering (search text + filters)
@@ -443,6 +457,8 @@ const Browse = () => {
       key === 'language' || 
       key === 'country' || 
       key === 'minRating' || 
+      key === 'maxRating' ||
+      key === 'rating' ||
       key === 'provider' ||
       key === 'keyword' ||
       key === 'network' ||
@@ -516,6 +532,7 @@ const Browse = () => {
             networkName={networkName}
             certification={certification}
             minRating={minRating}
+            maxRating={maxRating}
             onFilterChange={handleUpdateParam}
             onClear={handleClearFilters}
           />
@@ -555,6 +572,7 @@ const Browse = () => {
                 networkName={networkName}
                 certification={certification}
                 minRating={minRating}
+                maxRating={maxRating}
                 onFilterChange={handleUpdateParam}
                 onClear={handleClearFilters}
                 onClose={toggleSidebar}
@@ -591,6 +609,7 @@ const Browse = () => {
             maxEpisodes={maxEpisodes}
             certification={certification}
             minRating={minRating}
+            maxRating={maxRating}
             onRemove={handleUpdateParam}
             onClearAll={handleClearFilters}
           />

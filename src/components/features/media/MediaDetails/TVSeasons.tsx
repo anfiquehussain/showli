@@ -1,26 +1,26 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-
 import { motion } from 'framer-motion';
 import { ChevronDown, ChevronUp, Award } from 'lucide-react';
 import { clsx } from 'clsx';
 
 import { useGetTVSeasonDetailsQuery } from '@/api/media/mediaApi';
 import ScrollContainer from '@/components/patterns/ScrollContainer';
-
 import type { TmdbTVSeasonBrief } from '@/types/tmdb.types';
-
 import EpisodeCard from './EpisodeCard';
 import Skeleton from '../../../ui/Skeleton';
 import EpisodeRatingsModal from './EpisodeRatingsModal';
+import TVSchedulePlanner from '@/components/features/scheduling/TVSchedulePlanner/index';
 
 interface TVSeasonsProps {
   tvId: number;
   seasons: TmdbTVSeasonBrief[];
   showTitle: string;
+  posterPath: string | null;
 }
 
-const TVSeasons = ({ tvId, seasons, showTitle }: TVSeasonsProps) => {
+
+const TVSeasons = ({ tvId, seasons, showTitle, posterPath }: TVSeasonsProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const seasonParam = searchParams.get('season');
   const parsedSeasonParam = seasonParam ? parseInt(seasonParam, 10) : null;
@@ -39,9 +39,12 @@ const TVSeasons = ({ tvId, seasons, showTitle }: TVSeasonsProps) => {
   const [selectedSeason, setSelectedSeason] = useState(initialSeason);
   const [visibleCount, setVisibleCount] = useState(2);
   const [isRatingsModalOpen, setIsRatingsModalOpen] = useState(false);
+  const [isPlannerOpen, setIsPlannerOpen] = useState(false);
 
-  // Sync state if URL query param changes
-  useEffect(() => {
+
+  const [prevParsedSeasonParam, setPrevParsedSeasonParam] = useState(parsedSeasonParam);
+  if (parsedSeasonParam !== prevParsedSeasonParam) {
+    setPrevParsedSeasonParam(parsedSeasonParam);
     if (parsedSeasonParam !== null && !isNaN(parsedSeasonParam)) {
       const exists = sortedSeasons.some(s => s.season_number === parsedSeasonParam);
       if (exists && selectedSeason !== parsedSeasonParam) {
@@ -49,7 +52,7 @@ const TVSeasons = ({ tvId, seasons, showTitle }: TVSeasonsProps) => {
         setVisibleCount(2);
       }
     }
-  }, [parsedSeasonParam, sortedSeasons, selectedSeason]);
+  }
 
   // Smooth scroll to seasons section if query param and hash are set initially
   useEffect(() => {
@@ -122,7 +125,7 @@ const TVSeasons = ({ tvId, seasons, showTitle }: TVSeasonsProps) => {
             <Award className="w-3.5 h-3.5" />
             <span>Episode Ratings</span>
           </button>
-          
+
           <div className="text-[10px] font-black text-brand-primary/60 uppercase tracking-[0.2em] hidden md:block">
             {sortedSeasons.length} Seasons Available
           </div>
@@ -216,6 +219,16 @@ const TVSeasons = ({ tvId, seasons, showTitle }: TVSeasonsProps) => {
         isOpen={isRatingsModalOpen}
         onClose={() => setIsRatingsModalOpen(false)}
         showTitle={showTitle}
+      />
+      <TVSchedulePlanner
+        isOpen={isPlannerOpen}
+        onClose={() => setIsPlannerOpen(false)}
+        tvId={tvId}
+        seasonNumber={selectedSeason}
+        episodes={seasonDetails?.episodes || []}
+        showTitle={showTitle}
+        posterPath={posterPath}
+        allSeasons={seasons}
       />
     </section>
   );

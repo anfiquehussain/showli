@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Modal from '@/components/patterns/Modal';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
@@ -30,7 +30,13 @@ export const CollectionModal = ({ isOpen, onClose, onSubmit, collection, isLoadi
   const [color, setColor] = useState(COLORS[0]!);
   const [visibility, setVisibility] = useState<'private' | 'public'>('private');
 
-  useEffect(() => {
+  const collectionId = collection?.id || 'new';
+  const [prevCollectionId, setPrevCollectionId] = useState(collectionId);
+  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
+
+  if (isOpen !== prevIsOpen || collectionId !== prevCollectionId) {
+    setPrevIsOpen(isOpen);
+    setPrevCollectionId(collectionId);
     if (collection) {
       setName(collection.name);
       setDescription(collection.description || '');
@@ -42,7 +48,7 @@ export const CollectionModal = ({ isOpen, onClose, onSubmit, collection, isLoadi
       setColor(COLORS[0]!);
       setVisibility('private');
     }
-  }, [collection, isOpen]);
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

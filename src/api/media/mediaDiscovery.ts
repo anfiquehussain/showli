@@ -78,7 +78,7 @@ export const generateRandomDiscovery = (
 
   while (configs.length < count) {
     const strategy = Math.random();
-    let config: DiscoveryConfig | null = null;
+    let config: DiscoveryConfig | null;
 
     // A. Static Strategy (20%)
     if (strategy < 0.2 || (movieGenres.length === 0 && languages.length === 0)) {

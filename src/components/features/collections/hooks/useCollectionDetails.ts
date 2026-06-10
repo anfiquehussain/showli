@@ -52,7 +52,7 @@ export const useCollectionDetails = () => {
       await updateCollection({ uid: user.uid, collectionId, data }).unwrap();
       success('Collection updated');
       setIsEditModalOpen(false);
-    } catch (err) {
+    } catch {
       error('Failed to update collection');
     }
   };
@@ -64,7 +64,7 @@ export const useCollectionDetails = () => {
       success('Collection deleted');
       setIsDeleteConfirmOpen(false);
       navigate('/collections');
-    } catch (err) {
+    } catch {
       error('Failed to delete collection');
     }
   };
@@ -88,7 +88,7 @@ export const useCollectionDetails = () => {
         await removeMedia({ uid: user.uid, collectionId, tmdbId }).unwrap();
         success('Removed from collection');
       }
-    } catch (err) {
+    } catch {
       error('Failed to remove media');
     }
   };

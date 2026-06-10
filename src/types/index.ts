@@ -34,3 +34,4 @@ export type {
 
 export * from './collections.types';
 export * from './discussions.types';
+export * from './scheduling.types';

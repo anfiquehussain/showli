@@ -58,11 +58,13 @@ const EpisodeCard = ({ episode, tvId }: EpisodeCardProps) => {
                 {episode.name}
               </h3>
             </Link>
-            <div className="flex items-center gap-1.5 px-1.5 py-0.5 bg-brand-primary/10 rounded-md border border-brand-primary/20 shrink-0">
-              <Star className="w-2.5 h-2.5 text-brand-primary fill-brand-primary" />
-              <span className="text-[10px] font-black text-brand-primary">
-                {episode.vote_average?.toFixed(1) || '0.0'}
-              </span>
+            <div className="flex items-center gap-2 shrink-0">
+              <div className="flex items-center gap-1.5 px-1.5 py-0.5 bg-brand-primary/10 rounded-md border border-brand-primary/20">
+                <Star className="w-2.5 h-2.5 text-brand-primary fill-brand-primary" />
+                <span className="text-[10px] font-black text-brand-primary">
+                  {episode.vote_average?.toFixed(1) || '0.0'}
+                </span>
+              </div>
             </div>
           </div>
 

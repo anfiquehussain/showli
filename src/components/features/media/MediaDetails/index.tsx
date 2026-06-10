@@ -17,6 +17,8 @@ import TVSeasons from './TVSeasons';
 import FullCreditsModal from './FullCreditsModal';
 import MediaKeywords from './MediaKeywords';
 import Skeleton from '@/components/ui/Skeleton';
+import ScheduleModal from '@/components/features/scheduling/ScheduleModal/index';
+import TVSchedulePlanner from '@/components/features/scheduling/TVSchedulePlanner/index';
 
 interface MediaDetailsProps {
   id: number;
@@ -26,6 +28,8 @@ interface MediaDetailsProps {
 
 const MediaDetails = ({ id, type, onAddToCollection }: MediaDetailsProps) => {
   const [isCreditsModalOpen, setIsCreditsModalOpen] = useState(false);
+  const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
+  const [isTVPlannerOpen, setIsTVPlannerOpen] = useState(false);
 
   const movieQuery = useGetMovieDetailsQuery(id, { skip: type !== 'movie' });
   const tvQuery = useGetTVDetailsQuery(id, { skip: type !== 'tv' });
@@ -67,6 +71,13 @@ const MediaDetails = ({ id, type, onAddToCollection }: MediaDetailsProps) => {
         runtime={runtime}
         tagline={tagline}
         onAddToCollection={onAddToCollection}
+        onSchedule={() => {
+          if (type === 'tv') {
+            setIsTVPlannerOpen(true);
+          } else {
+            setIsScheduleModalOpen(true);
+          }
+        }}
       />
 
       {/* 2. Content Sections */}
@@ -90,6 +101,7 @@ const MediaDetails = ({ id, type, onAddToCollection }: MediaDetailsProps) => {
               tvId={id}
               seasons={(media as TmdbTVDetails).seasons}
               showTitle={title}
+              posterPath={media.poster_path}
             />
           )}
 
@@ -150,6 +162,29 @@ const MediaDetails = ({ id, type, onAddToCollection }: MediaDetailsProps) => {
         type={type}
         title={title}
       />
+
+      <ScheduleModal
+        isOpen={isScheduleModalOpen}
+        onClose={() => setIsScheduleModalOpen(false)}
+        mediaId={id}
+        mediaType={type}
+        title={title}
+        posterPath={media.poster_path}
+        runtime={runtime}
+      />
+
+      {type === 'tv' && isTVPlannerOpen && (media as TmdbTVDetails).seasons && (
+        <TVSchedulePlanner
+          isOpen={isTVPlannerOpen}
+          onClose={() => setIsTVPlannerOpen(false)}
+          tvId={id}
+          seasonNumber={1}
+          episodes={[]} // Fetched dynamically by the planner since we passed seasons
+          showTitle={title}
+          posterPath={media.poster_path}
+          allSeasons={(media as TmdbTVDetails).seasons}
+        />
+      )}
     </div>
   );
 };

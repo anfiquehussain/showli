@@ -17,6 +17,8 @@ src/
 │   │   └── collectionsApi.ts     # RTK Query for collections
 │   ├── discussions/    # Discussion service layer
 │   │   └── discussionsService.ts # Firebase firestore for comments/reviews
+│   ├── scheduling/     # Scheduling service layer
+│   │   └── schedulingService.ts # Firebase firestore for movie/TV schedules
 │   └── media/           # TMDb specific API endpoints
 │       ├── mediaApi.ts  # RTK Query API for trending, search, etc.
 │       └── mediaDiscovery.ts # Discovery row presets
@@ -136,6 +138,22 @@ src/
 │           ├── AddMediaModal.tsx
 │           └── ExportModal/ # Folder-per-component for exporting collections
 │               └── index.tsx
+│       ├── scheduling/ # Watch planner & scheduling components
+│       │   ├── ScheduleCalendar/ # Calendar UI layout
+│       │   │   ├── index.tsx
+│       │   │   ├── CalendarDay.tsx
+│       │   │   └── ScheduleCard.tsx
+│       │   ├── ScheduleModal/ # Date & time selector with conflict warnings
+│       │   │   ├── index.tsx
+│       │   │   ├── DateTimePicker.tsx
+│       │   │   └── ConflictWarning.tsx
+│       │   ├── TVSchedulePlanner/ # TV binge batch planners
+│       │   │   ├── index.tsx
+│       │   │   ├── PlanModeSelector.tsx
+│       │   │   └── PlanPreview.tsx
+│       │   └── hooks/      # Feature-specific custom hooks
+│       │       ├── useScheduling.ts
+│       │       └── useConflictCheck.ts
 ├── hooks/              # Reusable global hooks
 │   ├── useAuth.ts      # Firebase auth logic and state sync
 │   ├── useRedux.ts     # Pre-typed useAppDispatch & useAppSelector
@@ -153,6 +171,7 @@ src/
 │   ├── EpisodeDetailsPage.tsx # Episode detail view
 │   ├── CollectionsPage.tsx # Library dashboard and collections list
 │   ├── CollectionDetailsPage.tsx # Individual collection view
+│   ├── SchedulePage.tsx    # Watch planner calendar page
 │   └── PersonPage.tsx      # Person biography and credits
 
 ├── store/              # Redux store configuration
@@ -167,6 +186,7 @@ src/
 │   ├── auth.types.ts   # Firebase auth types
 │   ├── collections.types.ts # Collection and media types
 │   ├── discussions.types.ts # Discussion and review types
+│   ├── scheduling.types.ts # Schedule and plan configuration types
 │   └── index.ts        # Barrel export for all global types
 ├── utils/              # Helper functions (image.ts, date-fns helpers)
 │   └── image.ts        # TMDb image URL construction

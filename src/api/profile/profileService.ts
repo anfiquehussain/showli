@@ -36,7 +36,7 @@ export const profileService = {
       return [];
     } catch (error) {
       console.error('Error fetching favorites:', error);
-      throw new Error('Failed to fetch favorites');
+      throw new Error('Failed to fetch favorites', { cause: error });
     }
   },
 
@@ -50,7 +50,7 @@ export const profileService = {
       await setDoc(userDocRef, { favorites }, { merge: true });
     } catch (error) {
       console.error('Error updating favorites:', error);
-      throw new Error('Failed to update favorites');
+      throw new Error('Failed to update favorites', { cause: error });
     }
   },
 
@@ -82,7 +82,7 @@ export const profileService = {
       };
     } catch (error) {
       console.error('Error fetching profile details:', error);
-      throw new Error('Failed to fetch profile details');
+      throw new Error('Failed to fetch profile details', { cause: error });
     }
   },
 
@@ -115,7 +115,7 @@ export const profileService = {
       }
     } catch (error) {
       console.error('Error updating profile details:', error);
-      throw new Error('Failed to update profile details');
+      throw new Error('Failed to update profile details', { cause: error });
     }
   },
 };

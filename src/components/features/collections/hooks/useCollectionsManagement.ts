@@ -108,7 +108,7 @@ export const useCollectionsManagement = () => {
     };
 
     createMissingDefaults();
-  }, [user, isLoadingCollections, collections.length, createCollection]);
+  }, [user, isLoadingCollections, collections, createCollection]);
 
   const handleCreate = () => {
     setEditingCollection(null);
@@ -133,7 +133,7 @@ export const useCollectionsManagement = () => {
       success('Collection deleted successfully');
       setIsConfirmOpen(false);
       setDeletingCollection(null);
-    } catch (err) {
+    } catch {
       error('Failed to delete collection');
     }
   };
@@ -156,7 +156,7 @@ export const useCollectionsManagement = () => {
         success('Collection created successfully');
       }
       setIsModalOpen(false);
-    } catch (err) {
+    } catch {
       error(`Failed to ${editingCollection ? 'update' : 'create'} collection`);
     }
   };

@@ -103,7 +103,7 @@ export const useAuth = () => {
     try {
       await authService.logout();
       toast.success('Logged out successfully');
-    } catch (err) {
+    } catch {
       toast.error('Failed to log out');
     }
   };

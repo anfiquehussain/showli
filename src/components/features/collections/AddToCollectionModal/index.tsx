@@ -87,7 +87,7 @@ export const AddToCollectionModal = ({ isOpen, onClose, media }: AddToCollection
 
       success(`Created "${data.name}" and added ${title}`);
       setIsCollectionModalOpen(false);
-    } catch (err) {
+    } catch {
       error('Failed to create collection');
     } finally {
       setIsSubmitting(false);
@@ -119,7 +119,7 @@ export const AddToCollectionModal = ({ isOpen, onClose, media }: AddToCollection
         }).unwrap();
         success('Added to collection');
       }
-    } catch (err) {
+    } catch {
       error('Failed to update collection');
     }
   };

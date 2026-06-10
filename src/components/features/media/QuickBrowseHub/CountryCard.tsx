@@ -23,11 +23,15 @@ interface CountryCardProps {
 
 export const CountryCard = ({ code, name, onClick }: CountryCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.matchMedia('(hover: none)').matches;
+    }
+    return false;
+  });
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(hover: none)');
-    setIsTouchDevice(mediaQuery.matches);
     const handler = (e: MediaQueryListEvent) => setIsTouchDevice(e.matches);
     mediaQuery.addEventListener('change', handler);
     return () => mediaQuery.removeEventListener('change', handler);

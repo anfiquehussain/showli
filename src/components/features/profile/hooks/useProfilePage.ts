@@ -37,6 +37,15 @@ export const useProfilePage = () => {
   const [isLoadingProfile, setIsLoadingProfile] = useState(true);
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
 
+  // Reset loading states when uid changes directly in render to avoid effect cascading
+  const [prevUid, setPrevUid] = useState(user?.uid);
+  if (user?.uid !== prevUid) {
+    setPrevUid(user?.uid);
+    setIsLoadingCollections(!!user?.uid);
+    setIsLoadingReviews(!!user?.uid);
+    setIsLoadingProfile(!!user?.uid);
+  }
+
   // Fetch Favorites
   useEffect(() => {
     if (user?.uid) {
@@ -47,7 +56,6 @@ export const useProfilePage = () => {
   // Fetch Collections
   useEffect(() => {
     if (!user?.uid) return;
-    setIsLoadingCollections(true);
 
     const loadCollections = async () => {
       try {
@@ -66,7 +74,6 @@ export const useProfilePage = () => {
   // Subscribe to User Reviews in Real-time
   useEffect(() => {
     if (!user?.uid) return;
-    setIsLoadingReviews(true);
 
     const unsubscribe = discussionsService.subscribeToUserReviews(
       user.uid,
@@ -86,7 +93,6 @@ export const useProfilePage = () => {
   // Fetch Profile Details from Firestore
   useEffect(() => {
     if (!user?.uid) return;
-    setIsLoadingProfile(true);
 
     const loadProfileDetails = async () => {
       try {

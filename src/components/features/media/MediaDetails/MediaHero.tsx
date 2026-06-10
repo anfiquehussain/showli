@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Star, Clock, Globe, Plus, Share2, ChevronLeft } from 'lucide-react';
+import { Star, Clock, Globe, Plus, Share2, ChevronLeft, Calendar } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getTmdbImageUrl } from '@/utils/image';
 import Button from '@/components/ui/Button';
@@ -17,7 +17,9 @@ interface MediaHeroProps {
   runtime: number | null;
   tagline: string | null;
   onAddToCollection?: () => void;
+  onSchedule?: () => void;
 }
+
 
 interface MovieWithDates extends TmdbMovieDetails {
   release_dates?: {
@@ -47,7 +49,8 @@ const MediaHero = ({
   year, 
   runtime, 
   tagline, 
-  onAddToCollection 
+  onAddToCollection,
+  onSchedule
 }: MediaHeroProps) => {
   const navigate = useNavigate();
   const { success } = useToast();
@@ -274,6 +277,15 @@ const MediaHero = ({
                 <Plus className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">Collections</span>
                 <span className="sm:hidden">Collections</span>
+              </Button>
+              <Button 
+                variant="secondary" 
+                size="sm" 
+                className="flex-none gap-1.5 glass-card px-2.5 sm:px-3.5 h-8 sm:h-9 text-[10px] sm:text-xs font-bold border-white/10 hover:border-white/20"
+                onClick={() => onSchedule?.()}
+              >
+                <Calendar className="w-3.5 h-3.5" />
+                <span>{type === 'tv' ? 'Schedule Season' : 'Schedule'}</span>
               </Button>
               {media.homepage && (
                 <a 

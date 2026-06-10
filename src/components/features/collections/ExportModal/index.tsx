@@ -58,7 +58,7 @@ const ExportModal = ({ isOpen, onClose, collection, mediaItems }: ExportModalPro
 
     if (format === 'json') {
       const data = mediaItems.map(item => {
-        const obj: Record<string, any> = {};
+        const obj: Record<string, unknown> = {};
         if (fields.title) obj.title = item.title;
         if (fields.year) obj.year = item.release_date?.split('-')[0] || '';
         if (fields.tmdbId) obj.tmdb_id = item.tmdb_id;
@@ -143,7 +143,7 @@ const ExportModal = ({ isOpen, onClose, collection, mediaItems }: ExportModalPro
       setIsCopied(true);
       success('Copied to clipboard!');
       setTimeout(() => setIsCopied(false), 2000);
-    } catch (err) {
+    } catch {
       error('Failed to copy to clipboard');
     }
   };
@@ -173,7 +173,7 @@ const ExportModal = ({ isOpen, onClose, collection, mediaItems }: ExportModalPro
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
       success('Download started');
-    } catch (err) {
+    } catch {
       error('Failed to download file');
     }
   };

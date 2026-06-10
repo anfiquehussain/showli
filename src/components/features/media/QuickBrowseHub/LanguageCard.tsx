@@ -60,8 +60,8 @@ export const LanguageCard = ({ code, name, onClick }: LanguageCardProps) => {
       onClick={onClick}
       className="relative flex flex-col justify-end p-4 h-40 rounded-2xl border border-white/5 hover:border-white/10 transition-colors duration-300 group shrink-0 w-52 sm:w-60 bg-neutral-900/60 hover:bg-neutral-900/80 cursor-pointer text-left overflow-hidden select-none"
       style={{
-        ['--hover-color' as any]: metadata.colors.start,
-      }}
+        ['--hover-color' as string]: metadata.colors.start,
+      } as React.CSSProperties}
     >
       {/* Background Image wrapped in a cropped container */}
       <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none z-0">

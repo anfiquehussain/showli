@@ -14,6 +14,7 @@ const CollectionDetailsPage = lazy(() => import('./pages/CollectionDetailsPage')
 const BrowsePage = lazy(() => import('./pages/BrowsePage'));
 const PersonPage = lazy(() => import('./pages/PersonPage'));
 const EpisodeDetailsPage = lazy(() => import('./pages/EpisodeDetailsPage'));
+const SchedulePage = lazy(() => import('./pages/SchedulePage'));
 
 // --- App Root ---
 
@@ -36,6 +37,14 @@ function App() {
               <Route path="/tv/:id" element={<MediaDetailsPage />} />
               <Route path="/tv/:id/season/:seasonNumber/episode/:episodeNumber" element={<EpisodeDetailsPage />} />
               <Route path="/person/:id" element={<PersonPage />} />
+              <Route 
+                path="/schedule" 
+                element={
+                  <ProtectedRoute>
+                    <SchedulePage />
+                  </ProtectedRoute>
+                } 
+              />
               <Route 
                 path="/profile" 
                 element={

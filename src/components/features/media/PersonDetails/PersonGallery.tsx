@@ -45,6 +45,14 @@ const PersonGallery = ({ personId, profileImages = [] }: PersonGalleryProps) => 
     if (node) observer.current.observe(node);
   }, [hasMore, handleLoadMore]);
 
+  const handleNext = useCallback(() => {
+    setSelectedIndex(prev => (prev !== null && prev < currentImages.length - 1 ? prev + 1 : 0));
+  }, [currentImages.length]);
+
+  const handlePrev = useCallback(() => {
+    setSelectedIndex(prev => (prev !== null && prev > 0 ? prev - 1 : currentImages.length - 1));
+  }, [currentImages.length]);
+
   // Keyboard navigation for lightbox
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -55,19 +63,11 @@ const PersonGallery = ({ personId, profileImages = [] }: PersonGalleryProps) => 
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedIndex]);
+  }, [selectedIndex, handleNext, handlePrev]);
 
   if (taggedImages.length === 0 && profileImages.length === 0) return null;
 
   const previewImages = currentImages.slice(0, 10);
-
-  const handleNext = () => {
-    setSelectedIndex(prev => (prev !== null && prev < currentImages.length - 1 ? prev + 1 : 0));
-  };
-
-  const handlePrev = () => {
-    setSelectedIndex(prev => (prev !== null && prev > 0 ? prev - 1 : currentImages.length - 1));
-  };
 
   const selectedImage = selectedIndex !== null ? currentImages[selectedIndex] : null;
 

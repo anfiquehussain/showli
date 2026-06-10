@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, User, MapPin, Film, AlignLeft, Sparkles } from 'lucide-react';
 import Button from '@/components/ui/Button';
@@ -51,8 +51,9 @@ export const EditProfileModal = ({
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Sync state values when modal opens
-  useEffect(() => {
+  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
+  if (isOpen !== prevIsOpen) {
+    setPrevIsOpen(isOpen);
     if (isOpen) {
       setDisplayName(currentDisplayName ?? '');
       setBio(currentBio ?? '');
@@ -68,7 +69,7 @@ export const EditProfileModal = ({
       
       setError(null);
     }
-  }, [isOpen, currentDisplayName, currentBio, currentLocation, currentFavoriteGenre, currentPhotoURL, currentBannerURL]);
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     if (e) e.preventDefault();

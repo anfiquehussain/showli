@@ -71,7 +71,7 @@ const AddMediaModal = ({ isOpen, onClose, collection }: AddMediaModalProps) => {
         }).unwrap();
         success('Added to collection');
       }
-    } catch (err) {
+    } catch {
       error('Failed to update collection');
     }
   };

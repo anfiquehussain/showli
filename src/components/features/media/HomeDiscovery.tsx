@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { 
   Sparkles, 
   RefreshCw,
@@ -47,7 +47,11 @@ const HomeDiscovery = () => {
   const { data: movieGenresData } = useGetMovieGenresQuery();
   const { data: tvGenresData } = useGetTVGenresQuery();
 
-  const shuffleDiscovery = () => {
+  const hasLoadedData = !!(movieGenresData && tvGenresData && languages && countries);
+  const [hasInitialized, setHasInitialized] = useState(false);
+
+  const shuffleDiscovery = useCallback(() => {
+    if (!hasLoadedData) return;
     const freshRows = generateRandomDiscovery(
       12, // More rows for discovery tab
       movieGenresData?.genres || [],
@@ -56,13 +60,19 @@ const HomeDiscovery = () => {
       countries || []
     );
     setSelectedConfigs(freshRows);
-  };
+  }, [hasLoadedData, movieGenresData, tvGenresData, languages, countries]);
 
-  useEffect(() => {
-    if (movieGenresData && tvGenresData && languages && countries && selectedConfigs.length === 0) {
-      shuffleDiscovery();
-    }
-  }, [movieGenresData, tvGenresData, languages, countries]);
+  if (hasLoadedData && !hasInitialized && selectedConfigs.length === 0) {
+    setHasInitialized(true);
+    const freshRows = generateRandomDiscovery(
+      12,
+      movieGenresData?.genres || [],
+      tvGenresData?.genres || [],
+      languages || [],
+      countries || []
+    );
+    setSelectedConfigs(freshRows);
+  }
 
   return (
     <div className="space-y-8 animate-in slide-in-from-bottom-4 duration-700">

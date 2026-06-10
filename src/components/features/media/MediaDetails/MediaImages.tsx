@@ -30,17 +30,7 @@ const MediaImages = ({ id, type, collectionId }: MediaImagesProps) => {
   const [isViewAllOpen, setIsViewAllOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
 
-  // Keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (selectedIndex === null) return;
-      if (e.key === 'ArrowRight') handleNext();
-      if (e.key === 'ArrowLeft') handlePrev();
-      if (e.key === 'Escape') setSelectedIndex(null);
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedIndex]);
+
 
   const handleLoadMore = useCallback(() => {
     setVisibleCount(prev => prev + ITEMS_PER_PAGE);
@@ -77,6 +67,26 @@ const MediaImages = ({ id, type, collectionId }: MediaImagesProps) => {
     if (node) observer.current.observe(node);
   }, [hasMore, handleLoadMore]);
 
+  const handleNext = useCallback(() => {
+    setSelectedIndex(prev => (prev !== null && prev < currentImages.length - 1 ? prev + 1 : 0));
+  }, [currentImages.length]);
+
+  const handlePrev = useCallback(() => {
+    setSelectedIndex(prev => (prev !== null && prev > 0 ? prev - 1 : currentImages.length - 1));
+  }, [currentImages.length]);
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (selectedIndex === null) return;
+      if (e.key === 'ArrowRight') handleNext();
+      if (e.key === 'ArrowLeft') handlePrev();
+      if (e.key === 'Escape') setSelectedIndex(null);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedIndex, handleNext, handlePrev]);
+
   if (!isVisible || isLoading) return (
     <section ref={containerRef} className="space-y-4">
        <Skeleton className="h-48 rounded-3xl" />
@@ -87,14 +97,6 @@ const MediaImages = ({ id, type, collectionId }: MediaImagesProps) => {
 
   const previewImages = currentImages.slice(0, 10);
   const displayedImages = currentImages.slice(0, visibleCount);
-
-  const handleNext = () => {
-    setSelectedIndex(prev => (prev !== null && prev < currentImages.length - 1 ? prev + 1 : 0));
-  };
-
-  const handlePrev = () => {
-    setSelectedIndex(prev => (prev !== null && prev > 0 ? prev - 1 : currentImages.length - 1));
-  };
 
   if (allBackdrops.length === 0 && allPosters.length === 0) return null;
 

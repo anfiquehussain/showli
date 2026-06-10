@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, X, ChevronRight } from 'lucide-react';
 import { useGetMediaVideosQuery } from '@/api/media/mediaApi';
@@ -20,12 +20,13 @@ const MediaVideos = ({ id, type }: MediaVideosProps) => {
   const [isViewAllOpen, setIsViewAllOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
 
-  // Reset visible count when modal closes
-  useEffect(() => {
+  const [prevIsViewAllOpen, setPrevIsViewAllOpen] = useState(isViewAllOpen);
+  if (isViewAllOpen !== prevIsViewAllOpen) {
+    setPrevIsViewAllOpen(isViewAllOpen);
     if (!isViewAllOpen) {
       setVisibleCount(ITEMS_PER_PAGE);
     }
-  }, [isViewAllOpen]);
+  }
 
   // Filter for YouTube trailers and teasers - calculated safely
   const allVideos = videoData?.results

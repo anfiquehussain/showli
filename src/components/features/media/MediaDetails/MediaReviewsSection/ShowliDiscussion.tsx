@@ -31,8 +31,14 @@ const ShowliDiscussion = ({ mediaId, mediaType, mediaTitle, posterPath }: Showli
   const [commentToDelete, setCommentToDelete] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  useEffect(() => {
+  const mediaKey = `${mediaType}-${mediaId}`;
+  const [prevMediaKey, setPrevMediaKey] = useState(mediaKey);
+  if (mediaKey !== prevMediaKey) {
+    setPrevMediaKey(mediaKey);
     setIsLoading(true);
+  }
+
+  useEffect(() => {
     const unsubscribe = discussionsService.subscribeToComments(
       mediaId,
       mediaType,
@@ -121,7 +127,7 @@ const ShowliDiscussion = ({ mediaId, mediaType, mediaTitle, posterPath }: Showli
       });
       success(rating !== null ? 'Review shared!' : 'Comment posted!');
       setIsReviewModalOpen(false);
-    } catch (err) {
+    } catch {
       toastError('Failed to post. Please try again.');
     }
   };
@@ -140,7 +146,7 @@ const ShowliDiscussion = ({ mediaId, mediaType, mediaTitle, posterPath }: Showli
         parentId,
       });
       success('Reply posted!');
-    } catch (err) {
+    } catch {
       toastError('Failed to reply.');
     }
   };
@@ -149,7 +155,7 @@ const ShowliDiscussion = ({ mediaId, mediaType, mediaTitle, posterPath }: Showli
     if (!user) return;
     try {
       await discussionsService.toggleLike(commentId, user.uid, isLiked);
-    } catch (err) {
+    } catch {
       toastError('Action failed.');
     }
   };
@@ -162,7 +168,7 @@ const ShowliDiscussion = ({ mediaId, mediaType, mediaTitle, posterPath }: Showli
       await discussionsService.deleteComment(commentToDelete);
       success('Comment deleted.');
       setCommentToDelete(null);
-    } catch (err) {
+    } catch {
       toastError('Failed to delete.');
     } finally {
       setIsDeleting(false);

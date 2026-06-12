@@ -145,7 +145,7 @@ export const SchedulePage = () => {
   };
 
   const handleRescheduleConfirm = async (id: string, startAt: number) => {
-    return await updateSchedule(id, { startAt });
+    return await updateSchedule(id, { startAt, status: 'scheduled' });
   };
 
   return (
@@ -173,7 +173,6 @@ export const SchedulePage = () => {
               onDateSelect={setSelectedDate}
               onClearDate={() => setSelectedDate(new Date())}
               schedules={schedules}
-              now={now}
             />
           </div>
         </div>

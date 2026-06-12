@@ -1,4 +1,5 @@
-import { Film, Tv, Check, FastForward, Calendar, Trash2, AlertTriangle, Clock } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Film, Tv, Check, FastForward, Calendar, Trash2, AlertTriangle, Clock, RotateCcw } from 'lucide-react';
 import { getTmdbImageUrl } from '@/utils/image';
 import type { ScheduleEntry, ScheduleStatus } from '@/types/scheduling.types';
 
@@ -29,6 +30,21 @@ export const TimelineItem = ({
   };
 
   const hasConflicts = conflictingSchedules.length > 0;
+
+  const getDetailsUrl = () => {
+    if (schedule.mediaType === 'movie') {
+      return `/movie/${schedule.tmdbId}`;
+    }
+    if (schedule.mediaType === 'tv') {
+      return `/tv/${schedule.tmdbId}`;
+    }
+    if (schedule.mediaType === 'episode' && schedule.parentSeriesId) {
+      return `/tv/${schedule.parentSeriesId}/season/${schedule.seasonNumber}/episode/${schedule.episodeNumber}`;
+    }
+    return null;
+  };
+
+  const detailsUrl = getDetailsUrl();
 
   return (
     <div className="flex items-center gap-4 group">
@@ -64,18 +80,28 @@ export const TimelineItem = ({
         {/* Left Side: Thumbnail & Details */}
         <div className="flex items-center gap-3.5 min-w-0 flex-1">
           {/* Thumbnail */}
-          <div className="w-10 h-15 rounded-lg overflow-hidden border border-white/10 shrink-0 bg-zinc-950 shadow-md">
-            {schedule.posterPath ? (
-              <img
-                src={getTmdbImageUrl(schedule.posterPath, 'w92')}
-                alt=""
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                aria-hidden="true"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-white/20 text-[8px] font-bold uppercase">No Poster</div>
-            )}
-          </div>
+          {detailsUrl ? (
+            <Link
+              to={detailsUrl}
+              className="w-10 h-15 rounded-lg overflow-hidden border border-white/10 shrink-0 bg-zinc-950 shadow-md block hover:ring-2 hover:ring-brand-primary/50 transition-all"
+              title="View Details"
+            >
+              {schedule.posterPath ? (
+                <img
+                  src={getTmdbImageUrl(schedule.posterPath, 'w92')}
+                  alt=""
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  aria-hidden="true"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-white/20 text-[8px] font-bold uppercase">No Poster</div>
+              )}
+            </Link>
+          ) : (
+            <div className="w-10 h-15 rounded-lg overflow-hidden border border-white/10 shrink-0 bg-zinc-950 shadow-md flex items-center justify-center text-white/20 text-[8px] font-bold uppercase">
+              No Poster
+            </div>
+          )}
 
           {/* Details Column */}
           <div className="min-w-0 space-y-1 flex-1">
@@ -114,7 +140,13 @@ export const TimelineItem = ({
 
             {/* Title / Episode info */}
             <h4 className="text-xs sm:text-sm font-bold text-white truncate pr-2">
-              {schedule.title}
+              {detailsUrl ? (
+                <Link to={detailsUrl} className="hover:text-brand-primary transition-colors">
+                  {schedule.title}
+                </Link>
+              ) : (
+                schedule.title
+              )}
               {schedule.seasonNumber !== null && schedule.episodeNumber !== null && (
                 <span className="text-muted-foreground font-semibold">
                   {' '}— S{schedule.seasonNumber}E{schedule.episodeNumber}
@@ -148,6 +180,17 @@ export const TimelineItem = ({
 
         {/* Right Side/Bottom: Quick Action Icon Buttons */}
         <div className="flex items-center gap-1.5 shrink-0 justify-end border-t border-white/5 pt-2 sm:border-t-0 sm:pt-0 sm:ml-3">
+          {!isScheduled && (
+            <button
+              onClick={() => onStatusChange(schedule.id, 'scheduled')}
+              className="p-2 rounded-xl bg-brand-primary/5 border border-brand-primary/20 hover:bg-brand-primary/20 hover:border-brand-primary/30 text-brand-primary transition-all cursor-pointer flex items-center justify-center"
+              title="Undo Status"
+              aria-label="Undo Status"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+            </button>
+          )}
+
           {isScheduled && (
             <>
               <button
@@ -167,17 +210,17 @@ export const TimelineItem = ({
               >
                 <FastForward className="w-3.5 h-3.5" />
               </button>
-
-              <button
-                onClick={() => onRescheduleClick(schedule)}
-                className="p-2 rounded-xl bg-brand-primary/5 border border-brand-primary/20 hover:bg-brand-primary/20 hover:border-brand-primary/30 text-brand-primary transition-all cursor-pointer"
-                title="Reschedule Session"
-                aria-label="Reschedule Session"
-              >
-                <Calendar className="w-3.5 h-3.5" />
-              </button>
             </>
           )}
+
+          <button
+            onClick={() => onRescheduleClick(schedule)}
+            className="p-2 rounded-xl bg-brand-primary/5 border border-brand-primary/20 hover:bg-brand-primary/20 hover:border-brand-primary/30 text-brand-primary transition-all cursor-pointer flex items-center justify-center"
+            title="Reschedule Session"
+            aria-label="Reschedule Session"
+          >
+            <Calendar className="w-3.5 h-3.5" />
+          </button>
 
           <button
             onClick={() => onDeleteClick(schedule.id)}

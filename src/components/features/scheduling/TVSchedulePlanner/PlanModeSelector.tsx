@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { CheckCircle2 } from 'lucide-react';
 import type { TVPlanConfig } from '@/types/scheduling.types';
 import type { TmdbEpisode, TmdbTVSeasonBrief } from '@/types/tmdb.types';
@@ -21,6 +22,22 @@ export const PlanModeSelector = ({
   hasAllSeasons,
   allSeasons,
 }: PlanModeSelectorProps) => {
+  const [episodesPerDayStr, setEpisodesPerDayStr] = useState(config.episodesPerDay.toString());
+  const [prevEpisodesPerDay, setPrevEpisodesPerDay] = useState(config.episodesPerDay);
+
+  if (config.episodesPerDay !== prevEpisodesPerDay) {
+    setEpisodesPerDayStr(config.episodesPerDay.toString());
+    setPrevEpisodesPerDay(config.episodesPerDay);
+  }
+
+  const [breakMinutesStr, setBreakMinutesStr] = useState((config.breakMinutes ?? 0).toString());
+  const [prevBreakMinutes, setPrevBreakMinutes] = useState(config.breakMinutes ?? 0);
+
+  if ((config.breakMinutes ?? 0) !== prevBreakMinutes) {
+    setBreakMinutesStr((config.breakMinutes ?? 0).toString());
+    setPrevBreakMinutes(config.breakMinutes ?? 0);
+  }
+
   const handleModeChange = (mode: 'daily' | 'deadline') => {
     onChange({
       ...config,
@@ -270,8 +287,18 @@ export const PlanModeSelector = ({
               type="number"
               min={1}
               max={10}
-              value={config.episodesPerDay}
-              onChange={(e) => handleEpisodesPerDayChange(parseInt(e.target.value, 10) || 1)}
+              value={episodesPerDayStr}
+              onChange={(e) => {
+                const val = e.target.value;
+                setEpisodesPerDayStr(val);
+                const parsed = parseInt(val, 10);
+                if (!isNaN(parsed) && parsed > 0) {
+                  handleEpisodesPerDayChange(parsed);
+                }
+              }}
+              onBlur={() => {
+                setEpisodesPerDayStr(config.episodesPerDay.toString());
+              }}
               className="w-full px-3 py-1.5 bg-white/5 border border-white/10 rounded-xl text-xs text-white focus-visible:ring-2 focus-visible:ring-brand-primary/50 transition-colors"
             />
           </div>
@@ -320,8 +347,18 @@ export const PlanModeSelector = ({
             type="number"
             min={0}
             max={60}
-            value={config.breakMinutes ?? 0}
-            onChange={(e) => handleBreakMinutesChange(parseInt(e.target.value, 10) || 0)}
+            value={breakMinutesStr}
+            onChange={(e) => {
+              const val = e.target.value;
+              setBreakMinutesStr(val);
+              const parsed = parseInt(val, 10);
+              if (!isNaN(parsed) && parsed >= 0) {
+                handleBreakMinutesChange(parsed);
+              }
+            }}
+            onBlur={() => {
+              setBreakMinutesStr((config.breakMinutes ?? 0).toString());
+            }}
             className="w-full px-3 py-1.5 bg-white/5 border border-white/10 rounded-xl text-xs text-white focus-visible:ring-2 focus-visible:ring-brand-primary/50 transition-colors"
           />
         </div>

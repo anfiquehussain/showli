@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Play, Clock, CheckCircle2, XCircle } from 'lucide-react';
 import { getTmdbImageUrl } from '@/utils/image';
 import type { ScheduleEntry, ScheduleStatus } from '@/types/scheduling.types';
@@ -45,21 +46,57 @@ export const UpNextCard = ({
         return `Starts in ${mins}m`;
       })();
 
+  const getDetailsUrl = () => {
+    if (nextItem.mediaType === 'movie') {
+      return `/movie/${nextItem.tmdbId}`;
+    }
+    if (nextItem.mediaType === 'tv') {
+      return `/tv/${nextItem.tmdbId}`;
+    }
+    if (nextItem.mediaType === 'episode' && nextItem.parentSeriesId) {
+      return `/tv/${nextItem.parentSeriesId}/season/${nextItem.seasonNumber}/episode/${nextItem.episodeNumber}`;
+    }
+    return null;
+  };
+
+  const detailsUrl = getDetailsUrl();
+
   return (
     <div className="bg-white/5 hover:bg-white/8 border border-white/10 rounded-2xl p-4 space-y-3 transition-all relative overflow-hidden">
       <div className="flex gap-3">
         {/* Poster */}
-        {nextItem.posterPath ? (
-          <img
-            src={getTmdbImageUrl(nextItem.posterPath, 'w92')}
-            alt=""
-            className="w-12 h-18 rounded-lg object-cover border border-white/10 shrink-0"
-            aria-hidden="true"
-          />
+        {detailsUrl ? (
+          <Link
+            to={detailsUrl}
+            className="w-12 h-18 rounded-lg overflow-hidden border border-white/10 shrink-0 bg-zinc-950 block hover:ring-2 hover:ring-brand-primary/50 transition-all"
+            title="View Details"
+          >
+            {nextItem.posterPath ? (
+              <img
+                src={getTmdbImageUrl(nextItem.posterPath, 'w92')}
+                alt=""
+                className="w-full h-full object-cover"
+                aria-hidden="true"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <Clock className="w-5 h-5 text-muted-foreground" aria-hidden="true" />
+              </div>
+            )}
+          </Link>
         ) : (
-          <div className="w-12 h-18 rounded-lg bg-zinc-950 flex items-center justify-center border border-white/10 shrink-0">
-            <Clock className="w-5 h-5 text-muted-foreground" aria-hidden="true" />
-          </div>
+          nextItem.posterPath ? (
+            <img
+              src={getTmdbImageUrl(nextItem.posterPath, 'w92')}
+              alt=""
+              className="w-12 h-18 rounded-lg object-cover border border-white/10 shrink-0"
+              aria-hidden="true"
+            />
+          ) : (
+            <div className="w-12 h-18 rounded-lg bg-zinc-950 flex items-center justify-center border border-white/10 shrink-0">
+              <Clock className="w-5 h-5 text-muted-foreground" aria-hidden="true" />
+            </div>
+          )
         )}
 
         {/* Info */}
@@ -69,10 +106,16 @@ export const UpNextCard = ({
               UPCOMING SESSION
             </span>
             <h4 className="text-xs font-bold text-white truncate">
-              {nextItem.title}
+              {detailsUrl ? (
+                <Link to={detailsUrl} className="hover:text-brand-primary transition-colors">
+                  {nextItem.title}
+                </Link>
+              ) : (
+                nextItem.title
+              )}
             </h4>
             {nextItem.seasonNumber !== null && nextItem.episodeNumber !== null && (
-              <p className="text-[10px] text-muted-foreground truncate">
+              <p className="text-[10px] text-muted-foreground truncate font-semibold">
                 Season {nextItem.seasonNumber}, Episode {nextItem.episodeNumber}
               </p>
             )}

@@ -7,7 +7,6 @@ interface ScheduleSidebarProps {
   onDateSelect: (date: Date) => void;
   onClearDate: () => void;
   schedules: ScheduleEntry[];
-  now: number;
 }
 
 export const ScheduleSidebar = ({
@@ -15,7 +14,6 @@ export const ScheduleSidebar = ({
   onDateSelect,
   onClearDate,
   schedules,
-  now,
 }: ScheduleSidebarProps) => {
   const [navMonth, setNavMonth] = useState(() => new Date());
   
@@ -99,13 +97,18 @@ export const ScheduleSidebar = ({
     const items = schedules.filter(s => s.localDateKey === dateKey && s.status !== 'cancelled');
     if (items.length === 0) return null;
 
-    // Red: Missed day (at least one scheduled item whose startAt is in the past) - matched HSL saturation/lightness
-    const hasMissed = items.some(s => s.status === 'scheduled' && s.startAt < now);
-    if (hasMissed) {
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+    const startOfTodayMs = startOfToday.getTime();
+
+    // Red: Skipped day OR Missed day (at least one scheduled item whose startAt is before today)
+    const hasSkipped = items.some(s => s.status === 'skipped');
+    const hasMissed = items.some(s => s.status === 'scheduled' && s.startAt < startOfTodayMs);
+    if (hasSkipped || hasMissed) {
       return 'bg-calendar-dot-red';
     }
 
-    // Green: All items on this day are completed - matched HSL saturation/lightness
+    // Green: All items on this day are completed
     const allCompleted = items.every(s => s.status === 'completed');
     if (allCompleted) {
       return 'bg-calendar-dot-green';

@@ -1,4 +1,5 @@
-import { Star, Calendar, Clock, Share2, ChevronLeft } from 'lucide-react';
+import { useState } from 'react';
+import { Star, Calendar, Clock, Share2, ChevronLeft, Copy, Check } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { getTmdbImageUrl } from '@/utils/image';
 import { useToast } from '@/hooks/useToast';
@@ -21,6 +22,14 @@ interface EpisodeHeroProps {
 const EpisodeHero = ({ episode, show, tvId }: EpisodeHeroProps) => {
   const navigate = useNavigate();
   const { success } = useToast();
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyTitle = () => {
+    navigator.clipboard.writeText(episode.name);
+    setCopied(true);
+    success('Episode title copied to clipboard!');
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const formatSeasonEpisode = (season: number, ep: number) => {
     const s = season < 10 ? `0${season}` : season;
@@ -180,9 +189,23 @@ const EpisodeHero = ({ episode, show, tvId }: EpisodeHeroProps) => {
                 {show.name}
               </Link>
 
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-heading font-black text-white tracking-tight leading-tight text-pretty">
-                {episode.name}
-              </h1>
+              <div className="flex items-center justify-center md:justify-start gap-2 group/title">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-heading font-black text-white tracking-tight leading-tight text-pretty">
+                  {episode.name}
+                </h1>
+                <button
+                  onClick={handleCopyTitle}
+                  className="p-1.5 rounded-md bg-white/5 border border-white/10 hover:bg-white/10 text-white/50 hover:text-white transition-all duration-300 opacity-100 md:opacity-0 md:group-hover/title:opacity-100 focus:opacity-100 flex items-center justify-center shrink-0 cursor-pointer active:scale-90"
+                  title="Copy Episode Title"
+                  aria-label="Copy episode title"
+                >
+                  {copied ? (
+                    <Check className="w-3.5 h-3.5 text-success" />
+                  ) : (
+                    <Copy className="w-3.5 h-3.5" />
+                  )}
+                </button>
+              </div>
             </div>
 
              {/* Actions (IMDb and Share) */}

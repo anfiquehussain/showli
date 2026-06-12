@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Star, Clock, Globe, Plus, Share2, ChevronLeft, Calendar } from 'lucide-react';
+import { Star, Clock, Globe, Plus, Share2, ChevronLeft, Calendar, Copy, Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getTmdbImageUrl } from '@/utils/image';
 import Button from '@/components/ui/Button';
@@ -75,6 +75,14 @@ const MediaHero = ({
 
   const [showliRating, setShowliRating] = useState<number | null>(null);
   const [showliReviewCount, setShowliReviewCount] = useState<number>(0);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyTitle = () => {
+    navigator.clipboard.writeText(title);
+    setCopied(true);
+    success('Title copied to clipboard!');
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   useEffect(() => {
     const unsubscribe = discussionsService.subscribeToComments(
@@ -244,9 +252,23 @@ const MediaHero = ({
                 )}
               </div>
 
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-heading font-black text-white tracking-tight leading-tight text-pretty">
-                {title}
-              </h1>
+              <div className="flex items-center justify-center md:justify-start gap-2 group/title">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-heading font-black text-white tracking-tight leading-tight text-pretty">
+                  {title}
+                </h1>
+                <button
+                  onClick={handleCopyTitle}
+                  className="p-1.5 rounded-md bg-white/5 border border-white/10 hover:bg-white/10 text-white/50 hover:text-white transition-all duration-300 opacity-100 md:opacity-0 md:group-hover/title:opacity-100 focus:opacity-100 flex items-center justify-center shrink-0 cursor-pointer active:scale-90"
+                  title="Copy Title"
+                  aria-label="Copy title"
+                >
+                  {copied ? (
+                    <Check className="w-3.5 h-3.5 text-success" />
+                  ) : (
+                    <Copy className="w-3.5 h-3.5" />
+                  )}
+                </button>
+              </div>
               
               {tagline && (
                 <p className="text-sm md:text-base text-brand-secondary italic font-medium opacity-90 leading-tight">

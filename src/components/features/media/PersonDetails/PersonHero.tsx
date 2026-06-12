@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronLeft, Calendar, MapPin, Star, Share2 } from 'lucide-react';
+import { ChevronLeft, Calendar, MapPin, Star, Share2, Copy, Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getTmdbImageUrl } from '@/utils/image';
 import { useToast } from '@/hooks/useToast';
@@ -13,6 +14,14 @@ interface PersonHeroProps {
 const PersonHero = ({ person, bannerPath }: PersonHeroProps) => {
   const navigate = useNavigate();
   const { success } = useToast();
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyTitle = () => {
+    navigator.clipboard.writeText(person.name);
+    setCopied(true);
+    success('Name copied to clipboard!');
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <section className="relative w-full min-h-[300px] md:min-h-[400px] flex flex-col justify-end">
@@ -88,9 +97,23 @@ const PersonHero = ({ person, bannerPath }: PersonHeroProps) => {
                 )}
               </div>
 
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-heading font-black text-white tracking-tight leading-tight text-pretty">
-                {person.name}
-              </h1>
+              <div className="flex items-center justify-center md:justify-start gap-2 group/title">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-heading font-black text-white tracking-tight leading-tight text-pretty">
+                  {person.name}
+                </h1>
+                <button
+                  onClick={handleCopyTitle}
+                  className="p-1.5 rounded-md bg-white/5 border border-white/10 hover:bg-white/10 text-white/50 hover:text-white transition-all duration-300 opacity-100 md:opacity-0 md:group-hover/title:opacity-100 focus:opacity-100 flex items-center justify-center shrink-0 cursor-pointer active:scale-90"
+                  title="Copy Name"
+                  aria-label="Copy name"
+                >
+                  {copied ? (
+                    <Check className="w-3.5 h-3.5 text-success" />
+                  ) : (
+                    <Copy className="w-3.5 h-3.5" />
+                  )}
+                </button>
+              </div>
             </div>
 
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 pt-2">

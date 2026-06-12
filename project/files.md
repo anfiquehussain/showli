@@ -139,10 +139,15 @@ src/
 │           └── ExportModal/ # Folder-per-component for exporting collections
 │               └── index.tsx
 │       ├── scheduling/ # Watch planner & scheduling components
-│       │   ├── ScheduleCalendar/ # Calendar UI layout
+│       │   ├── TimelineFeed/ # Chronological feed and item components
 │       │   │   ├── index.tsx
-│       │   │   ├── CalendarDay.tsx
-│       │   │   └── ScheduleCard.tsx
+│       │   │   └── TimelineItem.tsx
+│       │   ├── ScheduleSidebar/ # Search filters, mini-calendar, Up Next and metrics panels
+│       │   │   ├── index.tsx
+│       │   │   ├── UpNextCard.tsx
+│       │   │   └── MetricsCard.tsx
+│       │   ├── RescheduleDrawer/ # Slide-over rescheduling panel
+│       │   │   └── index.tsx
 │       │   ├── ScheduleModal/ # Date & time selector with conflict warnings
 │       │   │   ├── index.tsx
 │       │   │   ├── DateTimePicker.tsx

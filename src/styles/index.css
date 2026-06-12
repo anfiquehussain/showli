@@ -7,6 +7,11 @@
   --color-brand-accent: #8b5cf6;
   --color-brand-light: #e0e7ff;
   
+  /* Calendar Dot Colors - Hue shifted from brand-primary HSL values */
+  --color-calendar-dot-red: #ee6767;
+  --color-calendar-dot-green: #67ee67;
+  --color-calendar-dot-blue: #6366f1;
+  
   /* Background & Surfaces - Zinc based for clean dark feel */
   --color-background: #09090b;
   --color-foreground: #fafafa;
